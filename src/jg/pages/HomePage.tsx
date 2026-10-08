@@ -86,7 +86,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
       {/* Hero */}
       <section className="relative flex min-h-[85vh] items-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroImage} alt="JG Motors" className="h-full w-full object-cover" />
+          <img src={heroImage} alt="ClickMotores" className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-jg-black via-jg-black/85 to-jg-black/40" />
           <div className="absolute inset-0 bg-gradient-to-t from-jg-black via-transparent to-jg-black/50" />
           <div className="absolute inset-0 grid-pattern opacity-30" />
@@ -144,7 +144,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10 text-center">
             <h2 className="section-title">
-              ¿Por qué elegir <span className="text-gradient">JG Motors?</span>
+              ¿Por qué elegir <span className="text-gradient">ClickMotores?</span>
             </h2>
             <p className="section-subtitle">
               Transparencia, confianza y calidad en cada vehículo que vendemos
@@ -310,7 +310,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 ))}
               </ul>
               <a
-                href={whatsappLink('Hola JG Motors, me gustaría solicitar gestión de trámites de tránsito.')}
+                href={whatsappLink('Hola ClickMotores, me gustaría solicitar gestión de trámites de tránsito.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => logConsulta('cotizacion_tramite')}
@@ -339,7 +339,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 ))}
               </ul>
               <a
-                href={whatsappLink('Hola JG Motors, me gustaría cotizar un seguro o SOAT para mi vehículo.')}
+                href={whatsappLink('Hola ClickMotores, me gustaría cotizar un seguro o SOAT para mi vehículo.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => logConsulta('cotizacion_seguro')}

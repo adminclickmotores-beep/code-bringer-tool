@@ -686,7 +686,7 @@ export function AdminPage({
                           <ThumbsDown className="h-4 w-4" />
                         </button>
                         <a
-                          href={whatsappLink(`Hola ${sub.name}, sobre la publicación de tu ${sub.brand} ${sub.model} en JG Motors.`)}
+                          href={whatsappLink(`Hola ${sub.name}, sobre la publicación de tu ${sub.brand} ${sub.model} en ClickMotores.`)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="rounded-lg bg-jg-dark p-2 text-gray-600 transition-all hover:text-jg-text-dark"
@@ -758,7 +758,7 @@ export function AdminPage({
                           <option value="descartado">Descartado</option>
                         </select>
                         <a
-                          href={whatsappLink(`Hola ${lead.name}, sobre tu ${lead.mode === 'compra_directa' ? 'compra directa' : 'consignación'} de ${lead.brand} ${lead.model} en JG Motors.`)}
+                          href={whatsappLink(`Hola ${lead.name}, sobre tu ${lead.mode === 'compra_directa' ? 'compra directa' : 'consignación'} de ${lead.brand} ${lead.model} en ClickMotores.`)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="rounded-lg bg-jg-dark p-2 text-gray-600 transition-all hover:text-jg-text-dark"

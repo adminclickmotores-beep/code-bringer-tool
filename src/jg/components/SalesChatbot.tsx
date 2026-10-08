@@ -30,7 +30,7 @@ export function SalesChatbot({ onNavigate }: SalesChatbotProps) {
       icon: Headphones,
       label: 'Hablar con un asesor',
       action: () => {
-        window.open(whatsappLink('Hola, me gustaría hablar con un asesor de JG Motors.'), '_blank');
+        window.open(whatsappLink('Hola, me gustaría hablar con un asesor de ClickMotores.'), '_blank');
         setOpen(false);
       },
     },
@@ -45,7 +45,7 @@ export function SalesChatbot({ onNavigate }: SalesChatbotProps) {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-jg-red/15 text-jg-red">
                 <MessageCircle className="h-4 w-4" />
               </div>
-              <span className="font-display text-sm font-bold text-jg-text-dark">Asistente JG Motors</span>
+              <span className="font-display text-sm font-bold text-jg-text-dark">Asistente ClickMotores</span>
             </div>
             <button onClick={() => setOpen(false)} className="rounded-lg p-1 text-gray-600 transition-colors hover:bg-jg-silver hover:text-jg-text-dark">
               <X className="h-4 w-4" />
@@ -73,7 +73,7 @@ export function SalesChatbot({ onNavigate }: SalesChatbotProps) {
       <button
         onClick={() => setOpen(!open)}
         className="flex h-14 w-14 items-center justify-center rounded-full bg-jg-red shadow-lg shadow-jg-red/30 transition-all duration-300 hover:scale-110 hover:bg-jg-red-dark"
-        aria-label="Asistente JG Motors"
+        aria-label="Asistente ClickMotores"
       >
         {open ? <X className="h-6 w-6 text-jg-text-dark" /> : <MessageCircle className="h-6 w-6 text-jg-text-dark" />}
         {!open && (

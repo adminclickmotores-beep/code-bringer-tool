@@ -158,7 +158,7 @@ export function SellPage() {
           ? 'Compra Directa (Efectivo)'
           : 'Consignación Comercial';
 
-      const message = `*${modeLabel} - JG Motors*
+      const message = `*${modeLabel} - ClickMotores*
 
 *Cliente:* ${form.name}
 *Teléfono:* ${form.phone}
@@ -204,7 +204,7 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
       id: 'publicar_gratis' as SaleMode,
       icon: Globe,
       title: 'Publicar Mi Vehículo Gratis',
-      desc: 'Publica tu moto o carro en nuestra web 100% gratuito. Los datos de compradores llegan exclusivamente a JG Motors.',
+      desc: 'Publica tu moto o carro en nuestra web 100% gratuito. Los datos de compradores llegan exclusivamente a ClickMotores.',
       color: 'blue',
     },
     {
@@ -330,7 +330,7 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
             </div>
             <div className="mt-4 rounded-lg border border-blue-500/20 bg-blue-500/5 p-4">
               <p className="text-xs text-gray-600">
-                <span className="font-semibold text-blue-400">Esquema de cierre:</span> 80% al vendedor, 20% + gastos de traspaso a JG Motors (de ahí se descuenta la comisión). Firma notarial y traspaso incluidos.
+                <span className="font-semibold text-blue-400">Esquema de cierre:</span> 80% al vendedor, 20% + gastos de traspaso a ClickMotores (de ahí se descuenta la comisión). Firma notarial y traspaso incluidos.
               </p>
             </div>
           </div>
@@ -369,7 +369,7 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
               </p>
             </div>
             <a
-              href={whatsappLink('Hola, soy aliado del gremio y me gustaría publicar mis vehículos en JG Motors.')}
+              href={whatsappLink('Hola, soy aliado del gremio y me gustaría publicar mis vehículos en ClickMotores.')}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary shrink-0"

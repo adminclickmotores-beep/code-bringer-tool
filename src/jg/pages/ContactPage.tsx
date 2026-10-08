@@ -16,7 +16,7 @@ export function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const text = `*Mensaje de Contacto - JG Motors*
+    const text = `*Mensaje de Contacto - ClickMotores*
 
 *Nombre:* ${form.name}
 
@@ -51,7 +51,7 @@ ${form.message}`;
           {/* Contact Info */}
           <div className="space-y-4">
             <a
-              href={whatsappLink('Hola JG Motors, me gustaría más información.')}
+              href={whatsappLink('Hola ClickMotores, me gustaría más información.')}
               target="_blank"
               rel="noopener noreferrer"
               className="card group flex items-center gap-4 p-5 transition-all hover:border-green-500/40"
@@ -79,7 +79,7 @@ ${form.message}`;
               </div>
               <div className="flex-1">
                 <p className="text-xs text-gray-500">Facebook</p>
-                <p className="font-display text-base font-bold text-jg-text-dark">JG Motors</p>
+                <p className="font-display text-base font-bold text-jg-text-dark">ClickMotores</p>
               </div>
               <Send className="h-4 w-4 text-gray-600 transition-colors group-hover:text-blue-400" />
             </a>

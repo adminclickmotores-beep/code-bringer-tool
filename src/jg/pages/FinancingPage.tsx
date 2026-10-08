@@ -208,7 +208,7 @@ export function FinancingPage() {
               <div className="flex items-start gap-2 rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-3">
                 <Info className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
                 <p className="text-xs text-gray-600">
-                  JG Motors NO otorga crédito directo. La financiación se gestiona exclusivamente a
+                  ClickMotores NO otorga crédito directo. La financiación se gestiona exclusivamente a
                   través de entidades bancarias aliadas (Sufi, Banco de Bogotá, Santander) sujeto a
                   estudio crediticio.
                 </p>
@@ -260,7 +260,7 @@ export function FinancingPage() {
                 Te ayudamos a encontrar la mejor opción de financiamiento según tu perfil y presupuesto.
               </p>
               <a
-                href={whatsappLink('Hola JG Motors, me gustaría asesoría sobre financiación de un vehículo.')}
+                href={whatsappLink('Hola ClickMotores, me gustaría asesoría sobre financiación de un vehículo.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 btn-primary w-full"

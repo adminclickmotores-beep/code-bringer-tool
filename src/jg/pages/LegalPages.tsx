@@ -18,7 +18,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
             Términos y Condiciones
           </h1>
           <p className="mt-3 text-sm text-gray-600">
-            JG Motors · Comercializadora Virtual y Tecnológica de Motos y Carros
+            ClickMotores · Comercializadora Virtual y Tecnológica de Motos y Carros
           </p>
         </div>
       </div>
@@ -29,7 +29,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
           <section>
             <h2 className="font-display text-xl font-bold text-jg-text-dark">1. Modelo de Operación</h2>
             <p className="mt-3 text-sm leading-relaxed text-gray-600">
-              JG Motors opera como una <strong className="text-jg-text-dark">comercializadora virtual y tecnológica</strong> especializada
+              ClickMotores opera como una <strong className="text-jg-text-dark">comercializadora virtual y tecnológica</strong> especializada
               en la comercialización, compra, venta y consignación de motos y carros. Próximamente habilitaremos
               vitrinas físicas de atención al público.
             </p>
@@ -49,7 +49,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
               transparencia, honestidad, responsabilidad, seriedad y cumplimiento</strong>.
             </p>
             <p className="mt-3 text-sm leading-relaxed text-gray-600">
-              <strong className="text-jg-text-dark">Política de Selección:</strong> JG Motors NO recibe cualquier vehículo.
+              <strong className="text-jg-text-dark">Política de Selección:</strong> ClickMotores NO recibe cualquier vehículo.
               Nos reservamos el derecho absoluto de aceptación para asegurar que solo ingresen al catálogo vehículos
               en óptimo estado y con procedencia 100% transparente.
             </p>
@@ -64,7 +64,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
             </p>
             <p className="mt-3 text-sm leading-relaxed text-gray-600">
               <strong className="text-jg-text-dark">Exclusividad de Intermediación:</strong> Los datos de contacto de los
-              compradores interesados llegarán única y exclusivamente a JG Motors.
+              compradores interesados llegarán única y exclusivamente a ClickMotores.
             </p>
             <p className="mt-3 text-sm leading-relaxed text-gray-600">
               <strong className="text-jg-text-dark">Control Integral:</strong> Gestionamos las ofertas, transmitimos propuestas
@@ -82,7 +82,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
             </p>
             <p className="mt-3 text-sm leading-relaxed text-gray-600">
               <strong className="text-jg-text-dark">Libertad de Custodia:</strong> El propietario es libre de elegir si deja
-              el vehículo (moto o carro) bajo custodia de JG Motors o si continúa usándolo. Si decide no dejarlo, el
+              el vehículo (moto o carro) bajo custodia de ClickMotores o si continúa usándolo. Si decide no dejarlo, el
               vendedor se compromete a estar disponible y disponer del vehículo para coordinar las citas de exhibición
               cuando exista un comprador interesado.
             </p>
@@ -105,7 +105,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
               <div className="rounded-lg border border-jg-red/20 bg-jg-red/5 p-4">
                 <p className="text-sm text-gray-600">
                   <strong className="text-jg-red">20% restante del valor del negocio + Gastos de traspaso:</strong>{' '}
-                  Consignado a las cuentas oficiales de JG Motors. De este porcentaje, JG Motors descontará su comisión
+                  Consignado a las cuentas oficiales de ClickMotores. De este porcentaje, ClickMotores descontará su comisión
                   comercial (3% carros / 5% motos) y destinará el saldo correspondiente a la gestión de traspaso e
                   impuestos de tránsito.
                 </p>
@@ -129,7 +129,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
               requiere un peritaje especializado, el costo total debe ser asumido por el comprador.
             </p>
             <p className="mt-3 text-sm leading-relaxed text-gray-600">
-              <strong className="text-jg-text-dark">Libertad de Peritaje en Compras/Retomas:</strong> JG Motors realiza una
+              <strong className="text-jg-text-dark">Libertad de Peritaje en Compras/Retomas:</strong> ClickMotores realiza una
               inspección física primaria y decide autónomamente si envía o no a peritaje técnico un vehículo antes de
               comprarlo o retomarlo.
             </p>
@@ -152,7 +152,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
           <section className="border-t border-jg-silver/50 pt-6">
             <p className="text-sm text-gray-600">
               Para consultas sobre estos términos, escríbenos por WhatsApp al{' '}
-              <a href={whatsappLink('Hola JG Motors, tengo una consulta sobre los términos y condiciones.')} target="_blank" rel="noopener noreferrer" className="text-jg-red hover:text-jg-red-light">{WHATSAPP_DISPLAY}</a>
+              <a href={whatsappLink('Hola ClickMotores, tengo una consulta sobre los términos y condiciones.')} target="_blank" rel="noopener noreferrer" className="text-jg-red hover:text-jg-red-light">{WHATSAPP_DISPLAY}</a>
             </p>
             <button onClick={() => onNavigate('home')} className="mt-4 btn-secondary">
               Volver al inicio
@@ -187,7 +187,7 @@ export function HabeasDataPage({ onNavigate }: LegalPageProps) {
           <section>
             <h2 className="font-display text-xl font-bold text-jg-text-dark">1. Responsable del Tratamiento</h2>
             <p className="mt-3 text-sm leading-relaxed text-gray-600">
-              JG Motors, comercializadora virtual y tecnológica de motos y carros con sede en Yumbo, Valle del Cauca,
+              ClickMotores, comercializadora virtual y tecnológica de motos y carros con sede en Yumbo, Valle del Cauca,
               Colombia, es responsable del tratamiento de los datos personales suministrados por los usuarios a través
               de nuestra página web y formularios de contacto.
             </p>
@@ -217,7 +217,7 @@ export function HabeasDataPage({ onNavigate }: LegalPageProps) {
           <section>
             <h2 className="font-display text-xl font-bold text-jg-text-dark">3. Autorización del Titular</h2>
             <p className="mt-3 text-sm leading-relaxed text-gray-600">
-              Al enviar sus datos a través de los formularios de JG Motors, el titular autoriza de manera libre,
+              Al enviar sus datos a través de los formularios de ClickMotores, el titular autoriza de manera libre,
               expresa e informada el tratamiento de sus datos personales para las finalidades descritas en esta
               política.
             </p>
@@ -246,7 +246,7 @@ export function HabeasDataPage({ onNavigate }: LegalPageProps) {
           <section>
             <h2 className="font-display text-xl font-bold text-jg-text-dark">5. Medidas de Seguridad</h2>
             <p className="mt-3 text-sm leading-relaxed text-gray-600">
-              JG Motors adopta las medidas técnicas, administrativas y físicas necesarias para proteger los datos
+              ClickMotores adopta las medidas técnicas, administrativas y físicas necesarias para proteger los datos
               personales contra alteración, pérdida, consulta o uso no autorizado.
             </p>
           </section>
@@ -256,7 +256,7 @@ export function HabeasDataPage({ onNavigate }: LegalPageProps) {
             <p className="mt-3 text-sm leading-relaxed text-gray-600">
               Para ejercer sus derechos o presentar solicitudes relacionadas con el tratamiento de sus datos, puede
               contactarnos a través de WhatsApp:{' '}
-              <a href={whatsappLink('Hola JG Motors, tengo una consulta sobre tratamiento de datos personales.')} target="_blank" rel="noopener noreferrer" className="text-jg-red hover:text-jg-red-light">{WHATSAPP_DISPLAY}</a>
+              <a href={whatsappLink('Hola ClickMotores, tengo una consulta sobre tratamiento de datos personales.')} target="_blank" rel="noopener noreferrer" className="text-jg-red hover:text-jg-red-light">{WHATSAPP_DISPLAY}</a>
             </p>
           </section>
 
