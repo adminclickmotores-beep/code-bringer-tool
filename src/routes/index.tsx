@@ -1,24 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HomePage } from "@/jg/pages/HomePage";
+import { useJg } from "@/jg/JgApp";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "JG Motors | Motos y Carros Usados en Yumbo y Cali" },
+      { name: "description", content: "Compraventa de carros y motos usadas en Yumbo y Cali. Compra directa, consignación, retomas, financiación y trámites de tránsito." },
+      { property: "og:title", content: "JG Motors | Motos y Carros Usados en Yumbo y Cali" },
+      { property: "og:description", content: "Compraventa de carros y motos usadas en Yumbo y Cali. Compra directa, consignación, retomas, financiación y trámites de tránsito." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Page,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+function Page() {
+  const j = useJg();
+  return <HomePage vehicles={j.vehicles} loading={j.loading} onNavigate={j.navigate} onVehicleClick={j.openVehicle} />;
 }
