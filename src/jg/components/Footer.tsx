@@ -139,7 +139,7 @@ export function Footer({ onNavigate }: FooterProps) {
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-jg-silver/30 pt-6 sm:flex-row">
           <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} ClickMotores · Comercializadora Virtual. Todos los derechos reservados.
+            © {new Date().getFullYear()} ClickMotores.com · ClickMotores es una marca comercial y vitrina virtual operada legalmente por JG Motors. Todos los derechos reservados.
           </p>
           <p className="text-xs text-gray-500">Cobertura en toda Colombia</p>
         </div>

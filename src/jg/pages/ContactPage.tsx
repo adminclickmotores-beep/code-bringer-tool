@@ -11,7 +11,7 @@ import { WHATSAPP_DISPLAY, FACEBOOK_URL, whatsappLink } from '@/jg/lib/supabase'
 import { useState } from 'react';
 
 export function ContactPage() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [form, setForm] = useState({ name: '', message: '' });
   const [sent, setSent] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -121,7 +121,7 @@ ${form.message}`;
                 </div>
                 <h3 className="font-display text-xl font-bold text-jg-text-dark">¡Mensaje enviado!</h3>
                 <p className="mt-2 max-w-md text-sm text-gray-600">
-                  Hemos abierto WhatsApp y tu correo con el mensaje listo para enviar. Te
+                  Hemos abierto WhatsApp con el mensaje listo para enviar. Te
                   responderemos a la brevedad.
                 </p>
                 <button onClick={() => setSent(false)} className="mt-6 btn-secondary">
@@ -138,17 +138,6 @@ ${form.message}`;
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     placeholder="Tu nombre"
-                    className="input-field"
-                  />
-                </div>
-                <div>
-                  <label className="label-field">Correo electrónico *</label>
-                  <input
-                    type="email"
-                    required
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    placeholder="tu@correo.com"
                     className="input-field"
                   />
                 </div>
