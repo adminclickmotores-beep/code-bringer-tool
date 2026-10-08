@@ -46,7 +46,7 @@ function BankLogo({ name }: { name: string }) {
       </svg>
     ),
   };
-  return logos[name] ?? <span className="text-sm font-medium text-gray-300">{name}</span>;
+  return logos[name] ?? <span className="text-sm font-medium text-gray-600">{name}</span>;
 }
 
 const faqItems = [
@@ -100,14 +100,14 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 Yumbo, Valle del Cauca
               </span>
             </div>
-            <h1 className="mt-5 animate-fade-up font-display text-4xl font-bold leading-tight text-white animate-delay-100 sm:text-5xl md:text-6xl">
+            <h1 className="mt-5 animate-fade-up font-display text-4xl font-bold leading-tight text-jg-text-dark animate-delay-100 sm:text-5xl md:text-6xl">
               Tu próximo vehículo
               <br />
               <span className="text-gradient">está aquí</span>
             </h1>
-            <p className="mt-5 max-w-xl animate-fade-up text-base leading-relaxed text-gray-300 animate-delay-200 sm:text-lg">
+            <p className="mt-5 max-w-xl animate-fade-up text-base leading-relaxed text-gray-600 animate-delay-200 sm:text-lg">
               Compra y venta de motos de bajo, mediano y alto cilindraje, y carros multimarca en
-              excelente estado. <span className="font-semibold text-white">100% verificados</span>,
+              excelente estado. <span className="font-semibold text-jg-text-dark">100% verificados</span>,
               sin chicharrones, con trámite de traspaso legal incluido a nombre del nuevo dueño.
             </p>
 
@@ -123,16 +123,16 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
 
             <div className="mt-10 flex animate-fade-up animate-delay-400 gap-6 sm:gap-10">
               <div>
-                <p className="font-display text-3xl font-bold text-white">{motosCount}</p>
-                <p className="text-xs text-gray-400">Motos disponibles</p>
+                <p className="font-display text-3xl font-bold text-jg-text-dark">{motosCount}</p>
+                <p className="text-xs text-gray-600">Motos disponibles</p>
               </div>
               <div className="border-l border-jg-silver pl-6 sm:pl-10">
-                <p className="font-display text-3xl font-bold text-white">{carrosCount}</p>
-                <p className="text-xs text-gray-400">Carros disponibles</p>
+                <p className="font-display text-3xl font-bold text-jg-text-dark">{carrosCount}</p>
+                <p className="text-xs text-gray-600">Carros disponibles</p>
               </div>
               <div className="border-l border-jg-silver pl-6 sm:pl-10">
-                <p className="font-display text-3xl font-bold text-white">100%</p>
-                <p className="text-xs text-gray-400">Verificados</p>
+                <p className="font-display text-3xl font-bold text-jg-text-dark">100%</p>
+                <p className="text-xs text-gray-600">Verificados</p>
               </div>
             </div>
           </div>
@@ -176,8 +176,8 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 <div className={`mb-4 inline-flex rounded-xl bg-jg-dark p-3 ${item.color} transition-transform group-hover:scale-110`}>
                   <item.icon className="h-7 w-7" />
                 </div>
-                <h3 className="font-display text-lg font-bold text-white">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-400">{item.desc}</p>
+                <h3 className="font-display text-lg font-bold text-jg-text-dark">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-600">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -188,8 +188,8 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 <Bike className="h-7 w-7" />
               </div>
               <div>
-                <h3 className="font-display text-lg font-bold text-white">Motos Multicilindraje</h3>
-                <p className="mt-1 text-sm text-gray-400">
+                <h3 className="font-display text-lg font-bold text-jg-text-dark">Motos Multicilindraje</h3>
+                <p className="mt-1 text-sm text-gray-600">
                   Desde bajo cilindraje para la ciudad hasta alto cilindraje deportivo. Todas
                   verificadas y listas para rodar.
                 </p>
@@ -200,8 +200,8 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 <Car className="h-7 w-7" />
               </div>
               <div>
-                <h3 className="font-display text-lg font-bold text-white">Carros Multimarca</h3>
-                <p className="mt-1 text-sm text-gray-400">
+                <h3 className="font-display text-lg font-bold text-jg-text-dark">Carros Multimarca</h3>
+                <p className="mt-1 text-sm text-gray-600">
                   Sedanes, SUVs y compactos de todas las marcas. En excelente estado y con
                   documentación al día.
                 </p>
@@ -266,7 +266,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
           ) : (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <Search className="mb-4 h-12 w-12 text-gray-600" />
-              <p className="text-gray-400">No hay vehículos destacados en este momento.</p>
+              <p className="text-gray-600">No hay vehículos destacados en este momento.</p>
             </div>
           )}
 
@@ -295,7 +295,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-jg-dark text-blue-400">
                 <FileText className="h-6 w-6" />
               </div>
-              <h3 className="font-display text-lg font-bold text-white">Gestión de Trámites de Tránsito</h3>
+              <h3 className="font-display text-lg font-bold text-jg-text-dark">Gestión de Trámites de Tránsito</h3>
               <ul className="mt-3 space-y-2">
                 {[
                   'Traspasos',
@@ -303,7 +303,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                   'Traslado y radicación de cuenta',
                   'Certificados de tradición (embargos)',
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-400">
+                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
                     {item}
                   </li>
@@ -324,7 +324,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-jg-dark text-jg-red">
                 <ShieldCheck className="h-6 w-6" />
               </div>
-              <h3 className="font-display text-lg font-bold text-white">SOAT y Pólizas Todo Riesgo</h3>
+              <h3 className="font-display text-lg font-bold text-jg-text-dark">SOAT y Pólizas Todo Riesgo</h3>
               <ul className="mt-3 space-y-2">
                 {[
                   'Cotizaciones multiaseguradora',
@@ -332,7 +332,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                   'SOAT con descuento especial',
                   'Pólizas todo riesgo para auto y moto',
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-400">
+                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
                     {item}
                   </li>
@@ -363,14 +363,14 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                   <TrendingUp className="h-3.5 w-3.5" />
                   Consignación
                 </span>
-                <h2 className="mt-4 font-display text-2xl font-bold text-white sm:text-3xl">
+                <h2 className="mt-4 font-display text-2xl font-bold text-jg-text-dark sm:text-3xl">
                   Vende o Consigna tu Vehículo
                 </h2>
-                <p className="mt-3 text-sm leading-relaxed text-gray-400 sm:text-base">
-                  Pago único de <span className="font-semibold text-white">$100.000 COP</span> para
+                <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:text-base">
+                  Pago único de <span className="font-semibold text-jg-text-dark">$100.000 COP</span> para
                   pauta publicitaria y búsqueda de compradores. Comisión del{' '}
-                  <span className="font-semibold text-white">3%</span> para carros y{' '}
-                  <span className="font-semibold text-white">5%</span> para motos al concretar la
+                  <span className="font-semibold text-jg-text-dark">3%</span> para carros y{' '}
+                  <span className="font-semibold text-jg-text-dark">5%</span> para motos al concretar la
                   venta. También aceptamos retomas.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
@@ -398,7 +398,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3">
                     <CheckCircle2 className="h-5 w-5 shrink-0 text-green-400" />
-                    <span className="text-sm text-gray-300">{item}</span>
+                    <span className="text-sm text-gray-600">{item}</span>
                   </div>
                 ))}
               </div>
@@ -425,14 +425,14 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                   className="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-jg-dark/50"
                 >
-                  <span className="font-display text-sm font-bold text-white">{item.q}</span>
+                  <span className="font-display text-sm font-bold text-jg-text-dark">{item.q}</span>
                   <ChevronDown
-                    className={`h-5 w-5 shrink-0 text-gray-400 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`}
+                    className={`h-5 w-5 shrink-0 text-gray-600 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`}
                   />
                 </button>
                 {openFaq === idx && (
                   <div className="animate-slide-down border-t border-jg-silver/50 px-5 py-4">
-                    <p className="text-sm leading-relaxed text-gray-400">{item.a}</p>
+                    <p className="text-sm leading-relaxed text-gray-600">{item.a}</p>
                   </div>
                 )}
               </div>

@@ -110,7 +110,7 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
               </>
             ) : (
               <div className="flex h-full w-full items-center justify-center">
-                <ImageIcon className="h-16 w-16 text-gray-300" />
+                <ImageIcon className="h-16 w-16 text-gray-600" />
               </div>
             )}
             <div className="absolute top-3 left-3 flex flex-col gap-1.5">

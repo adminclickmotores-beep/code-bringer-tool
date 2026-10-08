@@ -26,7 +26,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-jg-silver/30 bg-jg-carbon/95 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-jg-silver/30 bg-jg-black/95 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <button onClick={() => handleNav('home')} className="transition-transform hover:scale-105">
             <Logo />
@@ -82,7 +82,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
               <Facebook className="h-5 w-5" />
             </a>
             <a
-              href={whatsappLink('Hola JG Motors, me gustaría más información.')}
+              href={whatsappLink('Hola ClickMotores, me gustaría más información.')}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary !px-4 !py-2"
@@ -102,7 +102,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
         </div>
 
         {mobileOpen && (
-          <div className="animate-slide-down border-t border-jg-silver/30 bg-jg-carbon lg:hidden">
+          <div className="animate-slide-down border-t border-jg-silver/30 bg-jg-black lg:hidden">
             <nav className="space-y-1 px-4 py-4">
               {navItems.map((item) => (
                 <button
@@ -136,7 +136,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
                   <Facebook className="h-5 w-5" />
                 </a>
                 <a
-                  href={whatsappLink('Hola JG Motors, me gustaría más información.')}
+                  href={whatsappLink('Hola ClickMotores, me gustaría más información.')}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary !px-4 !py-2 text-xs"

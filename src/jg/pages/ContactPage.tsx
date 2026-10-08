@@ -36,10 +36,10 @@ ${form.message}`;
             <MapPin className="h-3.5 w-3.5" />
             Yumbo, Valle del Cauca
           </span>
-          <h1 className="mt-4 font-display text-3xl font-bold text-white sm:text-4xl md:text-5xl">
+          <h1 className="mt-4 font-display text-3xl font-bold text-jg-text-dark sm:text-4xl md:text-5xl">
             Contáctanos
           </h1>
-          <p className="mt-3 max-w-2xl text-sm text-gray-400 sm:text-base">
+          <p className="mt-3 max-w-2xl text-sm text-gray-600 sm:text-base">
             Estamos en Yumbo, Valle del Cauca. Escríbenos por WhatsApp, llámanos o visítanos. Te
             ayudamos a encontrar el vehículo ideal o a vender el tuyo.
           </p>
@@ -61,7 +61,7 @@ ${form.message}`;
               </div>
               <div className="flex-1">
                 <p className="text-xs text-gray-500">WhatsApp / Teléfono</p>
-                <p className="font-display text-lg font-bold text-white">{WHATSAPP_DISPLAY}</p>
+                <p className="font-display text-lg font-bold text-jg-text-dark">{WHATSAPP_DISPLAY}</p>
               </div>
               <Send className="h-4 w-4 text-gray-600 transition-colors group-hover:text-green-400" />
             </a>
@@ -79,7 +79,7 @@ ${form.message}`;
               </div>
               <div className="flex-1">
                 <p className="text-xs text-gray-500">Facebook</p>
-                <p className="font-display text-base font-bold text-white">JG Motors</p>
+                <p className="font-display text-base font-bold text-jg-text-dark">JG Motors</p>
               </div>
               <Send className="h-4 w-4 text-gray-600 transition-colors group-hover:text-blue-400" />
             </a>
@@ -90,7 +90,7 @@ ${form.message}`;
               </div>
               <div>
                 <p className="text-xs text-gray-500">Horario de atención</p>
-                <p className="font-display text-base font-bold text-white">Lun - Sáb: 8:00 AM - 6:00 PM</p>
+                <p className="font-display text-base font-bold text-jg-text-dark">Lun - Sáb: 8:00 AM - 6:00 PM</p>
               </div>
             </div>
 
@@ -100,7 +100,7 @@ ${form.message}`;
               </div>
               <div>
                 <p className="text-xs text-gray-500">Ubicación</p>
-                <p className="font-display text-base font-bold text-white">Yumbo, Valle del Cauca, Colombia</p>
+                <p className="font-display text-base font-bold text-jg-text-dark">Yumbo, Valle del Cauca, Colombia</p>
               </div>
             </div>
           </div>
@@ -108,8 +108,8 @@ ${form.message}`;
           {/* Contact Form */}
           <div className="card overflow-hidden">
             <div className="border-b border-jg-silver/50 px-6 py-5">
-              <h2 className="font-display text-xl font-bold text-white">Envíanos un mensaje</h2>
-              <p className="mt-1 text-sm text-gray-400">
+              <h2 className="font-display text-xl font-bold text-jg-text-dark">Envíanos un mensaje</h2>
+              <p className="mt-1 text-sm text-gray-600">
                 Se enviará por WhatsApp a {WHATSAPP_DISPLAY}.
               </p>
             </div>
@@ -119,8 +119,8 @@ ${form.message}`;
                 <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/15">
                   <MessageCircle className="h-8 w-8 text-green-400" />
                 </div>
-                <h3 className="font-display text-xl font-bold text-white">¡Mensaje enviado!</h3>
-                <p className="mt-2 max-w-md text-sm text-gray-400">
+                <h3 className="font-display text-xl font-bold text-jg-text-dark">¡Mensaje enviado!</h3>
+                <p className="mt-2 max-w-md text-sm text-gray-600">
                   Hemos abierto WhatsApp y tu correo con el mensaje listo para enviar. Te
                   responderemos a la brevedad.
                 </p>

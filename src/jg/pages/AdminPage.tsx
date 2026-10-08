@@ -427,14 +427,14 @@ export function AdminPage({
             <div>
               <div className="flex items-center gap-2">
                 <Settings2 className="h-6 w-6 text-jg-red" />
-                <h1 className="font-display text-3xl font-bold text-white">Panel de Control</h1>
+                <h1 className="font-display text-3xl font-bold text-jg-text-dark">Panel de Control</h1>
               </div>
-              <p className="mt-2 text-sm text-gray-400">Gestión de inventario público, publicaciones y CRM comercial</p>
+              <p className="mt-2 text-sm text-gray-600">Gestión de inventario público, publicaciones y CRM comercial</p>
             </div>
             <div className="flex flex-col items-end gap-3">
               <div className="flex items-center gap-2 rounded-lg border border-green-500/20 bg-green-500/5 px-3 py-2 text-xs">
                 <ShieldCheck className="h-4 w-4 text-green-400" />
-                <span className="text-gray-300">{userEmail}</span>
+                <span className="text-gray-600">{userEmail}</span>
               </div>
               <div className="flex items-center gap-2">
                 {/* Notifications bell */}
@@ -444,7 +444,7 @@ export function AdminPage({
                       setShowNotifications(!showNotifications);
                       if (unreadCount > 0) markAllRead();
                     }}
-                    className="relative rounded-lg border border-jg-silver bg-jg-dark p-2 text-gray-400 transition-all hover:text-white"
+                    className="relative rounded-lg border border-jg-silver bg-jg-dark p-2 text-gray-600 transition-all hover:text-jg-text-dark"
                     title="Notificaciones"
                   >
                     <Bell className="h-4 w-4" />
@@ -457,7 +457,7 @@ export function AdminPage({
                   {showNotifications && (
                     <div className="absolute right-0 top-full mt-2 z-50 w-80 animate-slide-down rounded-xl border border-jg-silver bg-jg-carbon shadow-2xl">
                       <div className="border-b border-jg-silver/50 px-4 py-3">
-                        <p className="font-display text-sm font-bold text-white">Notificaciones</p>
+                        <p className="font-display text-sm font-bold text-jg-text-dark">Notificaciones</p>
                       </div>
                       <div className="max-h-64 overflow-y-auto">
                         {notifications.length === 0 ? (
@@ -465,8 +465,8 @@ export function AdminPage({
                         ) : (
                           notifications.slice(0, 10).map((n) => (
                             <div key={n.id} className="border-b border-jg-silver/30 px-4 py-3">
-                              <p className="text-xs font-semibold text-white">{n.title}</p>
-                              <p className="mt-0.5 text-xs text-gray-400">{n.message}</p>
+                              <p className="text-xs font-semibold text-jg-text-dark">{n.title}</p>
+                              <p className="mt-0.5 text-xs text-gray-600">{n.message}</p>
                               <p className="mt-0.5 text-[10px] text-gray-600">{new Date(n.created_at).toLocaleString('es-CO')}</p>
                             </div>
                           ))
@@ -495,7 +495,7 @@ export function AdminPage({
                 className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   adminSection === tab.id
                     ? 'bg-jg-red/10 text-jg-red border border-jg-red/30'
-                    : 'border border-jg-silver text-gray-400 hover:text-white'
+                    : 'border border-jg-silver text-gray-600 hover:text-jg-text-dark'
                 }`}
               >
                 <tab.icon className="h-4 w-4" />
@@ -513,9 +513,9 @@ export function AdminPage({
           {adminSection === 'inventario' && (
             <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
               {[
-                { label: 'Total', value: vehicles.length, color: 'text-white' },
+                { label: 'Total', value: vehicles.length, color: 'text-jg-text-dark' },
                 { label: 'Disponibles', value: vehicles.filter((v) => v.status === 'disponible').length, color: 'text-green-400' },
-                { label: 'Vendidos', value: vehicles.filter((v) => v.status === 'vendido').length, color: 'text-gray-400' },
+                { label: 'Vendidos', value: vehicles.filter((v) => v.status === 'vendido').length, color: 'text-gray-600' },
                 { label: 'Destacados', value: vehicles.filter((v) => v.featured).length, color: 'text-jg-red' },
               ].map((stat) => (
                 <div key={stat.label} className="card p-4">
@@ -564,7 +564,7 @@ export function AdminPage({
                               <span className={`h-1.5 w-1.5 rounded-full ${status.dot}`} />
                               {status.label}
                             </span>
-                            <span className="badge border border-jg-silver text-gray-400">
+                            <span className="badge border border-jg-silver text-gray-600">
                               {vehicle.type === 'moto' ? <Bike className="h-3 w-3" /> : <Car className="h-3 w-3" />}
                               {vehicle.type === 'moto' ? 'Moto' : 'Carro'}
                             </span>
@@ -579,7 +579,7 @@ export function AdminPage({
                               </span>
                             )}
                           </div>
-                          <h3 className="mt-1.5 truncate font-display text-sm font-bold text-white">{vehicle.title}</h3>
+                          <h3 className="mt-1.5 truncate font-display text-sm font-bold text-jg-text-dark">{vehicle.title}</h3>
                           <p className="text-xs text-gray-500">{vehicle.brand} · {vehicle.model} · {vehicle.year}</p>
                           <p className="mt-0.5 text-sm font-semibold text-gradient">{formatCOP(vehicle.price)}</p>
                         </div>
@@ -597,7 +597,7 @@ export function AdminPage({
                         <select
                           value={vehicle.tag || ''}
                           onChange={(e) => handleTagChange(vehicle.id, (e.target.value || null) as Vehicle['tag'])}
-                          className="rounded-lg border border-jg-silver bg-jg-dark px-2 py-2 text-xs text-white focus:border-jg-red focus:outline-none"
+                          className="rounded-lg border border-jg-silver bg-jg-dark px-2 py-2 text-xs text-jg-text-dark focus:border-jg-red focus:outline-none"
                         >
                           <option value="">Sin etiqueta</option>
                           <option value="recien_ingresado">Recién Ingresado</option>
@@ -608,7 +608,7 @@ export function AdminPage({
                         <select
                           value={vehicle.status}
                           onChange={(e) => handleStatusChange(vehicle.id, e.target.value as Vehicle['status'])}
-                          className="rounded-lg border border-jg-silver bg-jg-dark px-3 py-2 text-xs text-white focus:border-jg-red focus:outline-none"
+                          className="rounded-lg border border-jg-silver bg-jg-dark px-3 py-2 text-xs text-jg-text-dark focus:border-jg-red focus:outline-none"
                         >
                           <option value="disponible">Disponible</option>
                           <option value="no_disponible">No disponible</option>
@@ -624,7 +624,7 @@ export function AdminPage({
                           <div className="flex items-center gap-1.5 rounded-lg bg-jg-red/10 px-2 py-1">
                             <span className="text-xs text-jg-red">¿Seguro?</span>
                             <button onClick={() => handleDelete(vehicle.id)} className="rounded bg-jg-red px-2 py-1 text-xs font-bold text-white">Sí</button>
-                            <button onClick={() => setConfirmDelete(null)} className="rounded bg-jg-silver px-2 py-1 text-xs font-bold text-gray-300">No</button>
+                            <button onClick={() => setConfirmDelete(null)} className="rounded bg-jg-silver px-2 py-1 text-xs font-bold text-gray-600">No</button>
                           </div>
                         ) : (
                           <button onClick={() => setConfirmDelete(vehicle.id)} className="rounded-lg bg-jg-dark p-2 text-jg-red transition-all hover:bg-jg-red/15" title="Eliminar">
@@ -646,7 +646,7 @@ export function AdminPage({
             {submissions.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <Bell className="mb-4 h-12 w-12 text-gray-600" />
-                <p className="text-gray-400">No hay publicaciones pendientes.</p>
+                <p className="text-gray-600">No hay publicaciones pendientes.</p>
               </div>
             ) : (
               submissions.map((sub) => (
@@ -657,17 +657,17 @@ export function AdminPage({
                         <span className={`badge ${sub.status === 'pendiente' ? 'border border-yellow-500/30 bg-yellow-500/15 text-yellow-400' : sub.status === 'aprobado' ? 'border border-green-500/30 bg-green-500/15 text-green-400' : 'border border-jg-red/30 bg-jg-red/15 text-jg-red'}`}>
                           {sub.status === 'pendiente' ? 'Pendiente' : sub.status === 'aprobado' ? 'Aprobado' : 'Rechazado'}
                         </span>
-                        <span className="badge border border-jg-silver text-gray-400">
+                        <span className="badge border border-jg-silver text-gray-600">
                           {sub.vehicle_type === 'moto' ? <Bike className="h-3 w-3" /> : <Car className="h-3 w-3" />}
                           {sub.vehicle_type === 'moto' ? 'Moto' : 'Carro'}
                         </span>
                       </div>
-                      <h3 className="mt-1.5 font-display text-sm font-bold text-white">{sub.brand} {sub.model} ({sub.year})</h3>
+                      <h3 className="mt-1.5 font-display text-sm font-bold text-jg-text-dark">{sub.brand} {sub.model} ({sub.year})</h3>
                       <p className="text-xs text-gray-500">
                         Cliente: {sub.name} · {sub.phone} · {sub.condition || 'Sin estado'}
                       </p>
                       {sub.asking_price && <p className="mt-0.5 text-sm font-semibold text-gradient">{formatCOP(sub.asking_price)}</p>}
-                      {sub.description && <p className="mt-1 text-xs text-gray-400 line-clamp-2">{sub.description}</p>}
+                      {sub.description && <p className="mt-1 text-xs text-gray-600 line-clamp-2">{sub.description}</p>}
                       {sub.image_urls.length > 0 && (
                         <div className="mt-2 flex gap-1.5">
                           {sub.image_urls.slice(0, 4).map((url, idx) => (
@@ -689,7 +689,7 @@ export function AdminPage({
                           href={whatsappLink(`Hola ${sub.name}, sobre la publicación de tu ${sub.brand} ${sub.model} en JG Motors.`)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="rounded-lg bg-jg-dark p-2 text-gray-400 transition-all hover:text-white"
+                          className="rounded-lg bg-jg-dark p-2 text-gray-600 transition-all hover:text-jg-text-dark"
                           title="Contactar por WhatsApp"
                         >
                           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c0-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
@@ -709,7 +709,7 @@ export function AdminPage({
             {leads.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <Users className="mb-4 h-12 w-12 text-gray-600" />
-                <p className="text-gray-400">No hay leads comerciales registrados.</p>
+                <p className="text-gray-600">No hay leads comerciales registrados.</p>
               </div>
             ) : (
               leads.map((lead) => {
@@ -720,7 +720,7 @@ export function AdminPage({
                       <div className="flex-1">
                         <div className="flex flex-wrap items-center gap-2">
                           <span className={`badge ${sc.class}`}>{sc.label}</span>
-                          <span className="badge border border-jg-silver text-gray-400">
+                          <span className="badge border border-jg-silver text-gray-600">
                             {lead.vehicle_type === 'moto' ? <Bike className="h-3 w-3" /> : <Car className="h-3 w-3" />}
                             {lead.vehicle_type === 'moto' ? 'Moto' : 'Carro'}
                           </span>
@@ -728,14 +728,14 @@ export function AdminPage({
                             {lead.mode === 'compra_directa' ? 'Compra Directa' : 'Consignación'}
                           </span>
                         </div>
-                        <h3 className="mt-1.5 font-display text-sm font-bold text-white">{lead.brand} {lead.model} ({lead.year})</h3>
+                        <h3 className="mt-1.5 font-display text-sm font-bold text-jg-text-dark">{lead.brand} {lead.model} ({lead.year})</h3>
                         <p className="text-xs text-gray-500">
                           Cliente: {lead.name} · {lead.phone}{lead.email ? ` · ${lead.email}` : ''}
                         </p>
                         {lead.asking_price != null && lead.asking_price > 0 && (
                           <p className="mt-0.5 text-sm font-semibold text-gradient">{formatCOP(lead.asking_price)}</p>
                         )}
-                        {lead.description && <p className="mt-1 text-xs text-gray-400 line-clamp-2">{lead.description}</p>}
+                        {lead.description && <p className="mt-1 text-xs text-gray-600 line-clamp-2">{lead.description}</p>}
                         {lead.image_urls.length > 0 && (
                           <div className="mt-2 flex gap-1.5">
                             {lead.image_urls.slice(0, 4).map((url, idx) => (
@@ -749,7 +749,7 @@ export function AdminPage({
                         <select
                           value={lead.status}
                           onChange={(e) => handleLeadStatusChange(lead.id, e.target.value as Lead['status'])}
-                          className="rounded-lg border border-jg-silver bg-jg-dark px-3 py-2 text-xs text-white focus:border-jg-red focus:outline-none"
+                          className="rounded-lg border border-jg-silver bg-jg-dark px-3 py-2 text-xs text-jg-text-dark focus:border-jg-red focus:outline-none"
                         >
                           <option value="nuevo_lead">Nuevo Lead</option>
                           <option value="en_negociacion">En Negociación</option>
@@ -761,7 +761,7 @@ export function AdminPage({
                           href={whatsappLink(`Hola ${lead.name}, sobre tu ${lead.mode === 'compra_directa' ? 'compra directa' : 'consignación'} de ${lead.brand} ${lead.model} en JG Motors.`)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="rounded-lg bg-jg-dark p-2 text-gray-400 transition-all hover:text-white"
+                          className="rounded-lg bg-jg-dark p-2 text-gray-600 transition-all hover:text-jg-text-dark"
                           title="Contactar por WhatsApp"
                         >
                           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c0-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
@@ -779,7 +779,7 @@ export function AdminPage({
         {adminSection === 'reportes' && (
           <div>
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="font-display text-xl font-bold text-white">Estadísticas e Ingresos</h2>
+              <h2 className="font-display text-xl font-bold text-jg-text-dark">Estadísticas e Ingresos</h2>
               <button onClick={exportSalesCSV} className="btn-secondary !py-2">
                 <FileDown className="h-4 w-4" />
                 Exportar CSV
@@ -788,7 +788,7 @@ export function AdminPage({
 
             <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
               {[
-                { label: 'Ventas del Mes', value: formatCOP(monthSales.reduce((s, x) => s + x.sale_price, 0)), color: 'text-white', icon: DollarSign },
+                { label: 'Ventas del Mes', value: formatCOP(monthSales.reduce((s, x) => s + x.sale_price, 0)), color: 'text-jg-text-dark', icon: DollarSign },
                 { label: 'Comisiones Consignación', value: formatCOP(totalCommission), color: 'text-green-400', icon: TrendingUp },
                 { label: 'Ingresos Trámites/Seguros', value: formatCOP(totalTramites), color: 'text-blue-400', icon: FileDown },
                 { label: 'Ganancia Neta Total', value: formatCOP(totalNet), color: 'text-jg-red', icon: BarChart3 },
@@ -805,7 +805,7 @@ export function AdminPage({
 
             <div className="card overflow-hidden">
               <div className="border-b border-jg-silver/50 px-5 py-4">
-                <h3 className="font-display text-base font-bold text-white">Historial de Ventas</h3>
+                <h3 className="font-display text-base font-bold text-jg-text-dark">Historial de Ventas</h3>
               </div>
               {sales.length === 0 ? (
                 <p className="px-5 py-10 text-center text-sm text-gray-500">No hay ventas registradas.</p>
@@ -826,9 +826,9 @@ export function AdminPage({
                     <tbody>
                       {sales.map((s) => (
                         <tr key={s.id} className="border-b border-jg-silver/30">
-                          <td className="px-4 py-3 text-white">{s.vehicle_title}</td>
-                          <td className="px-4 py-3 text-gray-400">{s.sale_type === 'directa' ? 'Directa' : 'Consignación'}</td>
-                          <td className="px-4 py-3 text-right text-gray-300">{formatCOP(s.sale_price)}</td>
+                          <td className="px-4 py-3 text-jg-text-dark">{s.vehicle_title}</td>
+                          <td className="px-4 py-3 text-gray-600">{s.sale_type === 'directa' ? 'Directa' : 'Consignación'}</td>
+                          <td className="px-4 py-3 text-right text-gray-600">{formatCOP(s.sale_price)}</td>
                           <td className="px-4 py-3 text-right text-green-400">{formatCOP(s.commission_amount)}</td>
                           <td className="px-4 py-3 text-right text-blue-400">{formatCOP(s.tramites_income)}</td>
                           <td className="px-4 py-3 text-right font-semibold text-gradient">{formatCOP(s.net_income)}</td>
@@ -846,21 +846,21 @@ export function AdminPage({
         {/* CONSULTAS SECTION */}
         {adminSection === 'consultas' && (
           <div>
-            <h2 className="mb-6 font-display text-xl font-bold text-white">Consultas y Prospectos</h2>
+            <h2 className="mb-6 font-display text-xl font-bold text-jg-text-dark">Consultas y Prospectos</h2>
             {consultas.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <Users className="mb-4 h-12 w-12 text-gray-600" />
-                <p className="text-gray-400">No hay consultas registradas.</p>
+                <p className="text-gray-600">No hay consultas registradas.</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {consultas.map((c) => (
                   <div key={c.id} className="card flex items-center justify-between p-4">
                     <div>
-                      <span className="badge border border-jg-silver text-gray-400">{consultaTypeLabels[c.type]}</span>
-                      {c.vehicle_title && <p className="mt-1.5 text-sm font-medium text-white">{c.vehicle_title}</p>}
+                      <span className="badge border border-jg-silver text-gray-600">{consultaTypeLabels[c.type]}</span>
+                      {c.vehicle_title && <p className="mt-1.5 text-sm font-medium text-jg-text-dark">{c.vehicle_title}</p>}
                       {c.contact && <p className="text-xs text-gray-500">Contacto: {c.contact}</p>}
-                      {c.notes && <p className="mt-0.5 text-xs text-gray-400">{c.notes}</p>}
+                      {c.notes && <p className="mt-0.5 text-xs text-gray-600">{c.notes}</p>}
                     </div>
                     <p className="text-xs text-gray-600">{new Date(c.created_at).toLocaleString('es-CO')}</p>
                   </div>
@@ -876,8 +876,8 @@ export function AdminPage({
         <div className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-sm" onClick={resetForm}>
           <div className="relative my-8 w-full max-w-2xl animate-scale-in rounded-2xl border border-jg-silver bg-jg-carbon" onClick={(e) => e.stopPropagation()}>
             <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-2xl border-b border-jg-silver/50 bg-jg-carbon px-6 py-4">
-              <h2 className="font-display text-xl font-bold text-white">{editingId ? 'Editar Vehículo' : 'Nuevo Vehículo'}</h2>
-              <button onClick={resetForm} className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-jg-silver hover:text-white">
+              <h2 className="font-display text-xl font-bold text-jg-text-dark">{editingId ? 'Editar Vehículo' : 'Nuevo Vehículo'}</h2>
+              <button onClick={resetForm} className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-jg-silver hover:text-jg-text-dark">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -996,7 +996,7 @@ export function AdminPage({
               <div>
                 <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-jg-silver/50 bg-jg-dark p-3">
                   <input type="checkbox" checked={form.consignado} onChange={(e) => setForm({ ...form, consignado: e.target.checked })} className="h-4 w-4 accent-jg-red" />
-                  <span className="text-sm text-gray-300">Marcar como vehículo consignado (muestra aviso de ubicación y cita previa)</span>
+                  <span className="text-sm text-gray-600">Marcar como vehículo consignado (muestra aviso de ubicación y cita previa)</span>
                 </label>
               </div>
 
@@ -1005,7 +1005,7 @@ export function AdminPage({
                 <label className="label-field">Fotos del vehículo (máximo {MAX_PHOTOS})</label>
 
                 <div className="mb-3 rounded-lg border border-jg-silver/50 bg-jg-dark p-3">
-                  <p className="mb-1.5 text-xs font-semibold text-gray-300">Guía de fotos ({form.type === 'moto' ? 'Moto' : 'Carro'}):</p>
+                  <p className="mb-1.5 text-xs font-semibold text-gray-600">Guía de fotos ({form.type === 'moto' ? 'Moto' : 'Carro'}):</p>
                   <div className="grid grid-cols-2 gap-1 sm:grid-cols-4">
                     {photoGuide.map((label, idx) => {
                       const hasPhoto = idx < form.image_urls.length;
@@ -1024,7 +1024,7 @@ export function AdminPage({
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={form.image_urls.length >= MAX_PHOTOS || uploading}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-jg-silver bg-jg-dark py-3 text-sm text-gray-400 transition-all hover:border-jg-red/50 hover:text-white disabled:opacity-50"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-jg-silver bg-jg-dark py-3 text-sm text-gray-600 transition-all hover:border-jg-red/50 hover:text-jg-text-dark disabled:opacity-50"
                 >
                   {uploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Upload className="h-5 w-5" />}
                   {form.image_urls.length >= MAX_PHOTOS ? `Máximo de ${MAX_PHOTOS} fotos` : `Subir fotos (${form.image_urls.length}/${MAX_PHOTOS})`}
@@ -1048,7 +1048,7 @@ export function AdminPage({
               <div>
                 <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-jg-silver/50 bg-jg-dark p-3">
                   <input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} className="h-4 w-4 accent-jg-red" />
-                  <span className="text-sm text-gray-300">Mostrar como destacado en la página principal</span>
+                  <span className="text-sm text-gray-600">Mostrar como destacado en la página principal</span>
                 </label>
               </div>
             </div>
