@@ -304,5 +304,7 @@
   .animate-delay-500 { animation-delay: 500ms; }
 }
 
-h1,h2,h3,h4,h5,h6{color:#111827}
-select option{background:#FFFFFF;color:#111827}
+@layer base {
+  h1,h2,h3,h4,h5,h6 { color: #111827; }
+  select option { background: #FFFFFF; color: #111827; }
+}
