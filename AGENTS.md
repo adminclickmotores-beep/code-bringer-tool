@@ -8,3 +8,9 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+# Project rules
+
+- JG Motors app code lives in `src/jg/` (imported from Bolt); route files in `src/routes/` are thin wrappers that read shared state from `useJg()` — keeps the original page components intact.
+- `JgApp` (mounted in `__root.tsx`) owns header/footer, vehicles, auth session and notifications — one shared shell for all pages.
+- Storage buckets are private (workspace blocks public buckets); vehicle photo uploads store long-lived signed URLs.
