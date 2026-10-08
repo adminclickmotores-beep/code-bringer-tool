@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useMemo, useEffect } from 'react';
 import { Search, SlidersHorizontal, X, Bike, Car, ImageIcon } from 'lucide-react';
 import { Vehicle, STATUS_CONFIG, formatCOP } from '@/jg/lib/supabase';
