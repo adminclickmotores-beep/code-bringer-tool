@@ -93,8 +93,8 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
     <div className="animate-fade-in">
       <div className="border-b border-jg-silver/50 bg-jg-carbon/50 py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-display text-3xl font-bold text-white sm:text-4xl">Inventario</h1>
-          <p className="mt-2 text-sm text-gray-400">
+          <h1 className="font-display text-3xl font-bold text-jg-text-dark sm:text-4xl">Inventario</h1>
+          <p className="mt-2 text-sm text-gray-600">
             Explora nuestra selección de motos y carros verificados
           </p>
           <p className="mt-1 text-xs text-yellow-400">
@@ -142,7 +142,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
                     className={`flex-1 rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
                       typeFilter === 'all'
                         ? 'border-jg-red bg-jg-red/10 text-jg-red'
-                        : 'border-jg-silver text-gray-400 hover:text-white'
+                        : 'border-jg-silver text-gray-600 hover:text-jg-text-dark'
                     }`}
                   >
                     Todos
@@ -152,7 +152,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
                     className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
                       typeFilter === 'moto'
                         ? 'border-jg-red bg-jg-red/10 text-jg-red'
-                        : 'border-jg-silver text-gray-400 hover:text-white'
+                        : 'border-jg-silver text-gray-600 hover:text-jg-text-dark'
                     }`}
                   >
                     <Bike className="h-4 w-4" /> Moto
@@ -162,7 +162,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
                     className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
                       typeFilter === 'carro'
                         ? 'border-jg-red bg-jg-red/10 text-jg-red'
-                        : 'border-jg-silver text-gray-400 hover:text-white'
+                        : 'border-jg-silver text-gray-600 hover:text-jg-text-dark'
                     }`}
                   >
                     <Car className="h-4 w-4" /> Carro
@@ -263,8 +263,8 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
           </div>
         ) : filtered.length > 0 ? (
           <>
-            <p className="mb-4 text-sm text-gray-400">
-              Mostrando <span className="font-semibold text-white">{filtered.length}</span> vehículo{filtered.length !== 1 ? 's' : ''}
+            <p className="mb-4 text-sm text-gray-600">
+              Mostrando <span className="font-semibold text-jg-text-dark">{filtered.length}</span> vehículo{filtered.length !== 1 ? 's' : ''}
             </p>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((vehicle) => (
@@ -281,8 +281,8 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-jg-dark">
               <ImageIcon className="h-8 w-8 text-gray-600" />
             </div>
-            <h3 className="font-display text-lg font-bold text-white">No se encontraron vehículos</h3>
-            <p className="mt-1 text-sm text-gray-400">Prueba ajustando los filtros de búsqueda.</p>
+            <h3 className="font-display text-lg font-bold text-jg-text-dark">No se encontraron vehículos</h3>
+            <p className="mt-1 text-sm text-gray-600">Prueba ajustando los filtros de búsqueda.</p>
             {activeFilters > 0 && (
               <button onClick={clearAll} className="mt-4 btn-secondary">
                 Limpiar filtros

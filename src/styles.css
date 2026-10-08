@@ -145,13 +145,13 @@
 
 /* JG Motors brand */
 @theme {
-  --color-jg-black:#0a0a0a; --color-jg-carbon:#121212; --color-jg-dark:#1a1a1a; --color-jg-silver:#2a2a2a;
-  --color-jg-gray:#3a3a3a; --color-jg-red:#dc2626; --color-jg-red-dark:#991b1b; --color-jg-red-light:#ef4444;
+  --color-jg-black:#121212; --color-jg-carbon:#FFFFFF; --color-jg-dark:#F3F4F6; --color-jg-silver:#E5E7EB;
+  --color-jg-gray:#D1D5DB; --color-jg-red:#dc2626; --color-jg-red-dark:#991b1b; --color-jg-red-light:#ef4444;
   --color-jg-accent:#f5f5f5; --color-jg-body:#F8F9FA; --color-jg-surface:#FFFFFF; --color-jg-surface-2:#F1F3F5;
-  --color-jg-border-light:#E2E8F0; --color-jg-text-dark:#1A1A1A; --color-jg-text-muted:#6B7280;
+  --color-jg-border-light:#E2E8F0; --color-jg-text-dark:#111827; --color-jg-text-muted:#4B5563;
   --color-jg-yellow:#FACC15; --color-jg-yellow-dark:#CA8A04;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-display: 'Poppins', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
   --animate-fade-in: fadeIn 0.6s ease-out forwards;
   --animate-fade-up: fadeUp 0.6s ease-out forwards;
   --animate-slide-down: slideDown 0.3s ease-out forwards;
@@ -196,8 +196,8 @@
 
   body {
     background-color: #F8F9FA;
-    color: #1A1A1A;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #111827;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -213,7 +213,7 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-jg-silver bg-transparent px-6 py-3 text-sm font-semibold text-jg-text-dark transition-all duration-300 hover:border-jg-red hover:bg-jg-red/10 active:scale-95;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-jg-silver bg-white px-6 py-3 text-sm font-semibold text-jg-text-dark transition-all duration-300 hover:border-jg-red hover:bg-jg-red/10 active:scale-95;
   }
 
   .btn-ghost {
@@ -221,7 +221,7 @@
   }
 
   .card {
-    @apply rounded-2xl border border-jg-border-light bg-jg-surface transition-all duration-300;
+    @apply rounded-2xl border border-jg-silver bg-jg-surface shadow-sm transition-all duration-300;
   }
 
   .card-dark {
@@ -237,7 +237,7 @@
   }
 
   .input-field-dark {
-    @apply w-full rounded-lg border border-jg-silver bg-jg-dark px-4 py-3 text-sm text-white placeholder-gray-500 transition-all duration-200 focus:border-jg-red focus:outline-none focus:ring-1 focus:ring-jg-red;
+    @apply w-full rounded-lg border border-jg-silver bg-white px-4 py-3 text-sm text-jg-text-dark placeholder-gray-400 transition-all duration-200 focus:border-jg-red focus:outline-none focus:ring-1 focus:ring-jg-red;
   }
 
   .select-field {
@@ -245,7 +245,7 @@
   }
 
   .select-field-dark {
-    @apply w-full cursor-pointer rounded-lg border border-jg-silver bg-jg-dark px-4 py-3 text-sm text-white transition-all duration-200 focus:border-jg-red focus:outline-none focus:ring-1 focus:ring-jg-red;
+    @apply w-full cursor-pointer rounded-lg border border-jg-silver bg-white px-4 py-3 text-sm text-jg-text-dark transition-all duration-200 focus:border-jg-red focus:outline-none focus:ring-1 focus:ring-jg-red;
   }
 
   .label-field {
@@ -302,4 +302,9 @@
   .animate-delay-300 { animation-delay: 300ms; }
   .animate-delay-400 { animation-delay: 400ms; }
   .animate-delay-500 { animation-delay: 500ms; }
+}
+
+@layer base {
+  h1,h2,h3,h4,h5,h6 { color: #111827; }
+  select option { background: #FFFFFF; color: #111827; }
 }

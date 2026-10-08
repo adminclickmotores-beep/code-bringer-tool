@@ -84,10 +84,10 @@ export function FinancingPage() {
             <TrendingUp className="h-3.5 w-3.5" />
             Financiación
           </span>
-          <h1 className="mt-4 font-display text-3xl font-bold text-white sm:text-4xl md:text-5xl">
+          <h1 className="mt-4 font-display text-3xl font-bold text-jg-text-dark sm:text-4xl md:text-5xl">
             Financia tu Vehículo
           </h1>
-          <p className="mt-3 max-w-2xl text-sm text-gray-400 sm:text-base">
+          <p className="mt-3 max-w-2xl text-sm text-gray-600 sm:text-base">
             Trabajamos con las principales entidades bancarias de Colombia para ofrecerte las mejores
             opciones de crédito. Simula tu cuota mensual y conoce los requisitos según tu perfil.
           </p>
@@ -105,7 +105,7 @@ export function FinancingPage() {
                 className="card flex h-20 w-44 items-center justify-center gap-2 p-4 text-center transition-all hover:border-jg-red/40"
               >
                 <Landmark className="h-5 w-5 text-jg-red/60" />
-                <span className="text-xs font-medium text-gray-300">{bank}</span>
+                <span className="text-xs font-medium text-gray-600">{bank}</span>
               </div>
             ))}
           </div>
@@ -121,8 +121,8 @@ export function FinancingPage() {
                   <Calculator className="h-5 w-5" />
                 </div>
                 <div>
-                  <h2 className="font-display text-xl font-bold text-white">Simulador de Crédito</h2>
-                  <p className="text-xs text-gray-400">Tasa promedio: 1.8% mensual</p>
+                  <h2 className="font-display text-xl font-bold text-jg-text-dark">Simulador de Crédito</h2>
+                  <p className="text-xs text-gray-600">Tasa promedio: 1.8% mensual</p>
                 </div>
               </div>
             </div>
@@ -179,7 +179,7 @@ export function FinancingPage() {
                       className={`rounded-lg border py-2 text-sm font-medium transition-all ${
                         term === t
                           ? 'border-jg-red bg-jg-red/10 text-jg-red'
-                          : 'border-jg-silver text-gray-400 hover:text-white'
+                          : 'border-jg-silver text-gray-600 hover:text-jg-text-dark'
                       }`}
                     >
                       {t}
@@ -192,11 +192,11 @@ export function FinancingPage() {
               <div className="space-y-3 rounded-xl border border-jg-silver/50 bg-jg-dark p-5">
                 <div>
                   <p className="text-xs text-gray-500">Valor financiado</p>
-                  <p className="font-display text-lg font-bold text-white">{formatCOP(financedAmount)}</p>
+                  <p className="font-display text-lg font-bold text-jg-text-dark">{formatCOP(financedAmount)}</p>
                 </div>
                 <div className="border-t border-jg-silver/50 pt-3">
                   <p className="text-xs text-gray-500">Plazo</p>
-                  <p className="font-display text-lg font-bold text-white">{term} meses</p>
+                  <p className="font-display text-lg font-bold text-jg-text-dark">{term} meses</p>
                 </div>
                 <div className="border-t border-jg-silver/50 pt-3">
                   <p className="text-xs text-gray-500">Cuota mensual estimada</p>
@@ -207,8 +207,8 @@ export function FinancingPage() {
               {/* Exemption note */}
               <div className="flex items-start gap-2 rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-3">
                 <Info className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
-                <p className="text-xs text-gray-400">
-                  JG Motors NO otorga crédito directo. La financiación se gestiona exclusivamente a
+                <p className="text-xs text-gray-600">
+                  ClickMotores NO otorga crédito directo. La financiación se gestiona exclusivamente a
                   través de entidades bancarias aliadas (Sufi, Banco de Bogotá, Santander) sujeto a
                   estudio crediticio.
                 </p>
@@ -230,10 +230,10 @@ export function FinancingPage() {
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-jg-dark text-jg-red">
                         <req.icon className="h-4 w-4" />
                       </div>
-                      <span className="font-display text-base font-bold text-white">{req.title}</span>
+                      <span className="font-display text-base font-bold text-jg-text-dark">{req.title}</span>
                     </div>
                     <ChevronDown
-                      className={`h-5 w-5 text-gray-400 transition-transform ${
+                      className={`h-5 w-5 text-gray-600 transition-transform ${
                         openAccordion === req.id ? 'rotate-180' : ''
                       }`}
                     />
@@ -242,7 +242,7 @@ export function FinancingPage() {
                     <div className="animate-slide-down border-t border-jg-silver/50 px-5 py-4">
                       <ul className="space-y-2.5">
                         {req.items.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-sm text-gray-300">
+                          <li key={idx} className="flex items-start gap-3 text-sm text-gray-600">
                             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
                             {item}
                           </li>
@@ -255,12 +255,12 @@ export function FinancingPage() {
             </div>
 
             <div className="mt-5 card p-5">
-              <h3 className="font-display text-base font-bold text-white">¿Necesitas asesoría?</h3>
-              <p className="mt-1 text-sm text-gray-400">
+              <h3 className="font-display text-base font-bold text-jg-text-dark">¿Necesitas asesoría?</h3>
+              <p className="mt-1 text-sm text-gray-600">
                 Te ayudamos a encontrar la mejor opción de financiamiento según tu perfil y presupuesto.
               </p>
               <a
-                href={whatsappLink('Hola JG Motors, me gustaría asesoría sobre financiación de un vehículo.')}
+                href={whatsappLink('Hola ClickMotores, me gustaría asesoría sobre financiación de un vehículo.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 btn-primary w-full"

@@ -110,7 +110,7 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
               </>
             ) : (
               <div className="flex h-full w-full items-center justify-center">
-                <ImageIcon className="h-16 w-16 text-gray-300" />
+                <ImageIcon className="h-16 w-16 text-gray-600" />
               </div>
             )}
             <div className="absolute top-3 left-3 flex flex-col gap-1.5">
@@ -188,7 +188,7 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
                   Al ser un vehículo consignado, puede no encontrarse físicamente en la sede. Es necesario agendar cita previa.
                 </p>
                 <a
-                  href={whatsappLink(`Hola JG Motors, me gustaría agendar una cita para ver el vehículo: ${vehicle.title}.`)}
+                  href={whatsappLink(`Hola ClickMotores, me gustaría agendar una cita para ver el vehículo: ${vehicle.title}.`)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-2 flex items-center gap-1.5 rounded-lg bg-yellow-500/15 px-3 py-2 text-xs font-semibold text-yellow-700 transition-all hover:bg-yellow-500/25"
@@ -214,7 +214,7 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
             <div className="mt-auto pt-5">
               {canBuy ? (
                 <a
-                  href={whatsappLink(`Hola JG Motors, estoy interesado en el vehículo: ${vehicle.title} - ${formatCOP(vehicle.price)}. ¿Me puedes dar más información?`)}
+                  href={whatsappLink(`Hola ClickMotores, estoy interesado en el vehículo: ${vehicle.title} - ${formatCOP(vehicle.price)}. ¿Me puedes dar más información?`)}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleWaClick}

@@ -43,7 +43,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <ImageIcon className="h-12 w-12 text-gray-300" />
+            <ImageIcon className="h-12 w-12 text-gray-600" />
           </div>
         )}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
@@ -168,7 +168,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="rounded-lg bg-pink-500/15 p-2.5 text-pink-600 transition-all hover:bg-pink-500 hover:text-white"
+                className="rounded-lg bg-pink-500/15 p-2.5 text-pink-600 transition-all hover:bg-pink-500 hover:text-jg-text-dark"
                 aria-label="Ver video en Instagram"
               >
                 <Instagram className="h-5 w-5" />

@@ -158,7 +158,7 @@ export function SellPage() {
           ? 'Compra Directa (Efectivo)'
           : 'Consignación Comercial';
 
-      const message = `*${modeLabel} - JG Motors*
+      const message = `*${modeLabel} - ClickMotores*
 
 *Cliente:* ${form.name}
 *Teléfono:* ${form.phone}
@@ -204,7 +204,7 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
       id: 'publicar_gratis' as SaleMode,
       icon: Globe,
       title: 'Publicar Mi Vehículo Gratis',
-      desc: 'Publica tu moto o carro en nuestra web 100% gratuito. Los datos de compradores llegan exclusivamente a JG Motors.',
+      desc: 'Publica tu moto o carro en nuestra web 100% gratuito. Los datos de compradores llegan exclusivamente a ClickMotores.',
       color: 'blue',
     },
     {
@@ -240,10 +240,10 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
             <TrendingUp className="h-3.5 w-3.5" />
             Publica Gratis · Compra Directa · Consignación · Retomas
           </span>
-          <h1 className="mt-4 font-display text-3xl font-bold text-white sm:text-4xl md:text-5xl">
+          <h1 className="mt-4 font-display text-3xl font-bold text-jg-text-dark sm:text-4xl md:text-5xl">
             Vende o Publica tu Vehículo
           </h1>
-          <p className="mt-3 max-w-2xl text-sm text-gray-300 sm:text-base">
+          <p className="mt-3 max-w-2xl text-sm text-gray-600 sm:text-base">
             Elige la modalidad que más te conviene. Publicación gratuita, compra directa con pago
             inmediato, o consignación profesional con pauta multicanal.
           </p>
@@ -281,24 +281,24 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
                 <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${iconBg[card.color]}`}>
                   <card.icon className="h-6 w-6" />
                 </div>
-                <h3 className="font-display text-lg font-bold text-white">{card.title}</h3>
-                <p className="mt-2 text-sm text-gray-400">{card.desc}</p>
+                <h3 className="font-display text-lg font-bold text-jg-text-dark">{card.title}</h3>
+                <p className="mt-2 text-sm text-gray-600">{card.desc}</p>
                 {card.id === 'consignacion' && (
                   <div className="mt-4 grid grid-cols-2 gap-3">
                     <div className="rounded-lg border border-jg-silver/50 bg-jg-dark p-3">
                       <p className="text-xs text-gray-500">Pago inicial</p>
-                      <p className="font-display text-lg font-bold text-white">$100.000</p>
+                      <p className="font-display text-lg font-bold text-jg-text-dark">$100.000</p>
                     </div>
                     <div className="rounded-lg border border-jg-silver/50 bg-jg-dark p-3">
                       <p className="text-xs text-gray-500">Comisión</p>
-                      <p className="font-display text-lg font-bold text-white">3% / 5%</p>
+                      <p className="font-display text-lg font-bold text-jg-text-dark">3% / 5%</p>
                     </div>
                   </div>
                 )}
                 <button
                   onClick={() => setSaleMode(card.id)}
                   className={`mt-5 w-full rounded-lg border py-2.5 text-sm font-semibold transition-all ${
-                    isActive ? btnActive[card.color] : 'border-jg-silver text-gray-400 hover:text-white'
+                    isActive ? btnActive[card.color] : 'border-jg-silver text-gray-600 hover:text-jg-text-dark'
                   }`}
                 >
                   {isActive ? 'Seleccionada' : 'Elegir'}
@@ -311,26 +311,26 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
         {/* Consignación details */}
         {saleMode === 'consignacion' && (
           <div className="mb-12 card p-6">
-            <h3 className="font-display text-lg font-bold text-white">Detalles de la Consignación</h3>
+            <h3 className="font-display text-lg font-bold text-jg-text-dark">Detalles de la Consignación</h3>
             <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="flex items-start gap-3 rounded-lg border border-jg-silver/50 bg-jg-dark p-4">
                 <DollarSign className="mt-0.5 h-5 w-5 shrink-0 text-green-400" />
                 <div>
-                  <p className="text-sm font-semibold text-white">Pago único inicial: $100.000 COP</p>
-                  <p className="mt-1 text-xs text-gray-400">No reembolsable. Cubre pauta en web, MercadoLibre, TuCarro.com, Facebook e Instagram.</p>
+                  <p className="text-sm font-semibold text-jg-text-dark">Pago único inicial: $100.000 COP</p>
+                  <p className="mt-1 text-xs text-gray-600">No reembolsable. Cubre pauta en web, MercadoLibre, TuCarro.com, Facebook e Instagram.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 rounded-lg border border-jg-silver/50 bg-jg-dark p-4">
                 <Handshake className="mt-0.5 h-5 w-5 shrink-0 text-jg-red" />
                 <div>
-                  <p className="text-sm font-semibold text-white">Comisión al vender</p>
-                  <p className="mt-1 text-xs text-gray-400">3% carros / 5% motos. Puedes dejar el vehículo en custodia o seguir usándolo.</p>
+                  <p className="text-sm font-semibold text-jg-text-dark">Comisión al vender</p>
+                  <p className="mt-1 text-xs text-gray-600">3% carros / 5% motos. Puedes dejar el vehículo en custodia o seguir usándolo.</p>
                 </div>
               </div>
             </div>
             <div className="mt-4 rounded-lg border border-blue-500/20 bg-blue-500/5 p-4">
-              <p className="text-xs text-gray-400">
-                <span className="font-semibold text-blue-400">Esquema de cierre:</span> 80% al vendedor, 20% + gastos de traspaso a JG Motors (de ahí se descuenta la comisión). Firma notarial y traspaso incluidos.
+              <p className="text-xs text-gray-600">
+                <span className="font-semibold text-blue-400">Esquema de cierre:</span> 80% al vendedor, 20% + gastos de traspaso a ClickMotores (de ahí se descuenta la comisión). Firma notarial y traspaso incluidos.
               </p>
             </div>
           </div>
@@ -348,8 +348,8 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
             ].map((item) => (
               <div key={item.step} className="card p-5">
                 <span className="font-display text-3xl font-bold text-jg-red/30">{item.step}</span>
-                <h3 className="mt-2 font-display text-base font-bold text-white">{item.title}</h3>
-                <p className="mt-1 text-sm text-gray-400">{item.desc}</p>
+                <h3 className="mt-2 font-display text-base font-bold text-jg-text-dark">{item.title}</h3>
+                <p className="mt-1 text-sm text-gray-600">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -363,13 +363,13 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
               <Users className="h-7 w-7" />
             </div>
             <div className="flex-1">
-              <h3 className="font-display text-xl font-bold text-white">¿Eres aliado del gremio automotriz?</h3>
-              <p className="mt-1 text-sm text-gray-400">
+              <h3 className="font-display text-xl font-bold text-jg-text-dark">¿Eres aliado del gremio automotriz?</h3>
+              <p className="mt-1 text-sm text-gray-600">
                 Exhibimos y vendemos carros de aliados comerciales del gremio. Contáctanos para publicar tus vehículos.
               </p>
             </div>
             <a
-              href={whatsappLink('Hola, soy aliado del gremio y me gustaría publicar mis vehículos en JG Motors.')}
+              href={whatsappLink('Hola, soy aliado del gremio y me gustaría publicar mis vehículos en ClickMotores.')}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary shrink-0"
@@ -382,10 +382,10 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
         {/* Form */}
         <div className="card overflow-hidden">
           <div className="border-b border-jg-silver/50 px-6 py-5">
-            <h2 className="font-display text-xl font-bold text-white">
+            <h2 className="font-display text-xl font-bold text-jg-text-dark">
               {isPublicar ? 'Publica tu vehículo gratis' : saleMode === 'directa' ? 'Solicita tu compra directa' : 'Solicita tu consignación'}
             </h2>
-            <p className="mt-1 text-sm text-gray-400">
+            <p className="mt-1 text-sm text-gray-600">
               Completa los datos de tu vehículo. Se enviará por WhatsApp a {WHATSAPP_DISPLAY}.{' '}
               {isCommercial ? (
                 <span className="font-semibold text-blue-400">Estado: Consulta Comercial / Pendiente de Valoración</span>
@@ -400,8 +400,8 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/15">
                 <CheckCircle2 className="h-8 w-8 text-green-400" />
               </div>
-              <h3 className="font-display text-xl font-bold text-white">¡Solicitud enviada!</h3>
-              <p className="mt-2 max-w-md text-sm text-gray-400">
+              <h3 className="font-display text-xl font-bold text-jg-text-dark">¡Solicitud enviada!</h3>
+              <p className="mt-2 max-w-md text-sm text-gray-600">
                 {isCommercial
                   ? 'Hemos registrado tu solicitud como Consulta Comercial / Pendiente de Valoración. Se notificó al administrador. Te contactaremos pronto.'
                   : 'Hemos registrado tu publicación como Pendiente de Aprobación. Se notificó al administrador. Te contactaremos pronto.'}
@@ -506,7 +506,7 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
                 </label>
 
                 <div className="mb-3 rounded-lg border border-jg-silver/50 bg-jg-dark p-4">
-                  <p className="mb-2 text-xs font-semibold text-gray-300">
+                  <p className="mb-2 text-xs font-semibold text-gray-600">
                     Guía de fotos {form.vehicleType === 'moto' ? 'para Moto' : 'para Carro'}:
                   </p>
                   <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
@@ -536,7 +536,7 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={form.photoUrls.length >= MAX_PHOTOS || uploading}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-jg-silver bg-jg-dark py-4 text-sm text-gray-400 transition-all hover:border-jg-red/50 hover:text-white disabled:opacity-50"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-jg-silver bg-jg-dark py-4 text-sm text-gray-600 transition-all hover:border-jg-red/50 hover:text-jg-text-dark disabled:opacity-50"
                 >
                   {uploading ? (
                     <Loader2 className="h-5 w-5 animate-spin" />

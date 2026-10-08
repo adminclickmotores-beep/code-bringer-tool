@@ -8,7 +8,7 @@ interface FooterProps {
 
 export function Footer({ onNavigate }: FooterProps) {
   return (
-    <footer className="border-t border-jg-silver/30 bg-jg-carbon">
+    <footer className="border-t border-jg-silver/30 bg-jg-black">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
@@ -79,7 +79,7 @@ export function Footer({ onNavigate }: FooterProps) {
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-gray-400">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-jg-red" />
-                <a href={whatsappLink('Hola JG Motors, me gustaría más información.')} target="_blank" rel="noopener noreferrer" className="hover:text-white">
+                <a href={whatsappLink('Hola ClickMotores, me gustaría más información.')} target="_blank" rel="noopener noreferrer" className="hover:text-white">
                   {WHATSAPP_DISPLAY}
                 </a>
               </li>
@@ -102,7 +102,7 @@ export function Footer({ onNavigate }: FooterProps) {
 
           <div>
             <h4 className="mb-4 font-display text-sm font-bold uppercase tracking-wide text-white">
-              Garantías JG Motors
+              Garantías ClickMotores
             </h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-gray-400">
@@ -139,7 +139,7 @@ export function Footer({ onNavigate }: FooterProps) {
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-jg-silver/30 pt-6 sm:flex-row">
           <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} JG Motors · Comercializadora Virtual. Todos los derechos reservados.
+            © {new Date().getFullYear()} ClickMotores.com · ClickMotores es una marca comercial y vitrina virtual operada legalmente por JG Motors. Todos los derechos reservados.
           </p>
           <p className="text-xs text-gray-500">Cobertura en toda Colombia</p>
         </div>
