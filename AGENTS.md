@@ -14,3 +14,4 @@
 - JG Motors app code lives in `src/jg/` (imported from Bolt); route files in `src/routes/` are thin wrappers that read shared state from `useJg()` — keeps the original page components intact.
 - `JgApp` (mounted in `__root.tsx`) owns header/footer, vehicles, auth session and notifications — one shared shell for all pages.
 - Storage buckets are private (workspace blocks public buckets); vehicle photo uploads store long-lived signed URLs.
+- Vehicle-sale requests are validated and stored through a server function — keeps validation and rate limiting authoritative.
