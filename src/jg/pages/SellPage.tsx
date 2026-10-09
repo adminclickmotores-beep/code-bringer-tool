@@ -1,25 +1,20 @@
-import { useState, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
+import { useServerFn } from '@tanstack/react-start';
 import {
-  Handshake,
-  TrendingUp,
-  Users,
-  CheckCircle2,
-  Camera,
-  Send,
-  Bike,
-  Car,
-  Loader2,
-  AlertCircle,
-  DollarSign,
-  Upload,
-  X,
-  Instagram,
-  Sparkles,
-  Globe,
+  AlertCircle, ArrowLeft, ArrowRight, Bike, Camera, Car, Check,
+  CheckCircle2, DollarSign, FileLock2, Globe, Handshake, Loader2,
+  LockKeyhole, Send, ShieldCheck, Sparkles, Upload, X,
 } from 'lucide-react';
-import { whatsappLink, WHATSAPP_DISPLAY, supabase, uploadVehiclePhoto, INSTAGRAM_URL } from '@/jg/lib/supabase';
-
-const MAX_PHOTOS = 8;
+import { Button } from '@/components/ui/button';
+import { useJg } from '@/jg/JgApp';
+import { formatCOP, uploadPropertyCard, uploadVehiclePhoto } from '@/jg/lib/supabase';
+import { submitVehicleRequest } from '@/jg/lib/vehicle-submission.functions';
+import {
+  MAX_VEHICLE_PHOTOS,
+  minimumPhotos,
+  suggestedVehiclePrice,
+  vehicleSubmissionSchema,
+} from '@/jg/lib/vehicle-submission';
 
 type SaleMode = 'publicar_gratis' | 'directa' | 'consignacion';
 
@@ -34,11 +29,13 @@ const photoGuideCarro = [
 ];
 
 export function SellPage() {
+  const { vehicles } = useJg();
+  const submitRequest = useServerFn(submitVehicleRequest);
   const [saleMode, setSaleMode] = useState<SaleMode>('publicar_gratis');
+  const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     name: '',
     phone: '',
-    email: '',
     vehicleType: 'moto' as 'moto' | 'carro',
     brand: '',
     model: '',
@@ -48,16 +45,30 @@ export function SellPage() {
     condition: '',
     askingPrice: 0,
     description: '',
-    instagramUrl: '',
+    city: '',
+    plate: '',
     photoUrls: [] as string[],
+    propertyCardPaths: [] as string[],
+    acceptedPrivacy: false,
   });
   const [uploading, setUploading] = useState(false);
+  const [uploadingCards, setUploadingCards] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [stepError, setStepError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const propertyInputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
 
   const photoGuide = form.vehicleType === 'moto' ? photoGuideMoto : photoGuideCarro;
+  const requiredPhotos = minimumPhotos(form.vehicleType);
+  const suggestedPrice = useMemo(() => suggestedVehiclePrice({
+    type: form.vehicleType,
+    brand: form.brand,
+    model: form.model,
+    year: form.year,
+  }, vehicles), [form.vehicleType, form.brand, form.model, form.year, vehicles]);
 
   const isCommercial = saleMode === 'directa' || saleMode === 'consignacion';
   const isPublicar = saleMode === 'publicar_gratis';
@@ -65,7 +76,7 @@ export function SellPage() {
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-    const remaining = MAX_PHOTOS - form.photoUrls.length;
+    const remaining = MAX_VEHICLE_PHOTOS - form.photoUrls.length;
     const toUpload = Array.from(files).slice(0, remaining);
     if (toUpload.length === 0) return;
 
@@ -87,100 +98,67 @@ export function SellPage() {
     setForm((prev) => ({ ...prev, photoUrls: prev.photoUrls.filter((u) => u !== url) }));
   };
 
+  const handlePropertyCards = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []).slice(0, 2);
+    if (files.length !== 2) {
+      setStepError('Selecciona dos imágenes: frente y reverso de la tarjeta.');
+      return;
+    }
+    setUploadingCards(true);
+    setStepError(null);
+    try {
+      const paths = await Promise.all(files.map(uploadPropertyCard));
+      if (paths.some((path) => path == null)) throw new Error('No se pudieron cargar los documentos.');
+      setForm((previous) => ({ ...previous, propertyCardPaths: paths.filter((path): path is string => path != null) }));
+    } catch (error) {
+      setStepError(error instanceof Error ? error.message : 'No se pudieron cargar los documentos.');
+    } finally {
+      setUploadingCards(false);
+      if (propertyInputRef.current) propertyInputRef.current.value = '';
+    }
+  };
+
+  const chooseMode = (mode: SaleMode) => {
+    setSaleMode(mode);
+    setStep(1);
+    requestAnimationFrame(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  };
+
+  const continueStep = () => {
+    setStepError(null);
+    if (step === 1) {
+      if (!form.brand.trim() || !form.model.trim() || !form.city.trim() || !form.plate.trim()) {
+        setStepError('Completa marca, modelo, ciudad y placa para continuar.');
+        return;
+      }
+      const year = new Date().getFullYear();
+      if (form.year < 1950 || form.year > year + 1 || form.mileage < 0) {
+        setStepError('Revisa el año y el kilometraje.');
+        return;
+      }
+    }
+    if (step === 2) {
+      if (form.photoUrls.length < requiredPhotos) {
+        setStepError(`Sube mínimo ${requiredPhotos} fotos para continuar.`);
+        return;
+      }
+      if (form.propertyCardPaths.length !== 2) {
+        setStepError('Sube el frente y el reverso de la tarjeta de propiedad.');
+        return;
+      }
+    }
+    setStep((current) => Math.min(3, current + 1));
+    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     setSubmitError(null);
 
     try {
-      if (isPublicar) {
-        const { error: dbError } = await supabase.from('vehicle_submissions').insert({
-          name: form.name,
-          phone: form.phone,
-          email: form.email || null,
-          vehicle_type: form.vehicleType,
-          brand: form.brand,
-          model: form.model,
-          year: form.year,
-          displacement: form.displacement || null,
-          mileage: form.mileage || null,
-          condition: form.condition || null,
-          asking_price: form.askingPrice || null,
-          description: form.description || null,
-          image_urls: form.photoUrls,
-          instagram_url: form.instagramUrl || null,
-          status: 'pendiente',
-        });
-        if (dbError) throw dbError;
-
-        await supabase.from('notifications').insert({
-          type: 'submission',
-          title: 'Nueva publicación gratuita recibida',
-          message: `${form.vehicleType === 'moto' ? 'Moto' : 'Carro'}: ${form.brand} ${form.model} - ${form.name} (${form.phone})`,
-          is_read: false,
-        });
-      } else {
-        const { error: leadError } = await supabase.from('leads').insert({
-          name: form.name,
-          phone: form.phone,
-          email: form.email || null,
-          vehicle_type: form.vehicleType,
-          mode: saleMode === 'directa' ? 'compra_directa' : 'consignacion',
-          brand: form.brand,
-          model: form.model,
-          year: form.year,
-          displacement: form.displacement || null,
-          mileage: form.mileage || null,
-          condition: form.condition || null,
-          asking_price: form.askingPrice || null,
-          description: form.description || null,
-          image_urls: form.photoUrls,
-          instagram_url: form.instagramUrl || null,
-          status: 'nuevo_lead',
-        });
-        if (leadError) throw leadError;
-
-        await supabase.from('notifications').insert({
-          type: 'lead',
-          title: `Nuevo lead: ${saleMode === 'directa' ? 'Compra Directa' : 'Consignación'}`,
-          message: `${form.vehicleType === 'moto' ? 'Moto' : 'Carro'}: ${form.brand} ${form.model} - ${form.name} (${form.phone})`,
-          is_read: false,
-        });
-      }
-
-      const statusLabel = isCommercial
-        ? 'Consulta Comercial / Pendiente de Valoración'
-        : 'Pendiente de Aprobación';
-
-      const modeLabel = isPublicar
-        ? 'Publicación Gratuita'
-        : saleMode === 'directa'
-          ? 'Compra Directa (Efectivo)'
-          : 'Consignación Comercial';
-
-      const message = `*${modeLabel} - ClickMotores*
-
-*Cliente:* ${form.name}
-*Teléfono:* ${form.phone}
-${form.email ? `*Correo:* ${form.email}\n` : ''}
-*Modalidad:* ${modeLabel}
-
-*Vehículo:*
-- Tipo: ${form.vehicleType === 'moto' ? 'Moto' : 'Carro'}
-- Marca: ${form.brand}
-- Modelo: ${form.model}
-- Año: ${form.year}
-${form.displacement ? `- Cilindraje: ${form.displacement}\n` : ''}- Kilometraje: ${form.mileage} km
-- Estado: ${form.condition}
-- Precio solicitado: $${form.askingPrice.toLocaleString('es-CO')} COP
-
-${form.instagramUrl ? `*Video Instagram:* ${form.instagramUrl}\n` : ''}*Descripción:*
-${form.description}
-
-${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photoUrls.join('\n')}\n\n` : ''}*Estado:* ${statusLabel}`;
-
-      window.open(whatsappLink(message), '_blank');
-
+      const payload = vehicleSubmissionSchema.parse({ ...form, saleMode });
+      await submitRequest({ data: payload });
       setSubmitted(true);
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Error al enviar la solicitud');
@@ -191,10 +169,12 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
 
   const resetForm = () => {
     setForm({
-      name: '', phone: '', email: '', vehicleType: 'moto',
+      name: '', phone: '', vehicleType: 'moto',
       brand: '', model: '', year: new Date().getFullYear(), displacement: '', mileage: 0,
-      condition: '', askingPrice: 0, description: '', instagramUrl: '', photoUrls: [],
+      condition: '', askingPrice: 0, description: '', city: '', plate: '', photoUrls: [],
+      propertyCardPaths: [], acceptedPrivacy: false,
     });
+    setStep(1);
     setSubmitted(false);
     setSubmitError(null);
   };
@@ -205,14 +185,14 @@ ${form.photoUrls.length > 0 ? `*Fotos (${form.photoUrls.length}):*\n${form.photo
       icon: Globe,
       title: 'Publicar Mi Vehículo Gratis',
       desc: 'Publica tu moto o carro en nuestra web 100% gratuito. Los datos de compradores llegan exclusivamente a ClickMotores.',
-      color: 'blue',
+       color: 'red',
     },
     {
       id: 'directa' as SaleMode,
       icon: DollarSign,
       title: 'Compra Directa (Efectivo)',
       desc: 'Compra inmediata con pago al instante. Recibimos tu vehículo y te pagamos en el acto.',
-      color: 'green',
+       color: 'red',
     },
     {
       id: 'consignacion' as SaleMode,
