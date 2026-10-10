@@ -1,6 +1,8 @@
 import { z } from 'zod';
 
 export const MAX_VEHICLE_PHOTOS = 8;
+export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+export const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const;
 
 export function minimumPhotos(vehicleType: 'moto' | 'carro') {
   return vehicleType === 'moto' ? 3 : 5;
@@ -24,7 +26,10 @@ export const vehicleSubmissionSchema = z.object({
   askingPrice: z.number().min(0).max(10_000_000_000),
   description: z.string().trim().max(1200),
   photoUrls: z.array(z.string().url()).max(MAX_VEHICLE_PHOTOS),
-  propertyCardPaths: z.array(z.string().regex(/^property-cards\/[A-Za-z0-9._/-]+$/)).length(2),
+  propertyCardPaths: z.tuple([
+    z.string().regex(/^property-cards\/[0-9a-f-]{36}\/front-[0-9a-f-]{36}\.(?:jpg|jpeg|png|webp)$/),
+    z.string().regex(/^property-cards\/[0-9a-f-]{36}\/back-[0-9a-f-]{36}\.(?:jpg|jpeg|png|webp)$/),
+  ]),
   acceptedPrivacy: z.literal(true),
 }).superRefine((data, ctx) => {
   const required = minimumPhotos(data.vehicleType);
@@ -33,6 +38,15 @@ export const vehicleSubmissionSchema = z.object({
       code: z.ZodIssueCode.custom,
       path: ['photoUrls'],
       message: `Sube mínimo ${required} fotos del vehículo.`,
+    });
+  }
+  const frontGroup = data.propertyCardPaths[0].split('/')[1];
+  const backGroup = data.propertyCardPaths[1].split('/')[1];
+  if (frontGroup !== backGroup) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['propertyCardPaths'],
+      message: 'El frente y el reverso deben pertenecer a la misma solicitud.',
     });
   }
 });
