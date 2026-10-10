@@ -158,3 +158,4 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
     </LegalShell>
   );
 }
+export const HabeasDataPage = PrivacyPage;
