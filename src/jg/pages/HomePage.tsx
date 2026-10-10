@@ -74,6 +74,9 @@ const faqItems = [
 
 export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: HomePageProps) {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activeTab, setActiveTab] = useState<'carro' | 'moto'>('carro');
+  const [searchTerm, setSearchTerm] = useState('');
+
 
   const featured = vehicles.filter((v) => v.featured).slice(0, 6);
   const displayVehicles = featured.length > 0 ? featured : vehicles.slice(0, 6);
@@ -94,32 +97,86 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
-            <div className="animate-fade-up flex items-center gap-2">
+          <div className="animate-fade-up flex items-center gap-2">
               <span className="badge bg-jg-red/15 text-jg-red border border-jg-red/30">
                 <Zap className="h-3.5 w-3.5" />
-                Yumbo, Valle del Cauca
+                Cobertura Nacional | Colombia
               </span>
             </div>
-            <h1 className="mt-5 animate-fade-up font-display text-4xl font-bold leading-tight text-jg-text-dark animate-delay-100 sm:text-5xl md:text-6xl">
-              Tu próximo vehículo
-              <br />
-              <span className="text-gradient">está aquí</span>
+
+            <h1 className="mt-5 animate-fade-up font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white animate-delay-100">
+              Conectamos personas, concesionarios y vehículos{' '}
+              <span className="text-gradient">con total transparencia</span>
             </h1>
-            <p className="mt-5 max-w-xl animate-fade-up text-base leading-relaxed text-gray-600 animate-delay-200 sm:text-lg">
-              Compra y venta de motos de bajo, mediano y alto cilindraje, y carros multimarca en
-              excelente estado. <span className="font-semibold text-jg-text-dark">100% verificados</span>,
-              sin chicharrones, con trámite de traspaso legal incluido a nombre del nuevo dueño.
+
+            <p className="mt-4 max-w-xl animate-fade-up text-base sm:text-lg leading-relaxed text-gray-300 animate-delay-200">
+              Vitrina virtual y comercialización de carros y motos multimarca 100% verificados, sin chicharrones y con traspaso legal garantizado a nivel nacional.
             </p>
 
-            <div className="mt-8 flex animate-fade-up animate-delay-300 flex-wrap gap-3">
-              <button onClick={() => onNavigate('catalog')} className="btn-primary">
+            {/* Pestañas CARROS / MOTOS y Buscador Rápido */}
+            <div className="mt-8 animate-fade-up animate-delay-300 w-full max-w-xl">
+              <div className="flex gap-2 mb-3">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('carro')}
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-t-lg font-bold text-sm transition-colors ${
+                    activeTab === 'carro'
+                      ? 'bg-white text-jg-black shadow'
+                      : 'bg-black/50 text-gray-300 hover:text-white border border-white/10'
+                  }`}
+                >
+                  <Car className="h-4 w-4 text-jg-red" />
+                  CARROS
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('moto')}
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-t-lg font-bold text-sm transition-colors ${
+                    activeTab === 'moto'
+                      ? 'bg-white text-jg-black shadow'
+                      : 'bg-black/50 text-gray-300 hover:text-white border border-white/10'
+                  }`}
+                >
+                  <Bike className="h-4 w-4 text-jg-red" />
+                  MOTOS
+                </button>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-2 bg-white/95 backdrop-blur p-2.5 rounded-b-xl rounded-tr-xl shadow-xl border border-white/20">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') onNavigate('catalog');
+                    }}
+                    placeholder={`Buscar ${activeTab === 'carro' ? 'carro' : 'moto'} por marca, modelo o ciudad...`}
+                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 text-jg-black rounded-lg text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-jg-red"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('catalog')}
+                  className="btn-primary !py-2.5 whitespace-nowrap"
+                >
+                  Buscar
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Botones de acción principales */}
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button onClick={() => onNavigate('catalog')} className="btn-secondary !bg-black/60 !text-white border border-white/20 hover:!bg-black">
                 Ver Inventario
-                <ArrowRight className="h-4 w-4" />
               </button>
-              <button onClick={() => onNavigate('sell')} className="btn-secondary">
-                Vende tu Vehículo
+              <button onClick={() => onNavigate('sell')} className="btn-secondary !bg-white !text-jg-black hover:!bg-gray-100">
+                Vender / Consignar Vehículo
               </button>
             </div>
+
 
             <div className="mt-10 flex animate-fade-up animate-delay-400 gap-6 sm:gap-10">
               <div>
