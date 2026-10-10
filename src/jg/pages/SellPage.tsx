@@ -168,7 +168,7 @@ export function SellPage() {
         setStepError(`Sube mínimo ${requiredPhotos} fotos para continuar.`);
         return;
       }
-      if (form.propertyCardPaths.length !== 2) {
+      if (!form.propertyCardPaths[0] || !form.propertyCardPaths[1]) {
         setStepError('Sube el frente y el reverso de la tarjeta de propiedad.');
         return;
       }
@@ -327,10 +327,11 @@ export function SellPage() {
                       <Button type="button" variant="outline" className="h-14 w-full border-dashed" disabled={uploading || form.photoUrls.length >= MAX_VEHICLE_PHOTOS} onClick={() => fileInputRef.current?.click()}>
                         {uploading ? <Loader2 className="animate-spin" /> : <Upload />} Subir fotos
                       </Button>
+                      <p className="mt-2 text-xs text-jg-text-muted">Formatos JPG, PNG o WebP. Máximo 10 MB por foto.</p>
                       {form.photoUrls.length > 0 && <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">{form.photoUrls.map((url, index) => <div key={url} className="relative"><img src={url} alt={`Vehículo ${index + 1}`} className="h-28 w-full rounded-md object-cover" /><Button type="button" size="icon" variant="destructive" className="absolute right-1 top-1 h-7 w-7" aria-label="Eliminar foto" onClick={() => removePhoto(url)}><X /></Button></div>)}</div>}
                     </div>
                     <div className="rounded-lg border border-blue-500/25 bg-blue-500/5 p-4">
-                      <div className="flex gap-3"><LockKeyhole className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" /><div><h3 className="font-bold text-jg-text-dark">Documento confidencial y protegido</h3><p className="mt-1 text-sm text-jg-text-muted">La tarjeta de propiedad se guarda en un espacio privado y solo puede verla el administrador para validar la titularidad. Nunca se publica con el vehículo.</p></div></div>
+                      <div className="flex gap-3"><LockKeyhole className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" /><div><h3 className="font-bold text-jg-text-dark">Documento confidencial y cifrado</h3><p className="mt-1 text-sm text-jg-text-muted">La tarjeta de propiedad se almacena cifrada en un espacio privado y solo puede verla el administrador para validar la titularidad. Nunca se publica con el vehículo.</p></div></div>
                       <div className="mt-4 grid gap-3 sm:grid-cols-2">
                         <input ref={propertyFrontInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(event) => handlePropertyCard('front', event)} />
                         <input ref={propertyBackInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(event) => handlePropertyCard('back', event)} />
