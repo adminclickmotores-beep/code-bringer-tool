@@ -34,20 +34,17 @@ export function AdminPage({
   onUpdateVehicle, 
   stats 
 }: AdminPageProps) {
-  // Estado de autenticación para el Administrador
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [loginError, setLoginError] = useState('');
 
-  // Estados del panel
   const [activeTab, setActiveTab] = useState<'requests' | 'inventory' | 'brochure'>('requests');
   const [tagFilter, setTagFilter] = useState<string>('all');
   const [brochureType, setBrochureType] = useState<'carro' | 'moto'>('carro');
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  // Formulario de vehículos / inventario
   const [form, setForm] = useState({
     title: '',
     type: 'carro',
@@ -64,7 +61,6 @@ export function AdminPage({
     image_urls: [] as string[]
   });
 
-  // Manejo de inicio de sesión con las credenciales solicitadas
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (emailInput === 'clientesjgmotors@gmail.com' && passwordInput === 'JGMotors2026!') {
@@ -75,7 +71,6 @@ export function AdminPage({
     }
   };
 
-  // Función para exportar solicitudes a Excel (.csv)
   const handleExportVehicleRequests = () => {
     if (!vehicles || vehicles.length === 0) {
       alert('No hay solicitudes de vehículos para exportar.');
@@ -110,7 +105,6 @@ export function AdminPage({
     document.body.removeChild(link);
   };
 
-  // Generador de Ficha Técnica Individual con Marca de Agua ClickMotores
   const handleDownloadTechnicalSheet = (vehicle: any) => {
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
@@ -191,7 +185,6 @@ export function AdminPage({
     setTimeout(() => printWindow.print(), 500);
   };
 
-  // Generador de Catálogo / Brochure en PDF con Marca de Agua
   const handleGenerateBrochurePDF = () => {
     const filteredVehicles = vehicles.filter(v => (v.type || 'carro').toLowerCase() === brochureType);
     
@@ -279,7 +272,7 @@ export function AdminPage({
   const handleSaveVehicle = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.title || !form.brand || !form.model || !form.price) {
-      alert('Por favor completa los campos obligatorios (Título, Marca, Modelo y Precio).');
+      alert('Por favor completa los campos obligatorios.');
       return;
     }
 
@@ -308,7 +301,6 @@ export function AdminPage({
     setEditingId(null);
   };
 
-  // PANTALLA DE LOGIN
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
@@ -370,12 +362,9 @@ export function AdminPage({
     );
   }
 
-  // PANEL DE ADMINISTRACIÓN COMPLETO
   return (
     <div className="min-h-screen bg-gray-950 text-white p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
-        
-        {/* Cabecera */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 bg-gray-900 p-6 rounded-2xl border border-gray-800 shadow-xl">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3">
@@ -405,7 +394,6 @@ export function AdminPage({
           </div>
         </div>
 
-        {/* Pestañas */}
         <div className="flex flex-wrap gap-2 border-b border-gray-800 mb-6">
           <button
             onClick={() => setActiveTab('requests')}
@@ -436,10 +424,7 @@ export function AdminPage({
           </button>
         </div>
 
-        {/* Contenido */}
         <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 shadow-xl">
-          
-          {/* PESTAÑA 1: SOLICITUDES */}
           {activeTab === 'requests' && (
             <div>
               <div className="flex justify-between items-center mb-6">
@@ -499,7 +484,6 @@ export function AdminPage({
             </div>
           )}
 
-          {/* PESTAÑA 2: INVENTARIO Y ETIQUETAS */}
           {activeTab === 'inventory' && (
             <div>
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -512,7 +496,6 @@ export function AdminPage({
                 </button>
               </div>
 
-              {/* Filtros por etiqueta */}
               <div className="flex flex-wrap gap-2 mb-6">
                 {['all', 'propio', 'retoma', 'aliado', 'consignacion', 'vendido', 'reservado', 'proximo_ingreso', 'pendiente'].map((tag) => (
                   <button
@@ -646,7 +629,6 @@ export function AdminPage({
             </div>
           )}
 
-          {/* PESTAÑA 3: CATÁLOGO / BROCHURE PDF */}
           {activeTab === 'brochure' && (
             <div className="max-w-xl mx-auto text-center py-8">
               <div className="bg-jg-red/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-jg-red">
@@ -688,7 +670,6 @@ export function AdminPage({
               </button>
             </div>
           )}
-
         </div>
       </div>
     </div>
