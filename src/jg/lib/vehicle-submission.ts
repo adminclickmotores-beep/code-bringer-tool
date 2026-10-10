@@ -17,7 +17,7 @@ export const vehicleSubmissionSchema = z.object({
   vehicleType: z.enum(['moto', 'carro']),
   brand: z.string().trim().min(2, 'Escribe la marca.').max(60),
   model: z.string().trim().min(1, 'Escribe el modelo.').max(80),
-  year: z.number().int().min(1950).max(2070),
+  year: z.coerce.number().int(),
   displacement: z.string().trim().max(30),
   mileage: z.number().int().min(0).max(2_000_000),
   city: z.string().trim().min(2, 'Escribe la ciudad.').max(80),
