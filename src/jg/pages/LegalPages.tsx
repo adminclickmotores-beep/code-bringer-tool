@@ -88,14 +88,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
             JG Motors ofrece el servicio de gestión y acompañamiento para trámites ante organismos de tránsito, tales como traspasos de propiedad, levantamientos de prenda, duplicados e inscripción de garantías. Comprador y vendedor se comprometen a entregar oportunamente la documentación legal exigida por las normas colombianas. JG Motors no asume responsabilidad por demoras operativas imputables directamente a las Secretarías de Movilidad o plataformas de tránsito nacionales.
           </p>
         </section>
-      </div>
-    </LegalShell>
-  );
-}
-export function TermsPageContinuation() {
-  return null;
-}
-<section className="space-y-4">
+    <section className="space-y-4">
           <h2 className="font-display text-xl font-bold">8. Cotización y Venta de Seguros (SOAT y Todo Riesgo)</h2>
           <p className="leading-relaxed">
             La plataforma facilita la cotización y expedición de SOAT (Seguro Obligatorio de Accidentes de Tránsito) y pólizas de seguros de automóviles y motocicletas todo riesgo a través de alianzas estratégicas con intermediarios y compañías aseguradoras legalmente autorizadas en Colombia.
