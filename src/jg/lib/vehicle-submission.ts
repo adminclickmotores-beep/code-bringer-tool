@@ -8,7 +8,7 @@ export function minimumPhotos(vehicleType: 'moto' | 'carro') {
   return vehicleType === 'moto' ? 3 : 5;
 }
 
-const currentYear = new Date().getFullYear();
+const currentYear = 2070;
 
 export const vehicleSubmissionSchema = z.object({
   saleMode: z.enum(['publicar_gratis', 'directa', 'consignacion']),
@@ -17,7 +17,7 @@ export const vehicleSubmissionSchema = z.object({
   vehicleType: z.enum(['moto', 'carro']),
   brand: z.string().trim().min(2, 'Escribe la marca.').max(60),
   model: z.string().trim().min(1, 'Escribe el modelo.').max(80),
-  year: z.number().int().min(1950).max(currentYear + 1),
+  year: z.number().int().min(1950).max(2070),
   displacement: z.string().trim().max(30),
   mileage: z.number().int().min(0).max(2_000_000),
   city: z.string().trim().min(2, 'Escribe la ciudad.').max(80),
