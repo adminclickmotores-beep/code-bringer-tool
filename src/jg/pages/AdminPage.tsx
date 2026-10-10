@@ -107,6 +107,40 @@ export function AdminPage({
   const [leads, setLeads] = useState<Lead[]>([]);
   const [consultas, setConsultas] = useState<Consulta[]>([]);
   const [sales, setSales] = useState<Sale[]>([]);
+  const handleExportVehicleRequests = () => {
+    if (!vehicles || vehicles.length === 0) {
+      alert('No hay solicitudes de vehículos para exportar.');
+      return;
+    }
+
+    const headers = ['ID', 'Tipo', 'Marca', 'Modelo', 'Año', 'Placa', 'Ciudad', 'Contacto', 'Fecha'];
+    
+    const rows = vehicles.map((v: any) => [
+      v.id || '',
+      v.type || '',
+      v.brand || '',
+      v.model || '',
+      v.year || '',
+      v.plate || '',
+      v.city || '',
+      v.phone || '',
+      v.createdAt || ''
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map((row: string[]) => row.map((val) => `"${val}"`).join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `solicitudes-vehiculos-jgmotors.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const photoGuide = form.type === 'moto' ? photoGuideMoto : photoGuideCarro;
@@ -159,51 +193,10 @@ export function AdminPage({
     if (data) setConsultas(data as Consulta[]);
   };
 
-  const loadSales = async () => {
-    const { data } = await supabase.from('sales').select('*').order('created_at', { ascending: false });
-    if (data) setSales(data as Sale[]);
-  };
-
-  const filtered = vehicles.filter((v) => {
-    if (!search) return true;
-    const q = search.toLowerCase();
-    return v.title.toLowerCase().includes(q) || v.brand.toLowerCase().includes(q) || v.model.toLowerCase().includes(q);
-  });
-
-  const resetForm = () => {
-    setForm(emptyForm);
-    setEditingId(null);
-    setShowForm(false);
-  };
-
-  const handleEdit = (vehicle: Vehicle) => {
-    setForm({
-      title: vehicle.title,
-      type: vehicle.type,
-      brand: vehicle.brand,
-      model: vehicle.model,
-      year: vehicle.year,
-      displacement: vehicle.displacement || '',
-      price: vehicle.price,
-      original_price: vehicle.original_price,
-      status: vehicle.status,
-      description: vehicle.description || '',
-      image_urls: vehicle.image_urls || [],
-      mileage: vehicle.mileage || 0,
-      transmission: vehicle.transmission || '',
-      fuel: vehicle.fuel || 'Gasolina',
-      featured: vehicle.featured,
-      tag: vehicle.tag,
-      instagram_url: vehicle.instagram_url || '',
-      consignado: vehicle.consignado || false,
-    });
-    setEditingId(vehicle.id);
-    setShowForm(true);
-  };
-
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
+
     const remaining = MAX_PHOTOS - form.image_urls.length;
     const toUpload = Array.from(files).slice(0, remaining);
     if (toUpload.length === 0) return;
@@ -225,7 +218,7 @@ export function AdminPage({
   const removeImageUrl = (url: string) => {
     setForm({ ...form, image_urls: form.image_urls.filter((u) => u !== url) });
   };
-
+  
   const handleSave = async () => {
     if (!form.title || !form.brand || !form.model || !form.price) {
       setNotification({ type: 'error', message: 'Completa título, marca, modelo y precio.' });
