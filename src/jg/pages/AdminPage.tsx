@@ -76,11 +76,11 @@ export function AdminPage({
 
   const handleExportVehicleRequests = () => {
     if (!vehicles || vehicles.length === 0) {
-      alert('No hay leads o solicitudes para exportar.');
+      alert('No hay solicitudes ni leads de vehículos para exportar.');
       return;
     }
 
-    const headers = ['ID', 'Tipo', 'Marca', 'Modelo', 'Año', 'Ciudad', 'Contacto', 'Estado', 'Fecha'];
+    const headers = ['ID', 'Tipo', 'Marca', 'Modelo', 'Anio', 'Ciudad', 'Contacto', 'Estado', 'Fecha'];
     const rows = vehicles.map((v: any) => [
       v.id || '',
       v.type || '',
@@ -102,7 +102,7 @@ export function AdminPage({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `leads-inventario-jgmotors.csv`);
+    link.setAttribute('download', 'solicitudes-vehiculos-jgmotors.csv');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
