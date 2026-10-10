@@ -129,7 +129,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
         <section className="space-y-4">
           <h2 className="font-display text-xl font-bold">13. Contacto y Soporte</h2>
           <p className="leading-relaxed">
-            Para cualquier inquietud, solicitud o soporte adicional, comunícate a través de nuestro canal de WhatsApp corporativo al <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="text-jg-red hover:underline">{WHATSAPP_DISPLAY}</a> o en nuestra sede de atención en el Valle del Cauca, Colombia.
+           Para cualquier inquietud, solicitud o soporte adicional, comunícate a través de nuestro canal de WhatsApp corporativo al <a href={whatsappLink('Hola ClickMotores, tengo una consulta sobre soporte.')} target="_blank" rel="noopener noreferrer" className="text-jg-red hover:underline">{WHATSAPP_DISPLAY}</a> o en nuestra sede de atención en el Valle del Cauca, Colombia.
           </p>
         </section>
       </div>
