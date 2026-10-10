@@ -15,7 +15,6 @@ import {
   Printer,
   CheckCircle2,
   XCircle,
-  Tag,
   MessageSquare
 } from 'lucide-react';
 
@@ -38,29 +37,17 @@ export function AdminPage({
   onUpdateVehicle, 
   stats 
 }: AdminPageProps) {
-  // Autenticación de Administrador Único
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [loginError, setLoginError] = useState('');
 
-  // Pestañas principales
-  const [activeTab, setActiveTab] = useState<'requests' | 'inventory' | 'users' | 'brochure'>('requests');
-  
-  // Filtros y estados de inventario
+  const [activeTab, setActiveTab] = useState<'requests' | 'inventory' | 'brochure'>('requests');
   const [tagFilter, setTagFilter] = useState<string>('all');
   const [brochureType, setBrochureType] = useState<'carro' | 'moto'>('carro');
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  // Lista de usuarios colaboradores adicionales permitidos por el Admin
-  const [teamUsers, setTeamUsers] = useState([
-    { email: 'asistente@jgmotors.com', role: 'Moderador de Clasificados' }
-  ]);
-  const [newTeamEmail, setNewTeamEmail] = useState('');
-  const [newTeamRole, setNewTeamRole] = useState('Moderador');
-
-  // Formulario de Creación / Edición de Vehículos
   const [form, setForm] = useState({
     title: '',
     type: 'carro',
@@ -72,8 +59,8 @@ export function AdminPage({
     transmission: 'Automática',
     fuel: 'Gasolina',
     city: 'Yumbo',
-    tag: 'disponible', // destacado, bajo_de_precio, disponible, no_disponible, reservado, nueva_publicacion, propio, consignacion, de_aliado, proximo_ingreso, vendido
-    status: 'pending', // pending (para moderar/autorizar), active (autorizado), rejected
+    tag: 'disponible',
+    status: 'pending',
     image_urls: [] as string[]
   });
 
@@ -83,7 +70,7 @@ export function AdminPage({
       setIsAuthenticated(true);
       setLoginError('');
     } else {
-      setLoginError('Credenciales incorrectas. Acceso exclusivo para clientesjgmotors@gmail.com');
+      setLoginError('Credenciales incorrectas. Acceso exclusivo para administradores.');
     }
   };
 
@@ -136,10 +123,7 @@ export function AdminPage({
         <title>Ficha Técnica - ${vehicle.brand} ${vehicle.model} | ClickMotores</title>
         <style>
           body { font-family: Arial, sans-serif; color: #111; padding: 40px; position: relative; }
-          .watermark {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 70px; color: rgba(220, 38, 38, 0.12); font-weight: bold; z-index: -1; pointer-events: none; text-transform: uppercase;
-          }
+          .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 70px; color: rgba(220, 38, 38, 0.12); font-weight: bold; z-index: -1; pointer-events: none; text-transform: uppercase; }
           header { border-bottom: 3px solid #dc2626; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
           h1 { margin: 0; color: #dc2626; font-size: 26px; }
           .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
@@ -161,8 +145,6 @@ export function AdminPage({
           <div class="spec-item"><span class="spec-label">Marca:</span> ${vehicle.brand}</div>
           <div class="spec-item"><span class="spec-label">Modelo:</span> ${vehicle.model}</div>
           <div class="spec-item"><span class="spec-label">Año:</span> ${vehicle.year}</div>
-          <div class="spec-item"><span class="spec-label">Transmisión:</span> ${vehicle.transmission || 'Automática'}</div>
-          <div class="spec-item"><span class="spec-label">Combustible:</span> ${vehicle.fuel || 'Gasolina'}</div>
           <div class="spec-item"><span class="spec-label">Ciudad:</span> ${vehicle.city || 'Yumbo'}</div>
           <div class="spec-item"><span class="spec-label">Etiqueta:</span> ${(vehicle.tag || 'disponible').toUpperCase()}</div>
         </div>
@@ -222,8 +204,7 @@ export function AdminPage({
               <div><strong>Marca:</strong> ${v.brand}</div>
               <div><strong>Modelo:</strong> ${v.model}</div>
               <div><strong>Año:</strong> ${v.year}</div>
-              <div><strong>Ciudad:</strong> ${v.city || 'Yumbo'}</div>
-              <div><strong>Transmisión:</strong> ${v.transmission \vert{}\vert{} 'Automática'}</div>             </div>             <div class="price">Precio: $ ${Number(v.price || 0).toLocaleString()} COP</div>
+              <div><strong>Ciudad:</strong> ${v.city \vert{}\vert{} 'Yumbo'}</div>             </div>             <div class="price">Precio: $ ${Number(v.price || 0).toLocaleString()} COP</div>
           </div>
         `).join('')}
         <footer><p style="text-align:center; font-size:12px; color:#777; margin-top:30px;">WhatsApp Ventas: +57 333 276 5584 · www.clickmotores.com</p></footer>
@@ -256,7 +237,6 @@ export function AdminPage({
     setEditingId(null);
   };
 
-  // PANTALLA DE ACCESO RESTRINGIDO
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
@@ -321,8 +301,6 @@ export function AdminPage({
   return (
     <div className="min-h-screen bg-gray-950 text-white p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
-        
-        {/* Cabecera */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 bg-gray-900 p-6 rounded-2xl border border-gray-800 shadow-xl">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3">
@@ -352,7 +330,6 @@ export function AdminPage({
           </div>
         </div>
 
-        {/* Pestañas de Navegación */}
         <div className="flex flex-wrap gap-2 border-b border-gray-800 mb-6">
           <button
             onClick={() => setActiveTab('requests')}
@@ -373,15 +350,6 @@ export function AdminPage({
             Inventario y Etiquetas
           </button>
           <button
-            onClick={() => setActiveTab('users')}
-            className={`pb-3 px-4 text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
-              activeTab === 'users' ? 'border-jg-red text-white' : 'border-transparent text-gray-400 hover:text-gray-200'
-            }`}
-          >
-            <ShieldCheck className="h-4 w-4" />
-            Gestión de Colaboradores
-          </button>
-          <button
             onClick={() => setActiveTab('brochure')}
             className={`pb-3 px-4 text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
               activeTab === 'brochure' ? 'border-jg-red text-white' : 'border-transparent text-gray-400 hover:text-gray-200'
@@ -392,10 +360,7 @@ export function AdminPage({
           </button>
         </div>
 
-        {/* Contenido por Pestañas */}
         <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 shadow-xl">
-          
-          {/* PESTAÑA 1: LEADS Y MODERACIÓN */}
           {activeTab === 'requests' && (
             <div>
               <div className="flex justify-between items-center mb-6">
@@ -415,7 +380,7 @@ export function AdminPage({
                         <th className="py-3 px-4">Año</th>
                         <th className="py-3 px-4">Estado Publicación</th>
                         <th className="py-3 px-4">WhatsApp Leads</th>
-                        <th className="py-3 px-4">Acciones de Moderación</th>
+                        <th className="py-3 px-4">Acciones</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-800 text-sm">
@@ -481,7 +446,6 @@ export function AdminPage({
             </div>
           )}
 
-          {/* PESTAÑA 2: INVENTARIO Y ETIQUETAS */}
           {activeTab === 'inventory' && (
             <div>
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -494,7 +458,6 @@ export function AdminPage({
                 </button>
               </div>
 
-              {/* Filtros por las 11 etiquetas requeridas */}
               <div className="flex flex-wrap gap-2 mb-6">
                 {['all', 'destacado', 'bajo_de_precio', 'disponible', 'no_disponible', 'reservado', 'nueva_publicacion', 'propio', 'consignacion', 'de_aliado', 'proximo_ingreso', 'vendido'].map((tag) => (
                   <button
@@ -629,68 +592,6 @@ export function AdminPage({
             </div>
           )}
 
-          {/* PESTAÑA 3: GESTIÓN DE COLABORADORES */}
-          {activeTab === 'users' && (
-            <div className="max-w-2xl mx-auto py-4">
-              <h2 className="text-xl font-bold mb-4">Gestión de Usuarios y Permisos Administrativos</h2>
-              <p className="text-gray-400 text-sm mb-6">
-                Como administrador principal (`clientesjgmotors@gmail.com`), puedes habilitar el acceso a colaboradores para que te ayuden a moderar clasificados.
-              </p>
-
-              <div className="bg-gray-950 p-6 rounded-xl border border-gray-800 mb-6 space-y-4">
-                <h3 className="font-semibold text-white">Agregar Nuevo Colaborador</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input
-                    type="email"
-                    value={newTeamEmail}
-                    onChange={(e) => setNewTeamEmail(e.target.value)}
-                    placeholder="correo@colaborador.com"
-                    className="bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white"
-                  />
-                  <select
-                    value={newTeamRole}
-                    onChange={(e) => setNewTeamRole(e.target.value)}
-                    className="bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white"
-                  >
-                    <option value="Moderador">Moderador de Clasificados</option>
-                    <option value="Gestor de Leads">Gestor de Leads / Ventas</option>
-                  </select>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!newTeamEmail) return;
-                    setTeamUsers([...teamUsers, { email: newTeamEmail, role: newTeamRole }]);
-                    setNewTeamEmail('');
-                    alert('Colaborador agregado correctamente.');
-                  }}
-                  className="bg-jg-red hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
-                >
-                  Otorgar Permisos
-                </button>
-              </div>
-
-              <div className="space-y-3">
-                <h3 className="font-semibold text-white text-sm">Usuarios con Acceso Autorizado:</h3>
-                {teamUsers.map((u, i) => (
-                  <div key={i} className="flex justify-between items-center bg-gray-950 p-4 rounded-xl border border-gray-800 text-sm">
-                    <div>
-                      <p className="font-medium text-white">{u.email}</p>
-                      <p className="text-xs text-gray-400">{u.role}</p>
-                    </div>
-                    <button
-                      onClick={() => setTeamUsers(teamUsers.filter((_, index) => index !== i))}
-                      className="text-red-400 hover:text-red-300 text-xs"
-                    >
-                      Revocar Acceso
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* PESTAÑA 4: CATÁLOGO Y BROCHURE PDF */}
           {activeTab === 'brochure' && (
             <div className="max-w-xl mx-auto text-center py-8">
               <div className="bg-jg-red/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-jg-red">
@@ -732,7 +633,6 @@ export function AdminPage({
               </button>
             </div>
           )}
-
         </div>
       </div>
     </div>
