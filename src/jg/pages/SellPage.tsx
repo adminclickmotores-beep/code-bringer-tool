@@ -10,6 +10,8 @@ import { useJg } from '@/jg/JgApp';
 import { formatCOP, uploadPropertyCard, uploadVehiclePhoto } from '@/jg/lib/supabase';
 import { submitVehicleRequest } from '@/jg/lib/vehicle-submission.functions';
 import {
+  ALLOWED_IMAGE_TYPES,
+  MAX_UPLOAD_BYTES,
   MAX_VEHICLE_PHOTOS,
   minimumPhotos,
   suggestedVehiclePrice,
@@ -58,7 +60,9 @@ export function SellPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [stepError, setStepError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const propertyInputRef = useRef<HTMLInputElement>(null);
+  const propertyFrontInputRef = useRef<HTMLInputElement>(null);
+  const propertyBackInputRef = useRef<HTMLInputElement>(null);
+  const propertyUploadGroupRef = useRef<string | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
   const photoGuide = form.vehicleType === 'moto' ? photoGuideMoto : photoGuideCarro;
@@ -79,8 +83,18 @@ export function SellPage() {
     const remaining = MAX_VEHICLE_PHOTOS - form.photoUrls.length;
     const toUpload = Array.from(files).slice(0, remaining);
     if (toUpload.length === 0) return;
+    const invalidFile = toUpload.find((file) =>
+      !ALLOWED_IMAGE_TYPES.includes(file.type as (typeof ALLOWED_IMAGE_TYPES)[number])
+      || file.size > MAX_UPLOAD_BYTES,
+    );
+    if (invalidFile) {
+      setStepError('Cada foto debe ser JPG, PNG o WebP y pesar máximo 10 MB.');
+      e.target.value = '';
+      return;
+    }
 
     setUploading(true);
+    setStepError(null);
     try {
       const urls: string[] = [];
       for (const file of toUpload) {
@@ -98,29 +112,41 @@ export function SellPage() {
     setForm((prev) => ({ ...prev, photoUrls: prev.photoUrls.filter((u) => u !== url) }));
   };
 
-  const handlePropertyCards = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []).slice(0, 2);
-    if (files.length !== 2) {
-      setStepError('Selecciona dos imágenes: frente y reverso de la tarjeta.');
+  const handlePropertyCard = async (
+    side: 'front' | 'back',
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type as (typeof ALLOWED_IMAGE_TYPES)[number]) || file.size > MAX_UPLOAD_BYTES) {
+      setStepError('La tarjeta debe ser JPG, PNG o WebP y pesar máximo 10 MB por lado.');
+      e.target.value = '';
       return;
     }
     setUploadingCards(true);
     setStepError(null);
     try {
-      const paths = await Promise.all(files.map(uploadPropertyCard));
-      if (paths.some((path) => path == null)) throw new Error('No se pudieron cargar los documentos.');
-      setForm((previous) => ({ ...previous, propertyCardPaths: paths.filter((path): path is string => path != null) }));
+      propertyUploadGroupRef.current ??= crypto.randomUUID();
+      const path = await uploadPropertyCard(file, propertyUploadGroupRef.current, side);
+      if (!path) throw new Error('No se pudo cargar el documento.');
+      const index = side === 'front' ? 0 : 1;
+      setForm((previous) => {
+        const paths = [...previous.propertyCardPaths];
+        paths[index] = path;
+        return { ...previous, propertyCardPaths: paths };
+      });
     } catch (error) {
       setStepError(error instanceof Error ? error.message : 'No se pudieron cargar los documentos.');
     } finally {
       setUploadingCards(false);
-      if (propertyInputRef.current) propertyInputRef.current.value = '';
+      e.target.value = '';
     }
   };
 
   const chooseMode = (mode: SaleMode) => {
     setSaleMode(mode);
     setStep(1);
+    propertyUploadGroupRef.current = null;
     requestAnimationFrame(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   };
 
@@ -305,10 +331,17 @@ export function SellPage() {
                     </div>
                     <div className="rounded-lg border border-blue-500/25 bg-blue-500/5 p-4">
                       <div className="flex gap-3"><LockKeyhole className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" /><div><h3 className="font-bold text-jg-text-dark">Documento confidencial y protegido</h3><p className="mt-1 text-sm text-jg-text-muted">La tarjeta de propiedad se guarda en un espacio privado y solo puede verla el administrador para validar la titularidad. Nunca se publica con el vehículo.</p></div></div>
-                      <input ref={propertyInputRef} type="file" accept="image/jpeg,image/png,image/webp" multiple className="hidden" onChange={handlePropertyCards} />
-                      <Button type="button" variant="outline" className="mt-4 w-full bg-jg-surface" disabled={uploadingCards} onClick={() => propertyInputRef.current?.click()}>
-                        {uploadingCards ? <Loader2 className="animate-spin" /> : <FileLock2 />} {form.propertyCardPaths.length === 2 ? 'Frente y reverso cargados' : 'Subir frente y reverso'}
-                      </Button>
+                      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                        <input ref={propertyFrontInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(event) => handlePropertyCard('front', event)} />
+                        <input ref={propertyBackInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(event) => handlePropertyCard('back', event)} />
+                        <Button type="button" variant="outline" className="h-12 bg-jg-surface" disabled={uploadingCards} onClick={() => propertyFrontInputRef.current?.click()}>
+                          {uploadingCards ? <Loader2 className="animate-spin" /> : form.propertyCardPaths[0] ? <Check /> : <FileLock2 />} {form.propertyCardPaths[0] ? 'Frente cargado' : 'Subir frente'}
+                        </Button>
+                        <Button type="button" variant="outline" className="h-12 bg-jg-surface" disabled={uploadingCards} onClick={() => propertyBackInputRef.current?.click()}>
+                          {uploadingCards ? <Loader2 className="animate-spin" /> : form.propertyCardPaths[1] ? <Check /> : <FileLock2 />} {form.propertyCardPaths[1] ? 'Reverso cargado' : 'Subir reverso'}
+                        </Button>
+                      </div>
+                      <p className="mt-2 text-xs text-jg-text-muted">Formatos JPG, PNG o WebP. Máximo 10 MB por imagen.</p>
                     </div>
                   </div>
                 )}
