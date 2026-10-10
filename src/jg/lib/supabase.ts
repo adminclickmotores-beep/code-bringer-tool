@@ -196,9 +196,13 @@ export async function uploadVehiclePhoto(file: File): Promise<string | null> {
   return data?.signedUrl ?? null;
 }
 
-export async function uploadPropertyCard(file: File): Promise<string | null> {
-  const ext = file.name.split('.').pop();
-  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+export async function uploadPropertyCard(
+  file: File,
+  uploadGroupId: string,
+  side: 'front' | 'back',
+): Promise<string | null> {
+  const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+  const fileName = `${uploadGroupId}/${side}-${crypto.randomUUID()}.${ext}`;
   const { error } = await supabase.storage
     .from('property-cards')
     .upload(fileName, file, { cacheControl: '3600', upsert: false });

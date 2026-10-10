@@ -5,6 +5,18 @@ export const submitVehicleRequest = createServerFn({ method: 'POST' })
   .inputValidator((input) => vehicleSubmissionSchema.parse(input))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    const documentGroup = data.propertyCardPaths[0].split('/')[1];
+    if (!documentGroup) throw new Error('No pudimos validar la tarjeta de propiedad.');
+
+    const { data: uploadedDocuments, error: documentError } = await supabaseAdmin.storage
+      .from('property-cards')
+      .list(documentGroup, { limit: 10 });
+    const uploadedNames = new Set((uploadedDocuments ?? []).map((document) => document.name));
+    const requestedNames = data.propertyCardPaths.map((path) => path.split('/').at(-1));
+    if (documentError || requestedNames.some((name) => !name || !uploadedNames.has(name))) {
+      throw new Error('No pudimos validar el frente y el reverso de la tarjeta de propiedad.');
+    }
+
     const table = data.saleMode === 'publicar_gratis' ? 'vehicle_submissions' : 'leads';
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
     const { count } = await supabaseAdmin
