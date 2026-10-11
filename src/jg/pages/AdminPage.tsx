@@ -46,7 +46,7 @@ interface AdminPageProps {
   loading: boolean;
   onUpdateVehicleStatus: (id: string, status: string) => void;
   onDeleteVehicle: (id: string) => void;
-  onAddVehicle: (vehicle: any) => void;
+  onAddVehicle:(vehicle: any) => void;
   onUpdateVehicle: (id: string, vehicle: any) => void;
   stats?: any;
 }

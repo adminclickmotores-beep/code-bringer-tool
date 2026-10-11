@@ -28,6 +28,11 @@ type Ctx = {
   vehicles: Vehicle[];
   loading: boolean;
   loadVehicles: () => Promise<void>;
+    addVehicle: (vehicle: Partial<Vehicle>) => Promise<void>;
+  updateVehicle: (id: string, vehicle: Partial<Vehicle>) => Promise<void>;
+  updateVehicleStatus: (id: string, status: string) => Promise<void>;
+  deleteVehicle: (id: string) => Promise<void>;
+
   session: Session | null;
   authLoading: boolean;
   refreshSession: () => void;
@@ -66,6 +71,61 @@ export function JgApp({ children }: { children: ReactNode }) {
     if (!error && data) setVehicles(data as Vehicle[]);
     setLoading(false);
   }, []);
+
+    const addVehicle = useCallback(async (vehicle: Partial<Vehicle>) => {
+    const { error } = await supabase
+      .from('vehicles')
+      .insert([vehicle]);
+
+    if (error) {
+      console.error('Error creando vehículo:', error);
+      throw error;
+    }
+
+    await loadVehicles();
+  }, [loadVehicles]);
+
+  const updateVehicle = useCallback(async (id: string, vehicle: Partial<Vehicle>) => {
+    const { error } = await supabase
+      .from('vehicles')
+      .update(vehicle)
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error actualizando vehículo:', error);
+      throw error;
+    }
+
+    await loadVehicles();
+  }, [loadVehicles]);
+
+  const updateVehicleStatus = useCallback(async (id: string, status: string) => {
+    const { error } = await supabase
+      .from('vehicles')
+      .update({ status })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error cambiando estado:', error);
+      throw error;
+    }
+
+    await loadVehicles();
+  }, [loadVehicles]);
+
+  const deleteVehicle = useCallback(async (id: string) => {
+    const { error } = await supabase
+      .from('vehicles')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error eliminando vehículo:', error);
+      throw error;
+    }
+
+    await loadVehicles();
+  }, [loadVehicles]);
 
   useEffect(() => {
     loadVehicles();
@@ -113,9 +173,18 @@ export function JgApp({ children }: { children: ReactNode }) {
   const isAdmin = currentPage === 'admin';
 
   return (
-    <JgContext.Provider
+        <JgContext.Provider
       value={{
-        vehicles, loading, loadVehicles, session, authLoading, refreshSession,
+        vehicles,
+        loading,
+        loadVehicles,
+        addVehicle,
+        updateVehicle,
+        updateVehicleStatus,
+        deleteVehicle,
+        session,
+        authLoading,
+        refreshSession,
         notifications, loadNotifications, adminSection, setAdminSection,
         navigate, openVehicle: setSelectedVehicle, logout,
       }}
