@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 
 import {
   Plus,
@@ -22,8 +22,20 @@ import {
   Eye,
   RefreshCw,
 } from 'lucide-react';
+import {
+  ALLOWED_IMAGE_TYPES,
+  MAX_UPLOAD_BYTES,
+  MAX_VEHICLE_PHOTOS,
+} from '@/jg/lib/vehicle-submission';
+import {
+  Vehicle,
+  VehicleAdminInput,
+  uploadVehiclePhoto,
+} from '@/jg/lib/supabase';
 
 type VehicleType = 'carro' | 'moto';
+type VehicleStatus = Vehicle['status'];
+type VehicleTag = NonNullable<Vehicle['tag']>;
 
 type VehicleForm = {
   title: string;
@@ -36,34 +48,44 @@ type VehicleForm = {
   transmission: string;
   fuel: string;
   city: string;
-  tag: string;
-  status: string;
+  tag: VehicleTag;
+  status: VehicleStatus;
   image_urls: string[];
 };
 
 interface AdminPageProps {
-  vehicles: any[];
+  vehicles: Vehicle[];
   loading: boolean;
-  onUpdateVehicleStatus: (id: string, status: string) => void;
-  onDeleteVehicle: (id: string) => void;
-  onAddVehicle: (vehicle: any) => void;
-  onUpdateVehicle: (id: string, vehicle: any) => void;
-  stats?: any;
+  onRefresh: () => Promise<void>;
+  onLogout: () => Promise<void>;
+  onUpdateVehicleStatus: (id: string, status: VehicleStatus) => Promise<void>;
+  onDeleteVehicle: (id: string) => Promise<void>;
+  onAddVehicle: (vehicle: VehicleAdminInput) => Promise<void>;
+  onUpdateVehicle: (id: string, vehicle: VehicleAdminInput) => Promise<void>;
+  userEmail: string;
+  stats?: Record<string, number>;
 }
 
-const TAGS = [
-  'destacado',
-  'bajo_de_precio',
+const TAGS: VehicleTag[] = [
+  'recien_ingresado',
+  'precio_rebajado',
+  'separado',
+];
+const TAG_FILTERS: ('all' | VehicleTag)[] = ['all', ...TAGS];
+
+const VEHICLE_STATUSES: VehicleStatus[] = [
   'disponible',
   'no_disponible',
-  'reservado',
-  'nueva_publicacion',
-  'propio',
-  'consignacion',
-  'de_aliado',
-  'proximo_ingreso',
   'vendido',
+  'aliado',
 ];
+
+const STATUS_LABELS: Record<VehicleStatus, string> = {
+  disponible: 'Disponible',
+  no_disponible: 'No disponible',
+  vendido: 'Vendido',
+  aliado: 'Aliado',
+};
 
 const INITIAL_FORM: VehicleForm = {
   title: '',
@@ -76,8 +98,8 @@ const INITIAL_FORM: VehicleForm = {
   transmission: 'Automática',
   fuel: 'Gasolina',
   city: 'Yumbo',
-  tag: 'disponible',
-  status: 'pending',
+  tag: 'recien_ingresado',
+  status: 'disponible',
   image_urls: [],
 };
 
@@ -119,15 +141,18 @@ function escapeCSV(value: unknown) {
   return `"${String(value ?? '').replace(/"/g, '""')}"`;
 }
 
-const getVehicleTitle = (vehicle: any) =>
+const getVehicleTitle = (vehicle: Vehicle) =>
   vehicle.title ||
   `${vehicle.brand || ''} ${vehicle.model || ''}`.trim() ||
   'Vehículo sin título';
 
-const getVehicleDate = (vehicle: any) =>
+const getVehicleDate = (vehicle: Vehicle & { createdAt?: string }) =>
   vehicle.created_at || vehicle.createdAt || '';
 
-const getImageUrls = (vehicle: any): string[] => {
+const getImageUrls = (vehicle: {
+  image_urls?: string[] | string | null;
+  image_url?: string;
+}): string[] => {
   if (Array.isArray(vehicle.image_urls)) {
     return vehicle.image_urls.filter(
       (url: unknown): url is string =>
@@ -162,19 +187,22 @@ const getImageUrls = (vehicle: any): string[] => {
 export function AdminPage({
   vehicles = [],
   loading = false,
+  onRefresh,
+  onLogout,
   onUpdateVehicleStatus,
   onDeleteVehicle,
   onAddVehicle,
   onUpdateVehicle,
+  userEmail,
   stats,
 }: AdminPageProps) {
   const [activeTab, setActiveTab] = useState<
     'requests' | 'inventory' | 'brochure'
   >('inventory');
 
-  const [tagFilter, setTagFilter] = useState('all');
+  const [tagFilter, setTagFilter] = useState<'all' | VehicleTag>('all');
   const [typeFilter, setTypeFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | VehicleStatus>('all');
   const [searchTerm, setSearchTerm] = useState('');
 
   const [brochureType, setBrochureType] =
@@ -187,6 +215,8 @@ export function AdminPage({
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
   const [actionError, setActionError] = useState('');
+  const [isUploadingPhotos, setIsUploadingPhotos] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   /*
    * La autenticación debe gestionarse mediante Supabase Auth
@@ -197,18 +227,18 @@ export function AdminPage({
    */
 
   const activeVehicles = useMemo(
-    () => vehicles.filter((vehicle) => vehicle.status === 'active'),
+    () => vehicles.filter((vehicle) => vehicle.status === 'disponible'),
     [vehicles],
   );
 
   const pendingVehicles = useMemo(
-    () => vehicles.filter((vehicle) => vehicle.status !== 'active'),
+    () => vehicles.filter((vehicle) => vehicle.status === 'no_disponible'),
     [vehicles],
   );
 
   const filteredVehicles = useMemo(() => {
     return vehicles.filter((vehicle) => {
-      const normalizedTag = normalizeText(vehicle.tag || 'disponible');
+      const normalizedTag = normalizeText(vehicle.tag || INITIAL_FORM.tag);
       const normalizedType = normalizeText(vehicle.type || 'carro');
       const normalizedStatus = normalizeText(vehicle.status);
 
@@ -221,7 +251,7 @@ export function AdminPage({
           vehicle.brand,
           vehicle.model,
           vehicle.year,
-          vehicle.city,
+          vehicle.ciudad,
           vehicle.tag,
         ].some((value) => normalizeText(value).includes(search));
 
@@ -266,7 +296,7 @@ export function AdminPage({
     setIsFormOpen(true);
   };
 
-  const openEditForm = (vehicle: any) => {
+  const openEditForm = (vehicle: Vehicle) => {
     setForm({
       title: vehicle.title || getVehicleTitle(vehicle),
       type: normalizeText(vehicle.type) === 'moto' ? 'moto' : 'carro',
@@ -277,9 +307,9 @@ export function AdminPage({
       mileage: String(vehicle.mileage ?? ''),
       transmission: vehicle.transmission || 'Automática',
       fuel: vehicle.fuel || 'Gasolina',
-      city: vehicle.city || 'Yumbo',
-      tag: vehicle.tag || 'disponible',
-      status: vehicle.status || 'pending',
+      city: vehicle.ciudad || 'Yumbo',
+      tag: vehicle.tag || INITIAL_FORM.tag,
+      status: vehicle.status || 'disponible',
       image_urls: getImageUrls(vehicle),
     });
 
@@ -297,6 +327,83 @@ export function AdminPage({
       ...previous,
       [field]: value,
     }));
+  };
+
+  const handlePhotoSelect = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const files = Array.from(event.target.files ?? []);
+    if (files.length === 0) return;
+
+    if (files.length > MAX_VEHICLE_PHOTOS - form.image_urls.length) {
+      setFormError(
+        `Puedes subir hasta ${MAX_VEHICLE_PHOTOS} fotografías por vehículo.`,
+      );
+      event.target.value = '';
+      return;
+    }
+
+    const invalidFile = files.find(
+      (file) =>
+        !ALLOWED_IMAGE_TYPES.includes(
+          file.type as (typeof ALLOWED_IMAGE_TYPES)[number],
+        ) || file.size > MAX_UPLOAD_BYTES,
+    );
+    if (invalidFile) {
+      setFormError('Cada foto debe ser JPG, PNG o WebP y pesar máximo 10 MB.');
+      event.target.value = '';
+      return;
+    }
+
+    setFormError('');
+    setIsUploadingPhotos(true);
+    try {
+      for (const file of files) {
+        const url = await uploadVehiclePhoto(file);
+        setForm((previous) => ({
+          ...previous,
+          image_urls: [...previous.image_urls, url],
+        }));
+      }
+    } catch (error) {
+      console.error('Error subiendo fotografías del vehículo:', error);
+      setFormError(
+        error instanceof Error
+          ? `No se pudo subir la fotografía: ${error.message}`
+          : 'No se pudo subir la fotografía. Revisa la conexión y los permisos de almacenamiento.',
+      );
+    } finally {
+      setIsUploadingPhotos(false);
+      event.target.value = '';
+    }
+  };
+
+  const handleLogout = async () => {
+    setActionError('');
+    try {
+      await onLogout();
+    } catch (error) {
+      console.error('Error cerrando sesión:', error);
+      setActionError(
+        error instanceof Error
+          ? `No se pudo cerrar la sesión: ${error.message}`
+          : 'No se pudo cerrar la sesión. Intenta nuevamente.',
+      );
+    }
+  };
+
+  const handleRefresh = async () => {
+    setActionError('');
+    try {
+      await onRefresh();
+    } catch (error) {
+      console.error('Error actualizando inventario:', error);
+      setActionError(
+        error instanceof Error
+          ? `No se pudo actualizar el inventario: ${error.message}`
+          : 'No se pudo actualizar el inventario. Intenta nuevamente.',
+      );
+    }
   };
 
   const handleSaveVehicle = async (
@@ -346,7 +453,7 @@ export function AdminPage({
       return;
     }
 
-    const vehicleData = {
+    const vehicleData: VehicleAdminInput = {
       title: form.title.trim(),
       type: form.type,
       brand: form.brand.trim(),
@@ -356,7 +463,7 @@ export function AdminPage({
       mileage,
       transmission: form.transmission,
       fuel: form.fuel,
-      city: form.city.trim() || 'Yumbo',
+      ciudad: form.city.trim() || 'Yumbo',
       tag: form.tag,
       status: form.status,
       image_urls: form.image_urls,
@@ -382,14 +489,16 @@ export function AdminPage({
       console.error('Error guardando vehículo:', error);
 
       setFormError(
-        'No fue posible guardar el vehículo. Verifica la conexión y los datos.',
+        error instanceof Error
+          ? `No fue posible guardar el vehículo: ${error.message}`
+          : 'No fue posible guardar el vehículo. Verifica la conexión y los datos.',
       );
     }
   };
 
   const handleStatusChange = async (
-    vehicle: any,
-    status: string,
+    vehicle: Vehicle,
+    status: VehicleStatus,
   ) => {
     setActionError('');
 
@@ -401,12 +510,14 @@ export function AdminPage({
       console.error('Error cambiando estado:', error);
 
       setActionError(
-        'No se pudo actualizar el estado. Intenta nuevamente.',
+        error instanceof Error
+          ? `No se pudo actualizar el estado: ${error.message}`
+          : 'No se pudo actualizar el estado. Intenta nuevamente.',
       );
     }
   };
 
-  const handleDelete = async (vehicle: any) => {
+  const handleDelete = async (vehicle: Vehicle) => {
     const confirmed = window.confirm(
       `¿Seguro que deseas eliminar "${getVehicleTitle(vehicle)}"? Esta acción puede ser irreversible.`,
     );
@@ -423,7 +534,9 @@ export function AdminPage({
       console.error('Error eliminando vehículo:', error);
 
       setActionError(
-        'No se pudo eliminar el vehículo. Verifica los permisos de acceso.',
+        error instanceof Error
+          ? `No se pudo eliminar el vehículo: ${error.message}`
+          : 'No se pudo eliminar el vehículo. Verifica los permisos de acceso.',
       );
     }
   };
@@ -462,7 +575,7 @@ export function AdminPage({
       vehicle.mileage,
       vehicle.transmission,
       vehicle.fuel,
-      vehicle.city,
+      vehicle.ciudad,
       vehicle.tag,
       vehicle.status,
       getVehicleDate(vehicle),
@@ -492,7 +605,7 @@ export function AdminPage({
     URL.revokeObjectURL(url);
   };
 
-  const handlePrintVehicle = (vehicle: any) => {
+  const handlePrintVehicle = (vehicle: Vehicle) => {
     const printWindow = window.open('', '_blank');
 
     if (!printWindow) {
@@ -512,8 +625,9 @@ export function AdminPage({
       ['Kilometraje', vehicle.mileage],
       ['Transmisión', vehicle.transmission],
       ['Combustible', vehicle.fuel],
-      ['Ciudad', vehicle.city || 'Yumbo'],
-      ['Estado comercial', vehicle.tag || 'disponible'],
+      ['Ciudad', vehicle.ciudad || 'Yumbo'],
+      ['Etiqueta comercial', vehicle.tag || INITIAL_FORM.tag],
+      ['Estado', STATUS_LABELS[vehicle.status]],
     ];
 
     printWindow.document.write(`
@@ -619,11 +733,7 @@ export function AdminPage({
       const isCorrectType =
         type === normalizeText(brochureType);
 
-      const isAvailable =
-        normalizeText(vehicle.tag) !== 'vendido' &&
-        normalizeText(vehicle.tag) !== 'no_disponible';
-
-      return isCorrectType && isAvailable;
+      return isCorrectType;
     });
 
     if (brochureVehicles.length === 0) {
@@ -655,11 +765,11 @@ export function AdminPage({
           <article class="card">
             ${imageHtml}
             <div class="details">
-              <span class="tag">${escapeHtml(vehicle.tag || 'disponible')}</span>
+              <span class="tag">${escapeHtml(vehicle.tag || INITIAL_FORM.tag)}</span>
               <h2>${escapeHtml(getVehicleTitle(vehicle))}</h2>
               <p>
                 ${escapeHtml(vehicle.year || '')}
-                · ${escapeHtml(vehicle.city || 'Yumbo')}
+                · ${escapeHtml(vehicle.ciudad || 'Yumbo')}
               </p>
               <p>Transmisión: ${escapeHtml(vehicle.transmission || 'No especificada')}</p>
               <p>Combustible: ${escapeHtml(vehicle.fuel || 'No especificado')}</p>
@@ -784,12 +894,12 @@ export function AdminPage({
       icon: Car,
     },
     {
-      label: 'Publicados',
+      label: 'Disponibles',
       value: activeVehicles.length,
       icon: CheckCircle2,
     },
     {
-      label: 'Pendientes',
+      label: 'No disponibles',
       value: pendingVehicles.length,
       icon: RefreshCw,
     },
@@ -809,15 +919,36 @@ export function AdminPage({
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={handleExportCSV}
-            className="flex items-center justify-center gap-2 rounded-lg bg-green-700 px-4 py-3 text-sm font-medium transition hover:bg-green-600"
-          >
-            <FileSpreadsheet className="h-4 w-4" />
-            Exportar inventario
-            <Download className="h-4 w-4" />
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            {userEmail && (
+              <span className="text-sm text-gray-400">{userEmail}</span>
+            )}
+            <button
+              type="button"
+              onClick={handleRefresh}
+              className="flex items-center justify-center gap-2 rounded-lg bg-gray-800 px-4 py-3 text-sm font-medium transition hover:bg-gray-700"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Actualizar
+            </button>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="flex items-center justify-center gap-2 rounded-lg bg-gray-800 px-4 py-3 text-sm font-medium transition hover:bg-gray-700"
+            >
+              <LogOut className="h-4 w-4" />
+              Cerrar sesión
+            </button>
+            <button
+              type="button"
+              onClick={handleExportCSV}
+              className="flex items-center justify-center gap-2 rounded-lg bg-green-700 px-4 py-3 text-sm font-medium transition hover:bg-green-600"
+            >
+              <FileSpreadsheet className="h-4 w-4" />
+              Exportar inventario
+              <Download className="h-4 w-4" />
+            </button>
+          </div>
         </header>
 
         {actionError && (
@@ -919,17 +1050,26 @@ export function AdminPage({
 
                 <select
                   value={statusFilter}
-                  onChange={(event) => setStatusFilter(event.target.value)}
+                  onChange={(event) =>
+                    setStatusFilter(
+                      event.target.value === 'all'
+                        ? 'all'
+                        : (event.target.value as VehicleStatus),
+                    )
+                  }
                   className="rounded-lg border border-gray-700 bg-gray-950 px-3 py-3 text-sm text-white"
                 >
                   <option value="all">Todos los estados</option>
-                  <option value="active">Publicados</option>
-                  <option value="pending">Pendientes</option>
+                  {VEHICLE_STATUSES.map((status) => (
+                    <option key={status} value={status}>
+                      {STATUS_LABELS[status]}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               <div className="mb-5 flex flex-wrap gap-2">
-                {['all', ...TAGS].map((tag) => (
+                {TAG_FILTERS.map((tag) => (
                   <button
                     key={tag}
                     type="button"
@@ -960,6 +1100,7 @@ export function AdminPage({
                     <button
                       type="button"
                       onClick={resetForm}
+                      disabled={isUploadingPhotos}
                       className="rounded-lg p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
                       aria-label="Cerrar formulario"
                     >
@@ -1132,7 +1273,7 @@ export function AdminPage({
                       <select
                         value={form.tag}
                         onChange={(event) =>
-                          updateForm('tag', event.target.value)
+                          updateForm('tag', event.target.value as VehicleTag)
                         }
                         className="mt-2 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-3 text-white"
                       >
@@ -1149,36 +1290,85 @@ export function AdminPage({
                       <select
                         value={form.status}
                         onChange={(event) =>
-                          updateForm('status', event.target.value)
+                          updateForm(
+                            'status',
+                            event.target.value as VehicleStatus,
+                          )
                         }
                         className="mt-2 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-3 text-white"
                       >
-                        <option value="pending">Pendiente</option>
-                        <option value="active">Publicado</option>
+                        {VEHICLE_STATUSES.map((status) => (
+                          <option key={status} value={status}>
+                            {STATUS_LABELS[status]}
+                          </option>
+                        ))}
                       </select>
                     </label>
 
                     <label className="col-span-full text-sm text-gray-300">
-                      URLs de fotografías
-                      <textarea
-                        value={form.image_urls.join('\n')}
-                        onChange={(event) =>
-                          updateForm(
-                            'image_urls',
-                            event.target.value
-                              .split('\n')
-                              .map((url) => url.trim())
-                              .filter(Boolean),
-                          )
+                      Fotografías del vehículo
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept={ALLOWED_IMAGE_TYPES.join(',')}
+                        multiple
+                        onChange={handlePhotoSelect}
+                        disabled={
+                          isUploadingPhotos ||
+                          form.image_urls.length >= MAX_VEHICLE_PHOTOS
                         }
-                        rows={3}
-                        placeholder="Pega una URL de imagen por línea."
-                        className="mt-2 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-3 text-white"
+                        className="sr-only"
                       />
-                      <span className="mt-1 block text-xs text-gray-500">
-                        Este campo registra URLs. La carga directa de archivos
-                        a Supabase Storage debe integrarse por separado.
-                      </span>
+                      <div className="mt-2 flex flex-wrap items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          disabled={
+                            isUploadingPhotos ||
+                            form.image_urls.length >= MAX_VEHICLE_PHOTOS
+                          }
+                          className="rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {isUploadingPhotos
+                            ? 'Subiendo fotografías...'
+                            : 'Seleccionar fotografías'}
+                        </button>
+                        <span className="text-xs text-gray-500">
+                          JPG, PNG o WebP; máximo 10 MB cada una y{' '}
+                          {MAX_VEHICLE_PHOTOS} por vehículo.
+                        </span>
+                      </div>
+                      {form.image_urls.length > 0 && (
+                        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                          {form.image_urls.map((url, index) => (
+                            <div
+                              key={`${url}-${index}`}
+                              className="relative overflow-hidden rounded-lg border border-gray-700"
+                            >
+                              <img
+                                src={url}
+                                alt={`Fotografía ${index + 1} del vehículo`}
+                                className="h-28 w-full object-cover"
+                              />
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  updateForm(
+                                    'image_urls',
+                                    form.image_urls.filter(
+                                      (_, imageIndex) => imageIndex !== index,
+                                    ),
+                                  )
+                                }
+                                className="absolute right-2 top-2 rounded-full bg-black/70 p-1.5 text-white hover:bg-red-700"
+                                aria-label={`Quitar fotografía ${index + 1}`}
+                              >
+                                <X className="h-4 w-4" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </label>
                   </div>
 
@@ -1186,6 +1376,7 @@ export function AdminPage({
                     <button
                       type="button"
                       onClick={resetForm}
+                      disabled={isUploadingPhotos}
                       className="rounded-lg bg-gray-800 px-4 py-3 text-sm hover:bg-gray-700"
                     >
                       Cancelar
@@ -1193,9 +1384,14 @@ export function AdminPage({
 
                     <button
                       type="submit"
+                      disabled={isUploadingPhotos}
                       className="rounded-lg bg-jg-red px-5 py-3 text-sm font-bold hover:bg-red-700"
                     >
-                      {editingId ? 'Guardar cambios' : 'Registrar vehículo'}
+                      {isUploadingPhotos
+                        ? 'Espera a que terminen las cargas'
+                        : editingId
+                          ? 'Guardar cambios'
+                          : 'Registrar vehículo'}
                     </button>
                   </div>
                 </form>
@@ -1239,7 +1435,7 @@ export function AdminPage({
                             </div>
                             <div className="mt-1 text-xs text-gray-400">
                               {vehicle.year || 'Año sin registrar'} ·{' '}
-                              {vehicle.city || 'Ciudad sin registrar'}
+                              {vehicle.ciudad || 'Ciudad sin registrar'}
                             </div>
                           </td>
 
@@ -1260,7 +1456,7 @@ export function AdminPage({
 
                           <td className="px-4 py-4">
                             <span className="rounded-full bg-gray-800 px-2.5 py-1 text-xs">
-                              {String(vehicle.tag || 'disponible').replace(
+                              {String(vehicle.tag || INITIAL_FORM.tag).replace(
                                 /_/g,
                                 ' ',
                               )}
@@ -1268,15 +1464,15 @@ export function AdminPage({
                           </td>
 
                           <td className="px-4 py-4">
-                            {vehicle.status === 'active' ? (
+                            {vehicle.status === 'disponible' ? (
                               <span className="inline-flex items-center gap-1 text-xs text-green-400">
                                 <CheckCircle2 className="h-4 w-4" />
-                                Publicado
+                                {STATUS_LABELS[vehicle.status]}
                               </span>
                             ) : (
                               <span className="inline-flex items-center gap-1 text-xs text-yellow-400">
                                 <RefreshCw className="h-4 w-4" />
-                                Pendiente
+                                {STATUS_LABELS[vehicle.status]}
                               </span>
                             )}
                           </td>
@@ -1303,13 +1499,13 @@ export function AdminPage({
                                 <FileText className="h-4 w-4" />
                               </button>
 
-                              {vehicle.status !== 'active' ? (
+                              {vehicle.status !== 'disponible' ? (
                                 <button
                                   type="button"
-                                  title="Publicar"
-                                  aria-label="Publicar vehículo"
+                                  title="Marcar disponible"
+                                  aria-label="Marcar vehículo disponible"
                                   onClick={() =>
-                                    handleStatusChange(vehicle, 'active')
+                                    handleStatusChange(vehicle, 'disponible')
                                   }
                                   className="rounded-lg bg-green-500/10 p-2 text-green-400 hover:bg-green-500/20"
                                 >
@@ -1318,10 +1514,13 @@ export function AdminPage({
                               ) : (
                                 <button
                                   type="button"
-                                  title="Retirar publicación"
-                                  aria-label="Retirar publicación"
+                                  title="Marcar no disponible"
+                                  aria-label="Marcar vehículo no disponible"
                                   onClick={() =>
-                                    handleStatusChange(vehicle, 'pending')
+                                    handleStatusChange(
+                                      vehicle,
+                                      'no_disponible',
+                                    )
                                   }
                                   className="rounded-lg bg-yellow-500/10 p-2 text-yellow-400 hover:bg-yellow-500/20"
                                 >
@@ -1391,7 +1590,7 @@ export function AdminPage({
                           {formatCOP(vehicle.price)}
                         </p>
                         <p className="mt-1 text-xs text-gray-500">
-                          Estado: {vehicle.status || 'Sin estado'}
+                          Estado: {STATUS_LABELS[vehicle.status]}
                         </p>
                       </div>
 
@@ -1422,20 +1621,20 @@ export function AdminPage({
                           onClick={() =>
                             handleStatusChange(
                               vehicle,
-                              vehicle.status === 'active'
-                                ? 'pending'
-                                : 'active',
+                              vehicle.status === 'disponible'
+                                ? 'no_disponible'
+                                : 'disponible',
                             )
                           }
                           className={`flex items-center gap-2 rounded-lg px-3 py-2 text-xs ${
-                            vehicle.status === 'active'
+                            vehicle.status === 'disponible'
                               ? 'bg-yellow-500/10 text-yellow-400'
                               : 'bg-green-500/10 text-green-400'
                           }`}
                         >
-                          {vehicle.status === 'active'
-                            ? 'Despublicar'
-                            : 'Autorizar'}
+                          {vehicle.status === 'disponible'
+                            ? 'Marcar no disponible'
+                            : 'Marcar disponible'}
                         </button>
 
                         <button
@@ -1507,10 +1706,7 @@ export function AdminPage({
                     activeVehicles.filter(
                       (vehicle) =>
                         normalizeText(vehicle.type || 'carro') ===
-                          normalizeText(brochureType) &&
-                        !['vendido', 'no_disponible'].includes(
-                          normalizeText(vehicle.tag),
-                        ),
+                        normalizeText(brochureType),
                     ).length
                   }
                 </p>

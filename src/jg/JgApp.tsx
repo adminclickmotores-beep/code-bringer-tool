@@ -6,7 +6,12 @@ import { Footer } from '@/jg/components/Footer';
 import { WhatsAppFloat } from '@/jg/components/WhatsAppFloat';
 import { SalesChatbot } from '@/jg/components/SalesChatbot';
 import { VehicleDetailModal } from '@/jg/components/VehicleDetailModal';
-import { Vehicle, Notification, supabase } from '@/jg/lib/supabase';
+import {
+  Vehicle,
+  VehicleAdminInput,
+  Notification,
+  supabase,
+} from '@/jg/lib/supabase';
 
 export const PAGE_PATHS: Record<string, string> = {
   home: '/',
@@ -28,6 +33,10 @@ type Ctx = {
   vehicles: Vehicle[];
   loading: boolean;
   loadVehicles: () => Promise<void>;
+  addVehicle: (vehicle: VehicleAdminInput) => Promise<void>;
+  updateVehicle: (id: string, vehicle: VehicleAdminInput) => Promise<void>;
+  updateVehicleStatus: (id: string, status: Vehicle['status']) => Promise<void>;
+  deleteVehicle: (id: string) => Promise<void>;
   session: Session | null;
   authLoading: boolean;
   refreshSession: () => void;
@@ -62,14 +71,78 @@ export function JgApp({ children }: { children: ReactNode }) {
 
   const loadVehicles = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase.from('vehicles').select('*').order('created_at', { ascending: false });
-    if (!error && data) setVehicles(data as Vehicle[]);
-    setLoading(false);
+    try {
+      const { data, error } = await supabase
+        .from('vehicles')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      setVehicles(data as Vehicle[]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
-    loadVehicles();
+    void loadVehicles().catch((error) => {
+      console.error('Error cargando vehículos:', error);
+    });
   }, [loadVehicles]);
+
+  const addVehicle = useCallback(
+    async (vehicle: VehicleAdminInput) => {
+      const { error } = await supabase
+        .from('vehicles')
+        .insert(vehicle)
+        .select('id')
+        .single();
+      if (error) throw error;
+      await loadVehicles();
+    },
+    [loadVehicles],
+  );
+
+  const updateVehicle = useCallback(
+    async (id: string, vehicle: VehicleAdminInput) => {
+      const { error } = await supabase
+        .from('vehicles')
+        .update(vehicle)
+        .eq('id', id)
+        .select('id')
+        .single();
+      if (error) throw error;
+      await loadVehicles();
+    },
+    [loadVehicles],
+  );
+
+  const updateVehicleStatus = useCallback(
+    async (id: string, status: Vehicle['status']) => {
+      const { error } = await supabase
+        .from('vehicles')
+        .update({ status })
+        .eq('id', id)
+        .select('id')
+        .single();
+      if (error) throw error;
+      await loadVehicles();
+    },
+    [loadVehicles],
+  );
+
+  const deleteVehicle = useCallback(
+    async (id: string) => {
+      const { error } = await supabase
+        .from('vehicles')
+        .delete()
+        .eq('id', id)
+        .select('id')
+        .single();
+      if (error) throw error;
+      await loadVehicles();
+    },
+    [loadVehicles],
+  );
 
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange((_e: string, s: Session | null) => setSession(s));
@@ -102,7 +175,8 @@ export function JgApp({ children }: { children: ReactNode }) {
   );
 
   const logout = async () => {
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
     navigate('home');
   };
 
@@ -115,7 +189,8 @@ export function JgApp({ children }: { children: ReactNode }) {
   return (
     <JgContext.Provider
       value={{
-        vehicles, loading, loadVehicles, session, authLoading, refreshSession,
+        vehicles, loading, loadVehicles, addVehicle, updateVehicle,
+        updateVehicleStatus, deleteVehicle, session, authLoading, refreshSession,
         notifications, loadNotifications, adminSection, setAdminSection,
         navigate, openVehicle: setSelectedVehicle, logout,
       }}

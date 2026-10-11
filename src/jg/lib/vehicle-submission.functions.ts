@@ -1,6 +1,33 @@
 import { createServerFn } from '@tanstack/react-start';
 import { vehicleSubmissionSchema } from './vehicle-submission';
 
+function safeDiagnosticString(value: unknown): string | undefined {
+  return typeof value === 'string' && /^[A-Za-z0-9_.-]{1,64}$/.test(value)
+    ? value
+    : undefined;
+}
+
+function storageErrorDiagnostics(error: unknown) {
+  if (typeof error !== 'object' || error === null) {
+    return { errorName: 'UnknownError' };
+  }
+
+  const details = error as {
+    name?: unknown;
+    status?: unknown;
+    statusCode?: unknown;
+    code?: unknown;
+  };
+  return {
+    errorName: safeDiagnosticString(details.name) ?? 'Error',
+    status: typeof details.status === 'number' && Number.isFinite(details.status)
+      ? details.status
+      : undefined,
+    statusCode: safeDiagnosticString(details.statusCode),
+    code: safeDiagnosticString(details.code),
+  };
+}
+
 export const submitVehicleRequest = createServerFn({ method: 'POST' })
   .inputValidator((input) => vehicleSubmissionSchema.parse(input))
   .handler(async ({ data }) => {
@@ -8,14 +35,52 @@ export const submitVehicleRequest = createServerFn({ method: 'POST' })
     const documentGroup = data.propertyCardPaths[0].split('/')[1];
     if (!documentGroup) throw new Error('No pudimos validar la tarjeta de propiedad.');
 
-    const { data: uploadedDocuments, error: documentError } = await supabaseAdmin.storage
-      .from('property-cards')
-      .list(documentGroup, { limit: 10 });
-    const uploadedNames = new Set((uploadedDocuments ?? []).map((document) => document.name));
-    const requestedNames = data.propertyCardPaths.map((path) => path.split('/').at(-1));
-    if (documentError || requestedNames.some((name) => !name || !uploadedNames.has(name))) {
+    const documentQuery = await Promise.resolve()
+      .then(() => supabaseAdmin.storage
+        .from('property-cards')
+        .list(documentGroup, { limit: 10 }))
+      .catch((error: unknown) => {
+        console.error(
+          '[vehicle-submission] Excepción inesperada al consultar documentos de Storage',
+          {
+            ...storageErrorDiagnostics(error),
+            entryCount: null,
+            matchedFileCount: 0,
+          },
+        );
+        throw new Error(
+          'No pudimos validar el frente y el reverso de la tarjeta de propiedad.',
+        );
+      });
+    const { data: uploadedDocuments, error: documentError } = documentQuery;
+
+    if (documentError) {
+      console.error('[vehicle-submission] Storage devolvió un error al consultar documentos', {
+        ...storageErrorDiagnostics(documentError),
+        entryCount: 0,
+        matchedFileCount: 0,
+      });
       throw new Error('No pudimos validar el frente y el reverso de la tarjeta de propiedad.');
     }
+
+    const uploadedNames = new Set((uploadedDocuments ?? []).map((document) => document.name));
+    const requestedNames = data.propertyCardPaths.map((path) => path.split('/').at(-1));
+    const matchedFileCount = requestedNames.filter(
+      (name): name is string => Boolean(name && uploadedNames.has(name)),
+    ).length;
+
+    if (matchedFileCount !== requestedNames.length) {
+      console.warn('[vehicle-submission] Consulta de Storage correcta, pero faltan documentos', {
+        entryCount: uploadedDocuments?.length ?? 0,
+        matchedFileCount,
+      });
+      throw new Error('No pudimos validar el frente y el reverso de la tarjeta de propiedad.');
+    }
+
+    console.info('[vehicle-submission] Documentos validados en Storage', {
+      entryCount: uploadedDocuments?.length ?? 0,
+      matchedFileCount,
+    });
 
     const table = data.saleMode === 'publicar_gratis' ? 'vehicle_submissions' : 'leads';
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();

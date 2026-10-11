@@ -30,11 +30,11 @@ function Page() {
       loading={j.loading}
       onRefresh={j.loadVehicles}
       onLogout={j.logout}
+      onAddVehicle={j.addVehicle}
+      onUpdateVehicle={j.updateVehicle}
+      onUpdateVehicleStatus={j.updateVehicleStatus}
+      onDeleteVehicle={j.deleteVehicle}
       userEmail={j.session.user.email || ""}
-      adminSection={j.adminSection}
-      onSectionChange={j.setAdminSection}
-      notifications={j.notifications}
-      onNotificationsRead={j.loadNotifications}
     />
   );
 }

@@ -32,6 +32,17 @@ export type Vehicle = {
 
 export type VehicleInput = Omit<Vehicle, 'id' | 'created_at'>;
 
+export type VehicleAdminInput = Pick<
+  Vehicle,
+  'title' | 'type' | 'brand' | 'model' | 'year' | 'price' | 'status'
+> &
+  Partial<
+    Omit<
+      Vehicle,
+      'id' | 'created_at' | 'title' | 'type' | 'brand' | 'model' | 'year' | 'price' | 'status'
+    >
+  >;
+
 export type VehicleSubmission = {
   id: string;
   name: string;
@@ -185,15 +196,23 @@ export const TAG_CONFIG: Record<
   },
 };
 
-export async function uploadVehiclePhoto(file: File): Promise<string | null> {
-  const ext = file.name.split('.').pop();
+export async function uploadVehiclePhoto(file: File): Promise<string> {
+  const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
   const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const { error } = await supabase.storage
+  const { error: uploadError } = await supabase.storage
     .from('vehicle-photos')
     .upload(fileName, file, { cacheControl: '3600', upsert: false });
-  if (error) return null;
-  const { data } = await supabase.storage.from('vehicle-photos').createSignedUrl(fileName, TEN_YEARS);
-  return data?.signedUrl ?? null;
+  if (uploadError) throw uploadError;
+
+  const { data, error: urlError } = await supabase.storage
+    .from('vehicle-photos')
+    .createSignedUrl(fileName, TEN_YEARS);
+  if (urlError) throw urlError;
+  if (!data?.signedUrl) {
+    throw new Error('Supabase no devolvió la dirección de la fotografía.');
+  }
+
+  return data.signedUrl;
 }
 
 export async function uploadPropertyCard(

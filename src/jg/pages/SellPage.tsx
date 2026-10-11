@@ -99,9 +99,11 @@ export function SellPage() {
       const urls: string[] = [];
       for (const file of toUpload) {
         const url = await uploadVehiclePhoto(file);
-        if (url) urls.push(url);
+        urls.push(url);
       }
       setForm((prev) => ({ ...prev, photoUrls: [...prev.photoUrls, ...urls] }));
+    } catch (error) {
+      setStepError(error instanceof Error ? error.message : 'No se pudieron cargar las fotografías.');
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
