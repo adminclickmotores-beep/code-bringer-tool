@@ -78,8 +78,11 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
   const [searchTerm, setSearchTerm] = useState('');
 
 
-  const featured = vehicles.filter((v) => v.featured).slice(0, 6);
-  const displayVehicles = featured.length > 0 ? featured : vehicles.slice(0, 6);
+  const soldLast = [...vehicles].sort(
+    (a, b) => (a.status === 'vendido' ? 1 : 0) - (b.status === 'vendido' ? 1 : 0),
+  );
+  const featured = soldLast.filter((v) => v.featured).slice(0, 6);
+  const displayVehicles = featured.length > 0 ? featured : soldLast.slice(0, 6);
 
   const motosCount = vehicles.filter((v) => v.type === 'moto').length;
   const carrosCount = vehicles.filter((v) => v.type === 'carro').length;
