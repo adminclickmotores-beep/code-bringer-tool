@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useJg } from '@/jg/JgApp';
+import { PlansSection } from '@/jg/components/PlansSection';
 import { formatCOP, uploadPropertyCard, uploadVehiclePhoto } from '@/jg/lib/supabase';
 import { submitVehicleRequest } from '@/jg/lib/vehicle-submission.functions';
 import {
@@ -372,6 +373,8 @@ export function SellPage() {
             )}
           </section>
         </div>
+
+        <PlansSection />
 
         <section className="py-14">
           <h2 className="text-center text-2xl font-bold text-jg-text-dark">¿Por qué elegir ClickMotores?</h2>
