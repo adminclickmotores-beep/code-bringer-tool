@@ -147,7 +147,7 @@ export function JgApp({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
+    const { data: listener } = supabase.auth.onAuthStateChange((_e: string, s: Session | null) => setSession(s));
     supabase.auth.getSession().then(({ data }: { data: { session: Session | null } }) => {
       setSession(data.session);
       setAuthLoading(false);
