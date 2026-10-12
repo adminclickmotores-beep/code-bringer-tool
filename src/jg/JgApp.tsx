@@ -1,5 +1,4 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
-import type { Session } from '@supabase/supabase-js';
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { Header } from '@/jg/components/Header';
 import { Footer } from '@/jg/components/Footer';
@@ -83,6 +82,8 @@ export function JgApp({ children }: { children: ReactNode }) {
     }
   }, []);
 
+
+
   useEffect(() => {
     void loadVehicles().catch((error) => {
       console.error('Error cargando vehículos:', error);
@@ -145,8 +146,8 @@ export function JgApp({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange((_e: string, s: Session | null) => setSession(s));
-    supabase.auth.getSession().then(({ data }: { data: { session: Session | null } }) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
+    supabase.auth.getSession().then(({ data }: { data: { session: AuthSession | null } }) => {
       setSession(data.session);
       setAuthLoading(false);
     });
@@ -180,14 +181,10 @@ export function JgApp({ children }: { children: ReactNode }) {
     navigate('home');
   };
 
-  const refreshSession = () => {
-    supabase.auth.getSession().then(({ data }: { data: { session: Session | null } }) => setSession(data.session));
-  };
-
-  const isAdmin = currentPage === 'admin';
+    const isAdmin = currentPage === 'admin';
 
   return (
-    <JgContext.Provider
+        <JgContext.Provider
       value={{
         vehicles, loading, loadVehicles, addVehicle, updateVehicle,
         updateVehicleStatus, deleteVehicle, session, authLoading, refreshSession,
