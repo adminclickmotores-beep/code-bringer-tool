@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
+import type { Session } from '@supabase/supabase-js';
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { Header } from '@/jg/components/Header';
 import { Footer } from '@/jg/components/Footer';
@@ -147,7 +148,7 @@ export function JgApp({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
-    supabase.auth.getSession().then(({ data }: { data: { session: AuthSession | null } }) => {
+    supabase.auth.getSession().then(({ data }: { data: { session: Session | null } }) => {
       setSession(data.session);
       setAuthLoading(false);
     });
@@ -181,7 +182,13 @@ export function JgApp({ children }: { children: ReactNode }) {
     navigate('home');
   };
 
-    const isAdmin = currentPage === 'admin';
+    const refreshSession = () => {
+    supabase.auth.getSession().then(({ data }: { data: { session: Session | null } }) => {
+      setSession(data.session);
+    });
+  };
+
+  const isAdmin = currentPage === 'admin';
 
   return (
         <JgContext.Provider
