@@ -197,18 +197,20 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
                 </select>
               </div>
 
-              <div>
-                <label className="label-field">Cilindraje (motos)</label>
-                <select
-                  value={displacementFilter}
-                  onChange={(e) => setDisplacementFilter(e.target.value)}
-                  className="select-field"
-                >
-                  {displacementOptions.map((d) => (
-                    <option key={d.value} value={d.value}>{d.label}</option>
-                  ))}
-                </select>
-              </div>
+              {typeFilter !== 'carro' && (
+                <div>
+                  <label className="label-field">Cilindraje (motos)</label>
+                  <select
+                    value={displacementFilter}
+                    onChange={(e) => setDisplacementFilter(e.target.value)}
+                    className="select-field"
+                  >
+                    {displacementOptions.map((d) => (
+                      <option key={d.value} value={d.value}>{d.label}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               <div>
                 <label className="label-field">Precio mínimo (COP)</label>
