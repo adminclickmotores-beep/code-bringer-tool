@@ -68,6 +68,11 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
       if (priceMin && v.price < parseInt(priceMin)) return false;
       if (priceMax && v.price > parseInt(priceMax)) return false;
       return true;
+    }).sort((a, b) => {
+      const rank = (v: Vehicle) => (v.status === 'vendido' ? 2 : v.status === 'no_disponible' ? 1 : 0);
+      const r = rank(a) - rank(b);
+      if (r !== 0) return r;
+      return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
     });
   }, [vehicles, search, typeFilter, brandFilter, statusFilter, displacementFilter, priceMin, priceMax]);
 
