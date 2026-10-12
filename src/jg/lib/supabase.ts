@@ -28,6 +28,7 @@ export type Vehicle = {
   placa_completa: string | null;
   ciudad: string | null;
   property_card_urls: string[] | null;
+  internal_status?: 'reservado' | 'propio' | 'consignacion' | 'retirado' | null;
 };
 
 export type VehicleInput = Omit<Vehicle, 'id' | 'created_at'>;

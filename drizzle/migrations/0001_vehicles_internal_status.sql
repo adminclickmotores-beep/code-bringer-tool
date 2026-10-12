@@ -1,0 +1,1 @@
+ALTER TABLE public.vehicles ADD COLUMN IF NOT EXISTS internal_status text DEFAULT 'propio' CHECK (internal_status IN ('reservado','propio','consignacion','retirado'));

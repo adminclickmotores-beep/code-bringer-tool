@@ -8,6 +8,13 @@
       "when": 1791435247657,
       "tag": "0000_jgmotors_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791825893102,
+      "tag": "0001_vehicles_internal_status",
+      "breakpoints": true
     }
   ]
 }

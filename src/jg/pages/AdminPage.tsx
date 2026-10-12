@@ -50,7 +50,17 @@ type VehicleForm = {
   city: string;
   tag: VehicleTag;
   status: VehicleStatus;
+  internal_status: InternalStatus;
   image_urls: string[];
+};
+
+type InternalStatus = 'reservado' | 'propio' | 'consignacion' | 'retirado';
+const INTERNAL_STATUSES: InternalStatus[] = ['propio', 'consignacion', 'reservado', 'retirado'];
+const INTERNAL_LABELS: Record<InternalStatus, string> = {
+  propio: 'Propio',
+  consignacion: 'Consignación',
+  reservado: 'Reservado',
+  retirado: 'Retirado',
 };
 
 interface AdminPageProps {
@@ -100,6 +110,7 @@ const INITIAL_FORM: VehicleForm = {
   city: 'Yumbo',
   tag: 'recien_ingresado',
   status: 'disponible',
+  internal_status: 'propio',
   image_urls: [],
 };
 
@@ -310,6 +321,7 @@ export function AdminPage({
       city: vehicle.ciudad || 'Yumbo',
       tag: vehicle.tag || INITIAL_FORM.tag,
       status: vehicle.status || 'disponible',
+      internal_status: (vehicle.internal_status as InternalStatus) || 'propio',
       image_urls: getImageUrls(vehicle),
     });
 
@@ -466,6 +478,8 @@ export function AdminPage({
       ciudad: form.city.trim() || 'Yumbo',
       tag: form.tag,
       status: form.status,
+      internal_status: form.internal_status,
+      consignado: form.internal_status === 'consignacion',
       image_urls: form.image_urls,
     };
 
@@ -1305,6 +1319,26 @@ export function AdminPage({
                       </select>
                     </label>
 
+                    <label className="text-sm text-gray-300">
+                      Estado interno (solo visible para ti)
+                      <select
+                        value={form.internal_status}
+                        onChange={(event) =>
+                          updateForm(
+                            'internal_status',
+                            event.target.value as InternalStatus,
+                          )
+                        }
+                        className="mt-2 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-3 text-white"
+                      >
+                        {INTERNAL_STATUSES.map((s) => (
+                          <option key={s} value={s}>
+                            {INTERNAL_LABELS[s]}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+
                     <label className="col-span-full text-sm text-gray-300">
                       Fotografías del vehículo
                       <input
@@ -1475,6 +1509,9 @@ export function AdminPage({
                                 {STATUS_LABELS[vehicle.status]}
                               </span>
                             )}
+                            <span className="mt-1 block text-[11px] font-semibold uppercase text-blue-400">
+                              🔒 {INTERNAL_LABELS[(vehicle.internal_status as InternalStatus) || 'propio']}
+                            </span>
                           </td>
 
                           <td className="px-4 py-4">

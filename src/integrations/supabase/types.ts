@@ -273,6 +273,7 @@ export type Database = {
           id: string
           image_urls: string[] | null
           instagram_url: string | null
+          internal_status: string | null
           mileage: number | null
           model: string
           original_price: number | null
@@ -298,6 +299,7 @@ export type Database = {
           id?: string
           image_urls?: string[] | null
           instagram_url?: string | null
+          internal_status?: string | null
           mileage?: number | null
           model: string
           original_price?: number | null
@@ -323,6 +325,7 @@ export type Database = {
           id?: string
           image_urls?: string[] | null
           instagram_url?: string | null
+          internal_status?: string | null
           mileage?: number | null
           model?: string
           original_price?: number | null
