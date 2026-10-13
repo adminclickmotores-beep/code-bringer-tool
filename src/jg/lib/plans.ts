@@ -32,3 +32,32 @@ export function planWhatsappMessage(plan: PublicationPlan, owner = '', plate = '
     `Adjunto el comprobante de transferencia a nombre de ${PAYMENT_HOLDER}.`,
   ].join('\n');
 }
+
+export const EXPIRING_SOON_DAYS = 3;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+export function normalizePlate(plate: string): string {
+  return plate.toUpperCase().replace(/[^A-Z0-9]/g, '');
+}
+
+export type ListingStatus = 'permanente' | 'activo' | 'por_vencer' | 'expirado';
+
+export function listingStatus(
+  v: { listing_owner?: string | null; expires_at?: string | null },
+  now: Date = new Date(),
+): ListingStatus {
+  if (v.listing_owner !== 'tercero' || !v.expires_at) return 'permanente';
+  const left = new Date(v.expires_at).getTime() - now.getTime();
+  if (left <= 0) return 'expirado';
+  if (left <= EXPIRING_SOON_DAYS * DAY_MS) return 'por_vencer';
+  return 'activo';
+}
+
+/** New expiry = max(now, current expiry) + plan days. */
+export function renewedExpiry(current: string | null, days: number, now: Date = new Date()): Date {
+  const base = Math.max(now.getTime(), current ? new Date(current).getTime() : 0);
+  return new Date(base + days * DAY_MS);
+}
+
+export const PLATE_USED_MESSAGE =
+  'Esta placa ya usó su periodo gratuito. Para volver a publicarla elige un plan (desde $20.000 COP).';

@@ -28,6 +28,10 @@ export type Vehicle = {
   placa_completa: string | null;
   ciudad: string | null;
   property_card_urls: string[] | null;
+  listing_owner?: 'jg' | 'tercero' | null;
+  expires_at?: string | null;
+  featured_until?: string | null;
+  plan_type?: string | null;
   internal_status?: 'reservado' | 'propio' | 'consignacion' | 'retirado' | null;
 };
 

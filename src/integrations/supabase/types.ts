@@ -149,6 +149,24 @@ export type Database = {
         }
         Relationships: []
       }
+      plate_registry: {
+        Row: {
+          first_free_at: string
+          plate_normalized: string
+          submission_id: string | null
+        }
+        Insert: {
+          first_free_at?: string
+          plate_normalized: string
+          submission_id?: string | null
+        }
+        Update: {
+          first_free_at?: string
+          plate_normalized?: string
+          submission_id?: string | null
+        }
+        Relationships: []
+      }
       sales: {
         Row: {
           commission_amount: number
@@ -207,6 +225,7 @@ export type Database = {
           name: string
           phone: string
           placa_completa: string | null
+          plate_normalized: string | null
           property_card_urls: string[] | null
           status: string
           vehicle_type: string
@@ -230,6 +249,7 @@ export type Database = {
           name: string
           phone: string
           placa_completa?: string | null
+          plate_normalized?: string | null
           property_card_urls?: string[] | null
           status?: string
           vehicle_type: string
@@ -253,6 +273,7 @@ export type Database = {
           name?: string
           phone?: string
           placa_completa?: string | null
+          plate_normalized?: string | null
           property_card_urls?: string[] | null
           status?: string
           vehicle_type?: string
@@ -268,16 +289,20 @@ export type Database = {
           created_at: string | null
           description: string | null
           displacement: string | null
+          expires_at: string | null
           featured: boolean
+          featured_until: string | null
           fuel: string | null
           id: string
           image_urls: string[] | null
           instagram_url: string | null
           internal_status: string | null
+          listing_owner: string
           mileage: number | null
           model: string
           original_price: number | null
           placa_completa: string | null
+          plan_type: string | null
           price: number
           property_card_urls: string[] | null
           status: string
@@ -294,16 +319,20 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           displacement?: string | null
+          expires_at?: string | null
           featured?: boolean
+          featured_until?: string | null
           fuel?: string | null
           id?: string
           image_urls?: string[] | null
           instagram_url?: string | null
           internal_status?: string | null
+          listing_owner?: string
           mileage?: number | null
           model: string
           original_price?: number | null
           placa_completa?: string | null
+          plan_type?: string | null
           price: number
           property_card_urls?: string[] | null
           status?: string
@@ -320,16 +349,20 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           displacement?: string | null
+          expires_at?: string | null
           featured?: boolean
+          featured_until?: string | null
           fuel?: string | null
           id?: string
           image_urls?: string[] | null
           instagram_url?: string | null
           internal_status?: string | null
+          listing_owner?: string
           mileage?: number | null
           model?: string
           original_price?: number | null
           placa_completa?: string | null
+          plan_type?: string | null
           price?: number
           property_card_urls?: string[] | null
           status?: string
