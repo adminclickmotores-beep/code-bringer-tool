@@ -1,5 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { vehicleSubmissionSchema } from './vehicle-submission';
+import { normalizePlate, PLATE_USED_MESSAGE } from './plans';
 
 function safeDiagnosticString(value: unknown): string | undefined {
   return typeof value === 'string' && /^[A-Za-z0-9_.-]{1,64}$/.test(value)
@@ -83,6 +84,15 @@ export const submitVehicleRequest = createServerFn({ method: 'POST' })
     });
 
     const table = data.saleMode === 'publicar_gratis' ? 'vehicle_submissions' : 'leads';
+    const plateNormalized = normalizePlate(data.plate);
+    if (data.saleMode === 'publicar_gratis') {
+      const { data: used } = await supabaseAdmin
+        .from('plate_registry')
+        .select('plate_normalized')
+        .eq('plate_normalized', plateNormalized)
+        .maybeSingle();
+      if (used) throw new Error(PLATE_USED_MESSAGE);
+    }
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
     const { count } = await supabaseAdmin
       .from(table)
@@ -116,7 +126,7 @@ export const submitVehicleRequest = createServerFn({ method: 'POST' })
     };
 
     const record = data.saleMode === 'publicar_gratis'
-      ? { ...common, status: 'pendiente' }
+      ? { ...common, status: 'pendiente', plate_normalized: plateNormalized }
       : {
           ...common,
           mode: data.saleMode === 'directa' ? 'compra_directa' : 'consignacion',
@@ -128,6 +138,16 @@ export const submitVehicleRequest = createServerFn({ method: 'POST' })
       .select('id')
       .single();
     if (error) throw new Error('No pudimos guardar la solicitud. Intenta nuevamente.');
+
+    if (data.saleMode === 'publicar_gratis') {
+      const { error: regErr } = await supabaseAdmin
+        .from('plate_registry')
+        .insert({ plate_normalized: plateNormalized, submission_id: inserted.id });
+      if (regErr) {
+        await supabaseAdmin.from('vehicle_submissions').delete().eq('id', inserted.id);
+        throw new Error(PLATE_USED_MESSAGE);
+      }
+    }
 
     await supabaseAdmin.from('notifications').insert({
       type: data.saleMode === 'publicar_gratis' ? 'submission' : 'lead',
