@@ -27,6 +27,7 @@ import {
   MAX_UPLOAD_BYTES,
   MAX_VEHICLE_PHOTOS,
 } from '@/jg/lib/vehicle-submission';
+import { ListingBadge } from '@/jg/components/ListingBadge';
 import {
   Vehicle,
   VehicleAdminInput,
@@ -51,6 +52,7 @@ type VehicleForm = {
   tag: VehicleTag;
   status: VehicleStatus;
   internal_status: InternalStatus;
+  listing_owner: 'jg' | 'tercero';
   image_urls: string[];
 };
 
@@ -111,6 +113,7 @@ const INITIAL_FORM: VehicleForm = {
   tag: 'recien_ingresado',
   status: 'disponible',
   internal_status: 'propio',
+  listing_owner: 'jg',
   image_urls: [],
 };
 
@@ -322,6 +325,7 @@ export function AdminPage({
       tag: vehicle.tag || INITIAL_FORM.tag,
       status: vehicle.status || 'disponible',
       internal_status: (vehicle.internal_status as InternalStatus) || 'propio',
+      listing_owner: vehicle.listing_owner === 'tercero' ? 'tercero' : 'jg',
       image_urls: getImageUrls(vehicle),
     });
 
@@ -480,6 +484,7 @@ export function AdminPage({
       status: form.status,
       internal_status: form.internal_status,
       consignado: form.internal_status === 'consignacion',
+      listing_owner: form.listing_owner,
       image_urls: form.image_urls,
     };
 
@@ -1339,6 +1344,20 @@ export function AdminPage({
                       </select>
                     </label>
 
+                    <label className="text-sm text-gray-300">
+                      Dueño del aviso
+                      <select
+                        value={form.listing_owner}
+                        onChange={(event) =>
+                          updateForm('listing_owner', event.target.value as 'jg' | 'tercero')
+                        }
+                        className="mt-2 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-3 text-white"
+                      >
+                        <option value="jg">JG Motors (propio, aliado o consignación) · sin vencimiento</option>
+                        <option value="tercero">Tercero (publicación gratis) · vence a los 20 días</option>
+                      </select>
+                    </label>
+
                     <label className="col-span-full text-sm text-gray-300">
                       Fotografías del vehículo
                       <input
@@ -1512,6 +1531,7 @@ export function AdminPage({
                             <span className="mt-1 block text-[11px] font-semibold uppercase text-blue-400">
                               🔒 {INTERNAL_LABELS[(vehicle.internal_status as InternalStatus) || 'propio']}
                             </span>
+                            <ListingBadge vehicle={vehicle} onRenewed={onRefresh} />
                           </td>
 
                           <td className="px-4 py-4">
