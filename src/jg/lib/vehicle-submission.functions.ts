@@ -134,7 +134,8 @@ export const submitVehicleRequest = createServerFn({ method: 'POST' })
         };
     const { data: inserted, error } = await supabaseAdmin
       .from(table)
-      .insert(record)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .insert(record as any)
       .select('id')
       .single();
     if (error) throw new Error('No pudimos guardar la solicitud. Intenta nuevamente.');
