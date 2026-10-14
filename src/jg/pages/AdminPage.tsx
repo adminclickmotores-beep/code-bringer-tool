@@ -28,6 +28,7 @@ import {
   MAX_VEHICLE_PHOTOS,
 } from '@/jg/lib/vehicle-submission';
 import { ListingBadge } from '@/jg/components/ListingBadge';
+import { BuyerInterestsPanel } from '@/jg/components/BuyerInterestsPanel';
 import {
   Vehicle,
   VehicleAdminInput,
@@ -215,7 +216,7 @@ export function AdminPage({
   stats,
 }: AdminPageProps) {
   const [activeTab, setActiveTab] = useState<
-    'requests' | 'inventory' | 'brochure'
+    'requests' | 'inventory' | 'interests' | 'brochure'
   >('inventory');
 
   const [tagFilter, setTagFilter] = useState<'all' | VehicleTag>('all');
@@ -911,6 +912,7 @@ export function AdminPage({
   const tabs = [
     { id: 'requests' as const, label: 'Leads y moderación', icon: Users },
     { id: 'inventory' as const, label: 'Inventario', icon: Car },
+    { id: 'interests' as const, label: 'Interesados', icon: MessageSquare },
     { id: 'brochure' as const, label: 'Catálogos y fichas', icon: Printer },
   ];
 
@@ -1745,6 +1747,8 @@ export function AdminPage({
               )}
             </section>
           )}
+
+          {activeTab === 'interests' && <BuyerInterestsPanel />}
 
           {activeTab === 'brochure' && (
             <section className="mx-auto max-w-2xl py-8 text-center">
