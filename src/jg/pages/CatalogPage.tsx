@@ -2,6 +2,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Search, SlidersHorizontal, X, Bike, Car, ImageIcon } from 'lucide-react';
 import { Vehicle, STATUS_CONFIG, formatCOP } from '@/jg/lib/supabase';
+import { catalogRank } from '@/jg/lib/plans';
 import { VehicleCard } from '@/jg/components/VehicleCard';
 
 interface CatalogPageProps {
@@ -69,8 +70,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
       if (priceMax && v.price > parseInt(priceMax)) return false;
       return true;
     }).sort((a, b) => {
-      const rank = (v: Vehicle) => (v.status === 'vendido' ? 2 : v.status === 'no_disponible' ? 1 : 0);
-      const r = rank(a) - rank(b);
+      const r = catalogRank(a) - catalogRank(b);
       if (r !== 0) return r;
       return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
     });
