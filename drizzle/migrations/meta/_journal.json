@@ -29,6 +29,13 @@
       "when": 1791985909531,
       "tag": "0003_vehicles_owner_contact",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791987406872,
+      "tag": "0004_buyer_interests",
+      "breakpoints": true
     }
   ]
 }

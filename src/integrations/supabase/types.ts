@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      buyer_interests: {
+        Row: {
+          buyer_name: string
+          buyer_phone: string
+          contact_target: string
+          created_at: string
+          id: string
+          status: string
+          vehicle_id: string | null
+          vehicle_plate: string | null
+          vehicle_title: string | null
+        }
+        Insert: {
+          buyer_name: string
+          buyer_phone: string
+          contact_target?: string
+          created_at?: string
+          id?: string
+          status?: string
+          vehicle_id?: string | null
+          vehicle_plate?: string | null
+          vehicle_title?: string | null
+        }
+        Update: {
+          buyer_name?: string
+          buyer_phone?: string
+          contact_target?: string
+          created_at?: string
+          id?: string
+          status?: string
+          vehicle_id?: string | null
+          vehicle_plate?: string | null
+          vehicle_title?: string | null
+        }
+        Relationships: []
+      }
       consultas: {
         Row: {
           contact: string | null
