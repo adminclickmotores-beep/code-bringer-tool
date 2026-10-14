@@ -53,6 +53,8 @@ type VehicleForm = {
   status: VehicleStatus;
   internal_status: InternalStatus;
   listing_owner: 'jg' | 'tercero';
+  owner_name: string;
+  owner_phone: string;
   image_urls: string[];
 };
 
@@ -114,6 +116,8 @@ const INITIAL_FORM: VehicleForm = {
   status: 'disponible',
   internal_status: 'propio',
   listing_owner: 'jg',
+  owner_name: '',
+  owner_phone: '',
   image_urls: [],
 };
 
@@ -326,6 +330,8 @@ export function AdminPage({
       status: vehicle.status || 'disponible',
       internal_status: (vehicle.internal_status as InternalStatus) || 'propio',
       listing_owner: vehicle.listing_owner === 'tercero' ? 'tercero' : 'jg',
+      owner_name: vehicle.owner_name || '',
+      owner_phone: vehicle.owner_phone || '',
       image_urls: getImageUrls(vehicle),
     });
 
@@ -485,6 +491,8 @@ export function AdminPage({
       internal_status: form.internal_status,
       consignado: form.internal_status === 'consignacion',
       listing_owner: form.listing_owner,
+      owner_name: form.listing_owner === 'tercero' ? form.owner_name.trim() || null : null,
+      owner_phone: form.listing_owner === 'tercero' ? form.owner_phone.trim() || null : null,
       image_urls: form.image_urls,
     };
 
@@ -1357,6 +1365,34 @@ export function AdminPage({
                         <option value="tercero">Tercero (publicación gratis) · vence a los 20 días</option>
                       </select>
                     </label>
+
+                    {form.listing_owner === 'tercero' && (
+                      <>
+                        <label className="text-sm text-gray-300">
+                          Nombre del propietario
+                          <input
+                            type="text"
+                            value={form.owner_name}
+                            onChange={(event) => updateForm('owner_name', event.target.value)}
+                            placeholder="Nombre de quien publica"
+                            className="mt-2 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-3 text-white"
+                          />
+                        </label>
+                        <label className="text-sm text-gray-300">
+                          WhatsApp del propietario
+                          <input
+                            type="tel"
+                            value={form.owner_phone}
+                            onChange={(event) => updateForm('owner_phone', event.target.value)}
+                            placeholder="Ej: 3001234567"
+                            className="mt-2 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-3 text-white"
+                          />
+                          <span className="mt-1 block text-xs text-gray-500">
+                            Los interesados contactarán directamente a este número mientras el anuncio esté activo.
+                          </span>
+                        </label>
+                      </>
+                    )}
 
                     <label className="col-span-full text-sm text-gray-300">
                       Fotografías del vehículo
