@@ -33,6 +33,8 @@ export type Vehicle = {
   featured_until?: string | null;
   plan_type?: string | null;
   internal_status?: 'reservado' | 'propio' | 'consignacion' | 'retirado' | null;
+  owner_name?: string | null;
+  owner_phone?: string | null;
 };
 
 export type VehicleInput = Omit<Vehicle, 'id' | 'created_at'>;
@@ -138,6 +140,20 @@ export const INSTAGRAM_HANDLE = '@jgmotors_co';
 
 export function whatsappLink(message: string): string {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+/** Normaliza un teléfono colombiano a formato wa.me (57 + 10 dígitos). */
+export function normalizePhone(phone: string | null | undefined): string | null {
+  if (!phone) return null;
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length === 10) return `57${digits}`;
+  if (digits.length === 12 && digits.startsWith('57')) return digits;
+  return null;
+}
+
+export function whatsappLinkTo(phone: string | null | undefined, message: string): string {
+  const target = normalizePhone(phone) ?? WHATSAPP_NUMBER;
+  return `https://wa.me/${target}?text=${encodeURIComponent(message)}`;
 }
 
 export function formatCOP(value: number): string {
