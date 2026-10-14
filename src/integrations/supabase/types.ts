@@ -301,6 +301,8 @@ export type Database = {
           mileage: number | null
           model: string
           original_price: number | null
+          owner_name: string | null
+          owner_phone: string | null
           placa_completa: string | null
           plan_type: string | null
           price: number
@@ -331,6 +333,8 @@ export type Database = {
           mileage?: number | null
           model: string
           original_price?: number | null
+          owner_name?: string | null
+          owner_phone?: string | null
           placa_completa?: string | null
           plan_type?: string | null
           price: number
@@ -361,6 +365,8 @@ export type Database = {
           mileage?: number | null
           model?: string
           original_price?: number | null
+          owner_name?: string | null
+          owner_phone?: string | null
           placa_completa?: string | null
           plan_type?: string | null
           price?: number
