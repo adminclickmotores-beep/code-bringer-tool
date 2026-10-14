@@ -61,3 +61,33 @@ export function renewedExpiry(current: string | null, days: number, now: Date = 
 
 export const PLATE_USED_MESSAGE =
   'Esta placa ya usó su periodo gratuito. Para volver a publicarla elige un plan (desde $20.000 COP).';
+
+export type ContactTarget = 'owner' | 'clickmotores' | 'none';
+
+/**
+ * Decide a quién contacta el cliente desde el catálogo:
+ * - tercero expirado -> sin contacto
+ * - tercero activo/por vencer -> WhatsApp directo del propietario
+ * - propio, consignación o aliado -> ClickMotores (comisión por venta)
+ */
+export function contactTarget(
+  v: { listing_owner?: string | null; expires_at?: string | null; status?: string },
+  now: Date = new Date(),
+): ContactTarget {
+  if (v.status === 'vendido' || v.status === 'no_disponible') return 'none';
+  if (v.listing_owner === 'tercero') {
+    return listingStatus(v, now) === 'expirado' ? 'none' : 'owner';
+  }
+  return 'clickmotores';
+}
+
+/** Orden del catálogo: disponibles -> no disponibles -> expirados de terceros -> vendidos. */
+export function catalogRank(
+  v: { listing_owner?: string | null; expires_at?: string | null; status?: string },
+  now: Date = new Date(),
+): number {
+  if (v.status === 'vendido') return 3;
+  if (v.listing_owner === 'tercero' && listingStatus(v, now) === 'expirado') return 2;
+  if (v.status === 'no_disponible') return 1;
+  return 0;
+}
