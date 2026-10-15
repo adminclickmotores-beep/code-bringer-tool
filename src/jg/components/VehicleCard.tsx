@@ -204,6 +204,14 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
           </div>
         </div>
       </div>
+      {showInterest && contact !== 'none' && (
+        <InterestCaptureModal
+          vehicle={vehicle}
+          target={contact}
+          whatsappHref={waHref}
+          onClose={() => setShowInterest(false)}
+        />
+      )}
     </article>
   );
 }

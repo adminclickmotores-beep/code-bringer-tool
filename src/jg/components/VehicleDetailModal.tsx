@@ -244,6 +244,14 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
           </div>
         </div>
       </div>
+      {showInterest && contact !== 'none' && (
+        <InterestCaptureModal
+          vehicle={vehicle}
+          target={contact}
+          whatsappHref={contactHref}
+          onClose={() => setShowInterest(false)}
+        />
+      )}
     </div>
   );
 }
