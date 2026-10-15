@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight, Bike, Car, Calendar, Gauge, Fuel, Settings2, ImageIcon, ShieldCheck, Instagram, MapPin, CalendarClock } from 'lucide-react';
 import { Vehicle, formatCOP, STATUS_CONFIG, TAG_CONFIG, whatsappLink, whatsappLinkTo, logConsulta, maskPlaca } from '@/jg/lib/supabase';
 import { contactTarget } from '@/jg/lib/plans';
+import { InterestCaptureModal } from '@/jg/components/InterestCaptureModal';
 
 interface VehicleDetailModalProps {
   vehicle: Vehicle | null;
