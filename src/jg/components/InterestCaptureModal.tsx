@@ -5,7 +5,7 @@ import { Vehicle, formatCOP, maskPlaca } from '@/jg/lib/supabase';
 
 interface Props {
   vehicle: Vehicle;
-  target: 'jg' | 'owner';
+  target: 'jg' | 'clickmotores' | 'owner';
   whatsappHref: string;
   onClose: () => void;
 }
