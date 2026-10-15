@@ -16,13 +16,16 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
   const [currentImage, setCurrentImage] = useState(0);
   const contact = contactTarget(vehicle);
   const isExpiredThirdParty = vehicle.listing_owner === 'tercero' && contact === 'none' && vehicle.status !== 'vendido' && vehicle.status !== 'no_disponible';
+  const [showInterest, setShowInterest] = useState(false);
   const waHref = contact === 'owner'
     ? whatsappLinkTo(vehicle.owner_phone, `Hola${vehicle.owner_name ? ` ${vehicle.owner_name}` : ''}, vi tu vehículo ${vehicle.title} (${maskPlaca(vehicle.placa_completa)}) publicado en ClickMotores y me interesa. ¿Sigue disponible?`)
     : whatsappLink(`Hola, estoy interesado en el vehículo: ${vehicle.title} (${formatCOP(vehicle.price)}). ¿Me puedes dar más información?`);
 
   const handleWaClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     logConsulta('whatsapp_click', vehicle.title);
+    setShowInterest(true);
   };
 
   const prevImage = (e: React.MouseEvent) => {

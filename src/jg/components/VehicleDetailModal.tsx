@@ -11,6 +11,7 @@ interface VehicleDetailModalProps {
 
 export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps) {
   const [currentImage, setCurrentImage] = useState(0);
+  const [showInterest, setShowInterest] = useState(false);
 
   useEffect(() => {
     setCurrentImage(0);
