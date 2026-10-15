@@ -220,10 +220,8 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
 
             <div className="mt-auto pt-5">
               {canBuy && contact !== 'none' ? (
-                <a
-                  href={contactHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
                   onClick={handleWaClick}
                   className="flex w-full items-center justify-center gap-2 rounded-lg bg-green-500 px-6 py-3.5 text-sm font-semibold text-white transition-all hover:bg-green-600 active:scale-95"
                 >
