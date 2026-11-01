@@ -5,7 +5,7 @@ import { Vehicle, formatCOP, maskPlaca } from '@/jg/lib/supabase';
 
 interface Props {
   vehicle: Vehicle;
-  target: 'jg' | 'clickmotores' | 'owner';
+  target: 'jg' | 'owner';
   whatsappHref: string;
   onClose: () => void;
 }
@@ -34,7 +34,7 @@ export function InterestCaptureModal({ vehicle, target, whatsappHref, onClose }:
       vehicle_id: vehicle.id,
       vehicle_title: vehicle.title,
       vehicle_plate: vehicle.placa_completa ?? null,
-      contact_target: target === 'owner' ? 'owner' : 'jg',
+      contact_target: target,
     });
     setSaving(false);
     if (win) win.location.href = whatsappHref;
