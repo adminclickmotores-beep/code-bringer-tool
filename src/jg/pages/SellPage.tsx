@@ -8,6 +8,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { useJg } from '@/jg/JgApp';
 import { PlansSection } from '@/jg/components/PlansSection';
+import { DirectPurchaseForm } from '@/jg/components/DirectPurchaseForm';
+import { ConsignmentPanel } from '@/jg/components/ConsignmentPanel';
 import { formatCOP, uploadPropertyCard, uploadVehiclePhoto } from '@/jg/lib/supabase';
 import { submitVehicleRequest } from '@/jg/lib/vehicle-submission.functions';
 import {
@@ -210,25 +212,25 @@ export function SellPage() {
 
   const modeCards = [
     {
-      id: 'publicar_gratis' as SaleMode,
-      icon: Globe,
-      title: 'Publicar Mi Vehículo Gratis',
-      desc: 'Publica tu moto o carro en nuestra web 100% gratuito. Los datos de compradores llegan exclusivamente a ClickMotores.',
-       color: 'red',
-    },
-    {
       id: 'directa' as SaleMode,
       icon: DollarSign,
-      title: 'Compra Directa (Efectivo)',
-      desc: 'Compra inmediata con pago al instante. Recibimos tu vehículo y te pagamos en el acto.',
-       color: 'red',
+      title: 'Te Compramos Tu Vehículo',
+      badge: '⚡ Pago de Contado · Oferta en 24h',
+      desc: 'Vende de inmediato, sin esperas. Te hacemos una oferta formal y recibes el dinero tras el peritaje.',
     },
     {
       id: 'consignacion' as SaleMode,
       icon: Handshake,
       title: 'Consignación Comercial',
-      desc: 'Nos encargamos de la pauta, comprador y trámite. Tú solo recibes tu dinero al concretar.',
-      color: 'red',
+      badge: '🤝 Gestión Total · Vendemos por ti',
+      desc: 'Nuestro equipo se encarga de fotos, pauta, compradores y trámites para lograr el mejor precio.',
+    },
+    {
+      id: 'publicar_gratis' as SaleMode,
+      icon: Globe,
+      title: 'Publica Gratis',
+      badge: '📢 20 Días GRATIS · Trato Directo',
+      desc: 'Publica por tu cuenta y atiende a los compradores directamente por WhatsApp.',
     },
   ];
 
@@ -258,6 +260,7 @@ export function SellPage() {
               <article key={card.id} className={`card p-6 ${selected ? 'border-jg-red ring-2 ring-jg-red/15' : ''}`}>
                 <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-jg-red/10 text-jg-red"><card.icon className="h-5 w-5" /></div>
                 <h2 className="mt-4 text-lg font-bold text-jg-text-dark">{card.title}</h2>
+                <span className="mt-2 inline-block rounded-full bg-jg-red/10 px-3 py-1 text-xs font-semibold text-jg-red">{card.badge}</span>
                 <p className="mt-2 min-h-16 text-sm text-jg-text-muted">{card.desc}</p>
                 <Button type="button" variant={selected ? 'default' : 'outline'} className={`mt-5 w-full ${selected ? 'bg-jg-red text-primary-foreground hover:bg-jg-red-dark' : ''}`} onClick={() => chooseMode(card.id)}>
                   {selected ? <><Check className="h-4 w-4" /> Seleccionada</> : 'Elegir modalidad'}
@@ -268,7 +271,9 @@ export function SellPage() {
         </div>
 
         <div ref={formRef} className="scroll-mt-24 pt-10">
-          <section className="card overflow-hidden">
+          {saleMode === 'directa' && <section className="card overflow-hidden"><DirectPurchaseForm /></section>}
+          {saleMode === 'consignacion' && <section className="card overflow-hidden"><ConsignmentPanel /></section>}
+          {isPublicar && <section className="card overflow-hidden">
             <div className="border-b border-jg-silver bg-jg-surface-2 px-5 py-6 sm:px-8">
               <div className="grid grid-cols-3 gap-2" aria-label={`Paso ${step} de 3`}>
                 {steps.map((item) => (
@@ -371,10 +376,10 @@ export function SellPage() {
                 </div>
               </form>
             )}
-          </section>
+          </section>}
         </div>
 
-        <PlansSection />
+        {isPublicar && <PlansSection />}
 
         <section className="py-14">
           <h2 className="text-center text-2xl font-bold text-jg-text-dark">¿Por qué elegir ClickMotores?</h2>
