@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { vehicleSubmissionSchema } from './vehicle-submission';
-import { normalizePlate, PLATE_USED_MESSAGE } from './plans';
+import { FREE_PUBLICATION_DAYS, normalizePlate, PLATE_USED_MESSAGE } from './plans';
 
 function safeDiagnosticString(value: unknown): string | undefined {
   return typeof value === 'string' && /^[A-Za-z0-9_.-]{1,64}$/.test(value)
