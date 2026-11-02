@@ -314,8 +314,8 @@ export function SellPage() {
             {submitted ? (
               <div className="px-5 py-16 text-center sm:px-8">
                 <CheckCircle2 className="mx-auto h-14 w-14 text-green-600" />
-                <h2 className="mt-4 text-2xl font-bold text-jg-text-dark">Solicitud enviada</h2>
-                <p className="mx-auto mt-2 max-w-lg text-sm text-jg-text-muted">La solicitud quedó guardada y el equipo de ClickMotores podrá revisarla desde el panel administrativo.</p>
+                <h2 className="mt-4 text-2xl font-bold text-jg-text-dark">{isPublicar ? '¡Tu aviso ya está publicado!' : 'Solicitud enviada'}</h2>
+                <p className="mx-auto mt-2 max-w-lg text-sm text-jg-text-muted">{isPublicar ? 'Tu vehículo ya aparece en el catálogo con 20 días de publicación gratis. Los interesados te escribirán directo a tu WhatsApp.' : 'La solicitud quedó guardada y el equipo de ClickMotores podrá revisarla desde el panel administrativo.'}</p>
                 <Button type="button" variant="outline" className="mt-6" onClick={resetForm}>Enviar otra solicitud</Button>
               </div>
             ) : (
