@@ -181,7 +181,8 @@ export function SellPage() {
         return;
       }
       const year = new Date().getFullYear();
-      if (form.year < 1950 || form.year > year + 1 || form.mileage < 0) {
+      if (form.year < 1950 || form.year > 2050 || form.mileage < 0 || (isPublicar && !form.mileage)) {
+        void year;
         setStepError('Revisa el año y el kilometraje.');
         return;
       }
@@ -202,8 +203,12 @@ export function SellPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
     setSubmitError(null);
+    if (isPublicar && (!form.askingPrice || form.askingPrice < 500_000 || !form.mileage || !form.name.trim() || !form.phone.trim())) {
+      setSubmitError('Completa nombre, WhatsApp, kilometraje y precio de venta para publicar tu aviso.');
+      return;
+    }
+    setSubmitting(true);
 
     try {
       const payload = vehicleSubmissionSchema.parse({ ...form, saleMode });
