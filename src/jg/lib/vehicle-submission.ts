@@ -4,8 +4,16 @@ export const MAX_VEHICLE_PHOTOS = 8;
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 export const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const;
 
+export const MIN_PHOTO_WIDTH = 1200;
+export const MIN_PHOTO_HEIGHT = 800;
+
+/** Acepta fotos horizontales o verticales siempre que el lado largo ≥1200 y el corto ≥800. */
+export function meetsPhotoResolution(width: number, height: number) {
+  return Math.max(width, height) >= MIN_PHOTO_WIDTH && Math.min(width, height) >= MIN_PHOTO_HEIGHT;
+}
+
 export function minimumPhotos(vehicleType: 'moto' | 'carro') {
-  return vehicleType === 'moto' ? 3 : 5;
+  return vehicleType === 'moto' ? 4 : 5;
 }
 
 const currentYear = 2070;

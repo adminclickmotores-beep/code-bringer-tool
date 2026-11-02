@@ -15,7 +15,7 @@ const base = {
 
 describe('reglas de fotos del formulario', () => {
   it('exige mínimo 3 fotos para motos', () => {
-    expect(minimumPhotos('moto')).toBe(3);
+    expect(minimumPhotos('moto')).toBe(4);
     expect(vehicleSubmissionSchema.safeParse({ ...base, photoUrls: ['https://x.co/1', 'https://x.co/2'] }).success).toBe(false);
   });
 
