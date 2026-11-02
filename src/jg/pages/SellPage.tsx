@@ -16,12 +16,25 @@ import {
   ALLOWED_IMAGE_TYPES,
   MAX_UPLOAD_BYTES,
   MAX_VEHICLE_PHOTOS,
+  MIN_PHOTO_HEIGHT,
+  MIN_PHOTO_WIDTH,
+  meetsPhotoResolution,
   minimumPhotos,
   suggestedVehiclePrice,
   vehicleSubmissionSchema,
 } from '@/jg/lib/vehicle-submission';
 
 type SaleMode = 'publicar_gratis' | 'directa' | 'consignacion';
+
+function readImageSize(file: File): Promise<{ width: number; height: number } | null> {
+  return new Promise((resolve) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { resolve({ width: img.naturalWidth, height: img.naturalHeight }); URL.revokeObjectURL(url); };
+    img.onerror = () => { resolve(null); URL.revokeObjectURL(url); };
+    img.src = url;
+  });
+}
 
 const photoGuideMoto = [
   'Frente', 'Trasera', 'Perfil Izquierdo', 'Perfil Derecho',
