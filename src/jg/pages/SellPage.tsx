@@ -94,6 +94,12 @@ export function SellPage() {
       e.target.value = '';
       return;
     }
+    const sizes = await Promise.all(toUpload.map(readImageSize));
+    if (sizes.some((s) => !s || !meetsPhotoResolution(s.width, s.height))) {
+      setStepError(`Cada foto debe tener mínimo ${MIN_PHOTO_WIDTH}×${MIN_PHOTO_HEIGHT} px. Usa fotos nítidas tomadas con la cámara, no capturas ni imágenes reducidas.`);
+      e.target.value = '';
+      return;
+    }
 
     setUploading(true);
     setStepError(null);
