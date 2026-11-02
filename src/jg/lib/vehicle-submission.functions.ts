@@ -140,6 +140,7 @@ export const submitVehicleRequest = createServerFn({ method: 'POST' })
       .single();
     if (error) throw new Error('No pudimos guardar la solicitud. Intenta nuevamente.');
 
+    let vehicleId: string | null = null;
     if (data.saleMode === 'publicar_gratis') {
       const { error: regErr } = await supabaseAdmin
         .from('plate_registry')
@@ -148,15 +149,52 @@ export const submitVehicleRequest = createServerFn({ method: 'POST' })
         await supabaseAdmin.from('vehicle_submissions').delete().eq('id', inserted.id);
         throw new Error(PLATE_USED_MESSAGE);
       }
+
+      // Publicación directa: entra al inventario de inmediato, 20 días exactos de vigencia.
+      const expiresAt = new Date(Date.now() + FREE_PUBLICATION_DAYS * 24 * 60 * 60 * 1000).toISOString();
+      const { data: vehicle, error: vehErr } = await supabaseAdmin
+        .from('vehicles')
+        .insert({
+          title: `${data.brand} ${data.model} ${data.year}`,
+          type: data.vehicleType,
+          brand: data.brand,
+          model: data.model,
+          year: data.year,
+          displacement: data.displacement || null,
+          price: data.askingPrice,
+          mileage: data.mileage,
+          status: 'disponible',
+          description: data.description || null,
+          image_urls: data.photoUrls,
+          placa_completa: data.plate,
+          ciudad: data.city,
+          property_card_urls: data.propertyCardPaths,
+          listing_owner: 'tercero',
+          internal_status: 'propio',
+          consignado: false,
+          featured: false,
+          owner_name: data.name,
+          owner_phone: data.phone,
+          expires_at: expiresAt,
+        })
+        .select('id')
+        .single();
+      if (vehErr || !vehicle) {
+        await supabaseAdmin.from('plate_registry').delete().eq('plate_normalized', plateNormalized);
+        await supabaseAdmin.from('vehicle_submissions').delete().eq('id', inserted.id);
+        throw new Error('No pudimos publicar tu aviso. Intenta nuevamente.');
+      }
+      vehicleId = vehicle.id;
+      await supabaseAdmin.from('vehicle_submissions').update({ status: 'publicado' }).eq('id', inserted.id);
     }
 
     await supabaseAdmin.from('notifications').insert({
-      type: data.saleMode === 'publicar_gratis' ? 'submission' : 'lead',
-      title: data.saleMode === 'publicar_gratis' ? 'Nueva publicación gratuita' : 'Nueva solicitud comercial',
+      type: data.saleMode === 'publicar_gratis' ? 'published' : 'lead',
+      title: data.saleMode === 'publicar_gratis' ? 'Nuevo clasificado publicado' : 'Nueva solicitud comercial',
       message: `${data.vehicleType === 'moto' ? 'Moto' : 'Carro'}: ${data.brand} ${data.model} - ${data.name}`,
-      related_id: inserted.id,
+      related_id: vehicleId ?? inserted.id,
       is_read: false,
     });
 
-    return { id: inserted.id };
+    return { id: inserted.id, vehicleId };
   });
