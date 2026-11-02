@@ -29,6 +29,7 @@ import {
 } from '@/jg/lib/vehicle-submission';
 import { ListingBadge } from '@/jg/components/ListingBadge';
 import { BuyerInterestsPanel } from '@/jg/components/BuyerInterestsPanel';
+import { NewListingsAlert } from '@/jg/components/NewListingsAlert';
 import {
   Vehicle,
   VehicleAdminInput,
@@ -1013,6 +1014,12 @@ export function AdminPage({
             recibidos por este componente.
           </p>
         )}
+
+        <NewListingsAlert
+          vehicles={vehicles}
+          onEdit={(vehicle) => { setActiveTab('inventory'); openEditForm(vehicle); }}
+          onTakeDown={(id) => onUpdateVehicleStatus(id, 'no_disponible')}
+        />
 
         <nav className="mb-6 flex flex-wrap gap-2 border-b border-gray-800">
           {tabs.map(({ id, label, icon: Icon }) => (

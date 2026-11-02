@@ -16,12 +16,25 @@ import {
   ALLOWED_IMAGE_TYPES,
   MAX_UPLOAD_BYTES,
   MAX_VEHICLE_PHOTOS,
+  MIN_PHOTO_HEIGHT,
+  MIN_PHOTO_WIDTH,
+  meetsPhotoResolution,
   minimumPhotos,
   suggestedVehiclePrice,
   vehicleSubmissionSchema,
 } from '@/jg/lib/vehicle-submission';
 
 type SaleMode = 'publicar_gratis' | 'directa' | 'consignacion';
+
+function readImageSize(file: File): Promise<{ width: number; height: number } | null> {
+  return new Promise((resolve) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { resolve({ width: img.naturalWidth, height: img.naturalHeight }); URL.revokeObjectURL(url); };
+    img.onerror = () => { resolve(null); URL.revokeObjectURL(url); };
+    img.src = url;
+  });
+}
 
 const photoGuideMoto = [
   'Frente', 'Trasera', 'Perfil Izquierdo', 'Perfil Derecho',
@@ -94,6 +107,12 @@ export function SellPage() {
       e.target.value = '';
       return;
     }
+    const sizes = await Promise.all(toUpload.map(readImageSize));
+    if (sizes.some((s) => !s || !meetsPhotoResolution(s.width, s.height))) {
+      setStepError(`Cada foto debe tener mínimo ${MIN_PHOTO_WIDTH}×${MIN_PHOTO_HEIGHT} px. Usa fotos nítidas tomadas con la cámara, no capturas ni imágenes reducidas.`);
+      e.target.value = '';
+      return;
+    }
 
     setUploading(true);
     setStepError(null);
@@ -162,7 +181,8 @@ export function SellPage() {
         return;
       }
       const year = new Date().getFullYear();
-      if (form.year < 1950 || form.year > year + 1 || form.mileage < 0) {
+      if (form.year < 1950 || form.year > 2050 || form.mileage < 0 || (isPublicar && !form.mileage)) {
+        void year;
         setStepError('Revisa el año y el kilometraje.');
         return;
       }
@@ -183,8 +203,12 @@ export function SellPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
     setSubmitError(null);
+    if (isPublicar && (!form.askingPrice || form.askingPrice < 500_000 || !form.mileage || !form.name.trim() || !form.phone.trim())) {
+      setSubmitError('Completa nombre, WhatsApp, kilometraje y precio de venta para publicar tu aviso.');
+      return;
+    }
+    setSubmitting(true);
 
     try {
       const payload = vehicleSubmissionSchema.parse({ ...form, saleMode });
@@ -290,8 +314,8 @@ export function SellPage() {
             {submitted ? (
               <div className="px-5 py-16 text-center sm:px-8">
                 <CheckCircle2 className="mx-auto h-14 w-14 text-green-600" />
-                <h2 className="mt-4 text-2xl font-bold text-jg-text-dark">Solicitud enviada</h2>
-                <p className="mx-auto mt-2 max-w-lg text-sm text-jg-text-muted">La solicitud quedó guardada y el equipo de ClickMotores podrá revisarla desde el panel administrativo.</p>
+                <h2 className="mt-4 text-2xl font-bold text-jg-text-dark">{isPublicar ? '¡Tu aviso ya está publicado!' : 'Solicitud enviada'}</h2>
+                <p className="mx-auto mt-2 max-w-lg text-sm text-jg-text-muted">{isPublicar ? 'Tu vehículo ya aparece en el catálogo con 20 días de publicación gratis. Los interesados te escribirán directo a tu WhatsApp.' : 'La solicitud quedó guardada y el equipo de ClickMotores podrá revisarla desde el panel administrativo.'}</p>
                 <Button type="button" variant="outline" className="mt-6" onClick={resetForm}>Enviar otra solicitud</Button>
               </div>
             ) : (

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { minimumPhotos, vehicleSubmissionSchema } from '@/jg/lib/vehicle-submission';
+import { meetsPhotoResolution, minimumPhotos, vehicleSubmissionSchema } from '@/jg/lib/vehicle-submission';
 
 const base = {
   saleMode: 'publicar_gratis' as const,
@@ -14,8 +14,8 @@ const base = {
 };
 
 describe('reglas de fotos del formulario', () => {
-  it('exige mínimo 3 fotos para motos', () => {
-    expect(minimumPhotos('moto')).toBe(3);
+  it('exige mínimo 4 fotos para motos', () => {
+    expect(minimumPhotos('moto')).toBe(4);
     expect(vehicleSubmissionSchema.safeParse({ ...base, photoUrls: ['https://x.co/1', 'https://x.co/2'] }).success).toBe(false);
   });
 
@@ -33,5 +33,13 @@ describe('reglas de fotos del formulario', () => {
   it('exige frente y reverso dentro de la misma carpeta privada', () => {
     const wrongBack = 'property-cards/123e4567-e89b-12d3-a456-426614174999/back-123e4567-e89b-12d3-a456-426614174002.jpg';
     expect(vehicleSubmissionSchema.safeParse({ ...base, photoUrls: ['https://x.co/1', 'https://x.co/2', 'https://x.co/3'], propertyCardPaths: [base.propertyCardPaths[0], wrongBack] }).success).toBe(false);
+  });
+});
+describe('resolución mínima de fotos', () => {
+  it('acepta 1200x800 y rechaza 1199x800', () => {
+    expect(meetsPhotoResolution(1200, 800)).toBe(true);
+    expect(meetsPhotoResolution(800, 1200)).toBe(true);
+    expect(meetsPhotoResolution(1199, 800)).toBe(false);
+    expect(meetsPhotoResolution(1200, 799)).toBe(false);
   });
 });
