@@ -77,7 +77,6 @@ export function SellPage() {
     year: form.year,
   }, vehicles), [form.vehicleType, form.brand, form.model, form.year, vehicles]);
 
-  const isCommercial = saleMode === 'directa' || saleMode === 'consignacion';
   const isPublicar = saleMode === 'publicar_gratis';
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
