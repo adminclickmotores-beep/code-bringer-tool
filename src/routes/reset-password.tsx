@@ -2,15 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { Loader2, Mail, Lock, ArrowLeft, CheckCircle2, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/jg/lib/supabase";
+import { routeHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/reset-password")({
-  head: () => ({
-    meta: [
-      { title: "Restablecer contraseña | ClickMotores" },
-      { name: "description", content: "Restablece tu contraseña del panel de ClickMotores." },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () => routeHead("/reset-password", { noindex: true }),
   component: Page,
 });
 

@@ -78,10 +78,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "author", content: "ClickMotores" },
       { name: "description", content: "ClickMotores — vitrina digital de vehículos. Compra, vende y financia tu próximo vehículo." },
       { name: "theme-color", content: "#121212" },
+      { property: "og:site_name", content: "ClickMotores" },
+      { property: "og:locale", content: "es_CO" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     title: "ClickMotores — Vitrina digital de vehículos",
     links: [

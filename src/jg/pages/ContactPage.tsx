@@ -8,9 +8,11 @@ import {
   Send,
 } from 'lucide-react';
 import { WHATSAPP_DISPLAY, FACEBOOK_URL, whatsappLink } from '@/jg/lib/supabase';
+import { useSeo } from '@/lib/seo';
 import { useState } from 'react';
 
 export function ContactPage() {
+  useSeo('/contacto');
   const [form, setForm] = useState({ name: '', message: '' });
   const [sent, setSent] = useState(false);
 

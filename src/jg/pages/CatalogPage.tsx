@@ -4,6 +4,7 @@ import { Search, SlidersHorizontal, X, Bike, Car, ImageIcon } from 'lucide-react
 import { Vehicle, STATUS_CONFIG, formatCOP } from '@/jg/lib/supabase';
 import { catalogRank } from '@/jg/lib/plans';
 import { VehicleCard } from '@/jg/components/VehicleCard';
+import { useSeo } from '@/lib/seo';
 
 interface CatalogPageProps {
   vehicles: Vehicle[];
@@ -65,6 +66,7 @@ function getDisplacementCategory(disp: string | number | null, vehicle?: Vehicle
 }
 
 export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPageProps) {
+  useSeo('/catalogo');
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
   const [brandFilter, setBrandFilter] = useState('all');

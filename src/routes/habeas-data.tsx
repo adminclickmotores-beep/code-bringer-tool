@@ -1,18 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { HabeasDataPage } from "@/jg/pages/LegalPages";
 import { useJg } from "@/jg/JgApp";
+import { routeHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/habeas-data")({
-  head: () => ({
-    meta: [
-      { title: "Política de Habeas Data | ClickMotores" },
-      { name: "description", content: "Política de tratamiento y protección de datos personales de la plataforma ClickMotores (operada por JG Motors)." },
-      { property: "og:title", content: "Política de Habeas Data | ClickMotores" },
-      { property: "og:description", content: "Política de tratamiento y protección de datos personales de la plataforma ClickMotores (operada por JG Motors)." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => routeHead("/habeas-data"),
   component: Page,
 });
 

@@ -2,19 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AdminPage } from "@/jg/pages/AdminPage";
 import { AdminLogin } from "@/jg/components/AdminLogin";
 import { useJg } from "@/jg/JgApp";
+import { routeHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({
-    meta: [
-      { title: "Panel Administrativo | ClickMotores" },
-      { name: "description", content: "Panel interno de ClickMotores para inventario, leads y ventas." },
-      { property: "og:title", content: "Panel Administrativo | ClickMotores" },
-      { property: "og:description", content: "Panel interno de ClickMotores para inventario, leads y ventas." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () => routeHead("/admin", { noindex: true }),
   component: Page,
 });
 

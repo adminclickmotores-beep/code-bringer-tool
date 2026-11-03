@@ -8,6 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useJg } from '@/jg/JgApp';
 import { PlansSection } from '@/jg/components/PlansSection';
+import { useSeo } from '@/lib/seo';
 import { DirectPurchaseForm } from '@/jg/components/DirectPurchaseForm';
 import { ConsignmentPanel } from '@/jg/components/ConsignmentPanel';
 import { formatCOP, fuelOptions, uploadPropertyCard, uploadVehiclePhoto } from '@/jg/lib/supabase';
@@ -47,6 +48,7 @@ const photoGuideCarro = [
 ];
 
 export function SellPage() {
+  useSeo('/vender');
   const { vehicles } = useJg();
   const submitRequest = useServerFn(submitVehicleRequest);
   const [saleMode, setSaleMode] = useState<SaleMode>('publicar_gratis');

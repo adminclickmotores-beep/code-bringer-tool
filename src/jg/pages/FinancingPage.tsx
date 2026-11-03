@@ -11,6 +11,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { formatCOP, whatsappLink } from '@/jg/lib/supabase';
+import { useSeo } from '@/lib/seo';
 
 const banks = [
   'Sufi',
@@ -25,6 +26,7 @@ const terms = [12, 24, 36, 48, 60, 72];
 const monthlyRate = 0.018; // 1.8% monthly
 
 export function FinancingPage() {
+  useSeo('/financiacion');
   const [amount, setAmount] = useState(20000000);
   const [term, setTerm] = useState(36);
   const [downPayment, setDownPayment] = useState(0);

@@ -19,6 +19,7 @@ import { VehicleCard } from '@/jg/components/VehicleCard';
 import { FeaturedInventory } from '@/jg/components/FeaturedInventory';
 import { SoatQuoteForm } from '@/jg/components/SoatQuoteForm';
 import { HeroClip } from '@/jg/components/HeroClip';
+import { useSeo } from '@/lib/seo';
 
 interface HomePageProps {
   vehicles: Vehicle[];
@@ -74,6 +75,7 @@ const faqItems = [
 ];
 
 export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: HomePageProps) {
+  useSeo('/');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [activeTab, setActiveTab] = useState<'carro' | 'moto'>('carro');
   const [searchTerm, setSearchTerm] = useState('');
