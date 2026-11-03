@@ -17,6 +17,7 @@ import {
 import { Vehicle, whatsappLink, logConsulta } from '@/jg/lib/supabase';
 import { VehicleCard } from '@/jg/components/VehicleCard';
 import { FeaturedInventory } from '@/jg/components/FeaturedInventory';
+import { SoatQuoteForm } from '@/jg/components/SoatQuoteForm';
 import { HeroClip } from '@/jg/components/HeroClip';
 
 interface HomePageProps {
@@ -379,28 +380,10 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <h3 className="font-display text-lg font-bold text-jg-text-dark">SOAT y Pólizas Todo Riesgo</h3>
-              <ul className="mt-3 space-y-2">
-                {[
-                  'Cotizaciones multiaseguradora',
-                  'Asesoría personalizada sin costo',
-                  'SOAT con descuento especial',
-                  'Pólizas todo riesgo para auto y moto',
-                ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-400">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={whatsappLink('Hola ClickMotores, me gustaría cotizar un seguro o SOAT para mi vehículo.')}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => logConsulta('cotizacion_seguro')}
-                className="mt-5 btn-primary w-full"
-              >
-                Cotizar Seguro o SOAT
-              </a>
+              <p className="mt-1 text-sm text-gray-400">
+                Cotizaciones multiaseguradora con asesoría sin costo y SOAT con descuento especial.
+              </p>
+              <SoatQuoteForm />
             </div>
           </div>
         </div>
