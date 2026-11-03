@@ -78,23 +78,25 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
   const brands = useMemo(() => {
     const seen = new Map<string, string>();
     for (const v of vehicles) {
+      if (typeFilter !== 'all' && norm(v.type) !== typeFilter) continue;
       const key = norm(v.brand);
       if (!key) continue;
       if (!seen.has(key)) seen.set(key, (v.brand ?? '').trim());
     }
     return Array.from(seen.values()).sort((a, b) => a.localeCompare(b, 'es'));
-  }, [vehicles]);
+  }, [vehicles, typeFilter]);
 
   const models = useMemo(() => {
     const seen = new Map<string, string>();
     for (const v of vehicles) {
+      if (typeFilter !== 'all' && norm(v.type) !== typeFilter) continue;
       if (brandFilter !== 'all' && norm(v.brand) !== norm(brandFilter)) continue;
       const key = norm(v.model);
       if (!key) continue;
       if (!seen.has(key)) seen.set(key, (v.model ?? '').trim());
     }
     return Array.from(seen.values()).sort((a, b) => a.localeCompare(b, 'es'));
-  }, [vehicles, brandFilter]);
+  }, [vehicles, brandFilter, typeFilter]);
 
   const soloDigitos = (s: string) => s.replace(/[^0-9]/g, '');
 
@@ -196,7 +198,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
                 <label className="label-field">Tipo de Vehículo</label>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => setTypeFilter('all')}
+                    onClick={() => { setTypeFilter('all'); setBrandFilter('all'); setModelFilter('all'); }}
                     className={`flex-1 rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
                       typeFilter === 'all'
                         ? 'border-jg-red bg-jg-red/10 text-jg-red'
@@ -206,7 +208,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
                     Todos
                   </button>
                   <button
-                    onClick={() => setTypeFilter('moto')}
+                    onClick={() => { setTypeFilter('moto'); setBrandFilter('all'); setModelFilter('all'); }}
                     className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
                       typeFilter === 'moto'
                         ? 'border-jg-red bg-jg-red/10 text-jg-red'
@@ -216,7 +218,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
                     <Bike className="h-4 w-4" /> Moto
                   </button>
                   <button
-                    onClick={() => { setTypeFilter('carro'); setDisplacementFilter('all'); }}
+                    onClick={() => { setTypeFilter('carro'); setDisplacementFilter('all'); setBrandFilter('all'); setModelFilter('all'); }}
                     className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
                       typeFilter === 'carro'
                         ? 'border-jg-red bg-jg-red/10 text-jg-red'
