@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Lock, Mail, Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Lock, Mail, Loader2, AlertCircle, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/jg/lib/supabase';
 import { Logo } from '@/jg/components/Logo';
 
@@ -13,6 +13,14 @@ export function AdminLogin({ onBack, onSuccess }: AdminLoginProps) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [remember, setRemember] = useState(() => {
+    try {
+      return localStorage.getItem('jg-remember-me') !== '0';
+    } catch {
+      return true;
+    }
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +45,39 @@ export function AdminLogin({ onBack, onSuccess }: AdminLoginProps) {
           setError(signInError.message);
         }
         return;
+      }
+
+      try {
+        localStorage.setItem('jg-remember-me', remember ? '1' : '0');
+        if (!remember) {
+          const only: Record<string, string> = {};
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            const v = k ? localStorage.getItem(k) : null;
+            if (k && v !== null && k.startsWith('sb-')) only[k] = v;
+          }
+          Object.entries(only).forEach(([k, v]) => {
+            try {
+              sessionStorage.setItem(k, v);
+            } catch {
+              /* almacenamiento no disponible */
+            }
+            localStorage.removeItem(k);
+          });
+          try {
+            sessionStorage.setItem('jg-session-only', '1');
+          } catch {
+            /* almacenamiento no disponible */
+          }
+        } else {
+          try {
+            sessionStorage.removeItem('jg-session-only');
+          } catch {
+            /* almacenamiento no disponible */
+          }
+        }
+      } catch {
+        /* almacenamiento no disponible */
       }
 
       onSuccess();
@@ -98,14 +139,38 @@ export function AdminLogin({ onBack, onSuccess }: AdminLoginProps) {
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="input-field pl-11"
+                  autoComplete="current-password"
+                  className="input-field pl-11 pr-11"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-gray-500 transition-colors hover:text-jg-text-dark"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
               </div>
+            </div>
+
+            <div className="flex items-center justify-between gap-2 text-sm">
+              <label className="flex cursor-pointer items-center gap-2 text-gray-600">
+                <input
+                  type="checkbox"
+                  checked={remember}
+                  onChange={(e) => setRemember(e.target.checked)}
+                  className="h-4 w-4 accent-red-600"
+                />
+                Recuérdame
+              </label>
+              <a href="/reset-password" className="font-medium text-jg-red hover:underline">
+                ¿Olvidaste tu contraseña?
+              </a>
             </div>
 
             <button

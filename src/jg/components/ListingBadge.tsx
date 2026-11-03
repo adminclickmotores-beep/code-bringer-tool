@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useServerFn } from '@tanstack/react-start';
 import { renewListing } from '@/jg/lib/listing-renewal.functions';
-import { listingStatus, PUBLICATION_PLANS, type PlanId } from '@/jg/lib/plans';
+import { listingStatus, type PlanId } from '@/jg/lib/plans';
 
 const LABELS = {
   activo: { text: 'Activo', cls: 'text-green-400' },
@@ -39,21 +39,26 @@ export function ListingBadge({
     <div className="mt-1 text-[11px]">
       <span className={`font-semibold ${label.cls}`}>
         Tercero · {label.text} · vence{' '}
-        {new Date(vehicle.expires_at!).toLocaleDateString('es-CO')}
+        {vehicle.expires_at ? new Date(vehicle.expires_at).toLocaleDateString('es-CO') : '—'}
       </span>
-      <select
-        disabled={busy}
-        value=""
-        onChange={(e) => e.target.value && handle(e.target.value as PlanId)}
-        className="mt-1 block rounded border border-gray-700 bg-gray-900 px-1 py-0.5 text-gray-200"
-      >
-        <option value="">Renovar…</option>
-        {PUBLICATION_PLANS.map((p) => (
-          <option key={p.id} value={p.id}>
-            {p.name} (+{p.days} días)
-          </option>
-        ))}
-      </select>
+      <div className="mt-1 flex flex-wrap gap-1.5">
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => handle('renovacion_simple')}
+          className="rounded bg-gray-800 px-2 py-1 font-semibold text-gray-100 transition hover:bg-gray-700 disabled:opacity-50"
+        >
+          Renovar +30 días
+        </button>
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => handle('destacado_90')}
+          className="rounded bg-jg-red px-2 py-1 font-semibold text-white transition hover:bg-red-700 disabled:opacity-50"
+        >
+          Renovar +90 días
+        </button>
+      </div>
     </div>
   );
 }

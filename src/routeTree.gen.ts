@@ -15,6 +15,7 @@ import { Route as CatalogoRouteImport } from './routes/catalogo'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as FinanciacionRouteImport } from './routes/financiacion'
 import { Route as HabeasDataRouteImport } from './routes/habeas-data'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as TerminosRouteImport } from './routes/terminos'
 import { Route as VenderRouteImport } from './routes/vender'
 
@@ -48,6 +49,11 @@ const HabeasDataRoute = HabeasDataRouteImport.update({
   path: '/habeas-data',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TerminosRoute = TerminosRouteImport.update({
   id: '/terminos',
   path: '/terminos',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/contacto': typeof ContactoRoute
   '/financiacion': typeof FinanciacionRoute
   '/habeas-data': typeof HabeasDataRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/terminos': typeof TerminosRoute
   '/vender': typeof VenderRoute
 }
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/contacto': typeof ContactoRoute
   '/financiacion': typeof FinanciacionRoute
   '/habeas-data': typeof HabeasDataRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/terminos': typeof TerminosRoute
   '/vender': typeof VenderRoute
 }
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/contacto': typeof ContactoRoute
   '/financiacion': typeof FinanciacionRoute
   '/habeas-data': typeof HabeasDataRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/terminos': typeof TerminosRoute
   '/vender': typeof VenderRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/contacto'
     | '/financiacion'
     | '/habeas-data'
+    | '/reset-password'
     | '/terminos'
     | '/vender'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/contacto'
     | '/financiacion'
     | '/habeas-data'
+    | '/reset-password'
     | '/terminos'
     | '/vender'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/contacto'
     | '/financiacion'
     | '/habeas-data'
+    | '/reset-password'
     | '/terminos'
     | '/vender'
   fileRoutesById: FileRoutesById
@@ -130,6 +142,7 @@ export interface RootRouteChildren {
   ContactoRoute: typeof ContactoRoute
   FinanciacionRoute: typeof FinanciacionRoute
   HabeasDataRoute: typeof HabeasDataRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   TerminosRoute: typeof TerminosRoute
   VenderRoute: typeof VenderRoute
 }
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HabeasDataRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terminos': {
       id: '/terminos'
       path: '/terminos'
@@ -202,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactoRoute: ContactoRoute,
   FinanciacionRoute: FinanciacionRoute,
   HabeasDataRoute: HabeasDataRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   TerminosRoute: TerminosRoute,
   VenderRoute: VenderRoute,
 }

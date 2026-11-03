@@ -14,8 +14,9 @@ type Interest = {
 };
 
 export function followUpLink(i: Pick<Interest, 'buyer_name' | 'buyer_phone' | 'vehicle_title'>) {
+  const digits = i.buyer_phone.replace(/\D/g, '').replace(/^57(?=\d{10}$)/, '');
   const msg = `Hola ${i.buyer_name}, te saluda ClickMotores. Vimos tu interés en ${i.vehicle_title ?? 'uno de nuestros vehículos'}. ¿Aún lo estás buscando? Con gusto te ayudamos.`;
-  return `https://wa.me/57${i.buyer_phone}?text=${encodeURIComponent(msg)}`;
+  return `https://wa.me/57${digits}?text=${encodeURIComponent(msg)}`;
 }
 
 export function BuyerInterestsPanel() {
@@ -42,12 +43,16 @@ export function BuyerInterestsPanel() {
   const exportCsv = () => {
     const head = ['Fecha', 'Nombre', 'WhatsApp', 'Vehículo', 'Placa', 'Contactó a', 'Estado'];
     const lines = rows.map((r) => [new Date(r.created_at).toLocaleString('es-CO'), r.buyer_name, r.buyer_phone, r.vehicle_title ?? '', r.vehicle_plate ?? '', r.contact_target === 'owner' ? 'Propietario' : 'ClickMotores', r.status]
-      .map((v) => `"${String(v).replace(/"/g, '""')}"`).join(','));
-    const blob = new Blob(['\ufeff' + [head.join(','), ...lines].join('\n')], { type: 'text/csv;charset=utf-8' });
+      .map((v) => `"${String(v).replace(/"/g, '""')}"`).join(';'));
+    const blob = new Blob(['\ufeff' + [head.join(';'), ...lines].join('\n')], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
+    a.href = url;
     a.download = 'interesados.csv';
+    document.body.appendChild(a);
     a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -69,12 +74,12 @@ export function BuyerInterestsPanel() {
         <div className="space-y-2">
           {rows.map((r) => (
             <article key={r.id} className="flex flex-col gap-3 rounded-xl border border-gray-800 bg-gray-950 p-4 md:flex-row md:items-center md:justify-between">
-              <div className="text-sm">
+              <div className="min-w-0 flex-1 text-sm break-words">
                 <p className="font-semibold">{r.buyer_name} · {r.buyer_phone}</p>
                 <p className="text-gray-400">{r.vehicle_title ?? '—'} {r.vehicle_plate ? `· ${r.vehicle_plate}` : ''}</p>
                 <p className="text-xs text-gray-500">{new Date(r.created_at).toLocaleString('es-CO')} · Contactó a {r.contact_target === 'owner' ? 'propietario' : 'ClickMotores'}</p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <select value={r.status} onChange={(e) => setStatus(r.id, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-900 px-2 py-1.5 text-sm">
                   <option value="nuevo">Nuevo</option>
                   <option value="contactado">Contactado</option>
