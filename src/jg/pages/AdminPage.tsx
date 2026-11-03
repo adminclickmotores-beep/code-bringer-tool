@@ -772,7 +772,7 @@ export function AdminPage({
     };
   };
 
-  const handleGenerateBrochure = () => {
+  const handleGenerateBrochure = async (): Promise<void> => {
     const rankBrochure = (vehicle: Vehicle): number => {
       const tag = normalizeText(vehicle.tag || '');
       const internal = normalizeText(
@@ -832,10 +832,46 @@ export function AdminPage({
       );
       return;
     }
+    printWindow.document.write(
+      '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Cargando catálogo…</title></head><body><p>Cargando fotos del catálogo, espera un momento…</p></body></html>',
+    );
+
+    // Las fotos se descargan aquí (misma sesión que el inventario) y se
+    // incrustan como data URL: el PDF ya no depende de que la ventana de
+    // impresión pueda volver a pedirlas por red (firmas vencidas o bloqueo).
+    const primerasFotos = [...motos, ...carros]
+      .map((v) => getImageUrls(v)[0])
+      .filter((u): u is string => typeof u === 'string' && u.length > 0);
+    const urlsUnicas = [...new Set(primerasFotos)];
+    const fotoLista: Record<string, string> = {};
+    const descargar = async (url: string): Promise<void> => {
+      try {
+        const controller = new AbortController();
+        const limite = window.setTimeout(() => controller.abort(), 15000);
+        const respuesta = await fetch(url, { signal: controller.signal });
+        window.clearTimeout(limite);
+        if (!respuesta.ok) return;
+        const blob = await respuesta.blob();
+        if (!blob.type.startsWith('image/')) return;
+        const dataUrl = await new Promise<string>((resolve, reject) => {
+          const lector = new FileReader();
+          lector.onload = () => resolve(String(lector.result));
+          lector.onerror = () => reject(new Error('lectura'));
+          lector.readAsDataURL(blob);
+        });
+        fotoLista[url] = dataUrl;
+      } catch {
+        /* se conserva la URL original como respaldo */
+      }
+    };
+    const LOTE = 6;
+    for (let i = 0; i < urlsUnicas.length; i += LOTE) {
+      const lote = urlsUnicas.slice(i, i + LOTE);
+      await Promise.all(lote.map((u) => descargar(u)));
+    }
 
     const cardHtml = (vehicle: Vehicle): string => {
       const images = getImageUrls(vehicle);
-      const firstImage = images[0];
       const estado = statusLabel(vehicle);
       const estadoClass =
         estado === 'Disponible'
@@ -846,8 +882,11 @@ export function AdminPage({
               ? 'est-vendido'
               : 'est-sep';
 
-      const imageHtml = firstImage
-        ? `<img src="${escapeHtml(firstImage)}" alt="${escapeHtml(getVehicleTitle(vehicle))}" loading="eager" decoding="async" referrerpolicy="no-referrer" />`
+      const primera = images[0];
+      const srcFinal = primera ? (fotoLista[primera] ?? primera) : null;
+
+      const imageHtml = srcFinal
+        ? `<img src="${escapeHtml(srcFinal)}" alt="${escapeHtml(getVehicleTitle(vehicle))}" loading="eager" decoding="async" onerror="this.onerror=null;this.outerHTML='<div class=no-image>Foto no disponible</div>';" />`
         : `<div class="no-image">Sin foto</div>`;
 
       return `
@@ -878,6 +917,7 @@ export function AdminPage({
           ? 'Catálogo de carros'
           : 'Catálogo de motos y carros';
 
+    printWindow.document.open();
     printWindow.document.write(`
       <!DOCTYPE html>
       <html lang="es">
@@ -937,7 +977,7 @@ export function AdminPage({
             var aviso = document.getElementById('estado-fotos');
             function listas() {
               var imgs = Array.prototype.slice.call(document.images || []);
-              return imgs.every(function (img) { return img.complete; });
+              return imgs.every(function (img) { return img.complete && img.naturalWidth !== 0; });
             }
             function imprimir() {
               if (aviso) aviso.style.display = 'none';
@@ -963,7 +1003,7 @@ export function AdminPage({
         const imgs = Array.from(
           printWindow.document.images || [],
         ) as HTMLImageElement[];
-        const pendientes = imgs.filter((img) => !img.complete);
+        const pendientes = imgs.filter((img) => !img.complete || img.naturalWidth === 0);
         if (pendientes.length === 0 || Date.now() - inicioEspera > 9000) {
           printWindow.focus();
           printWindow.print();
