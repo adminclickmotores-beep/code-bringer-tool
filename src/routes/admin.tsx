@@ -6,10 +6,10 @@ import { useJg } from "@/jg/JgApp";
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Panel Administrativo | JG Motors" },
-      { name: "description", content: "Panel interno de JG Motors para inventario, leads y ventas." },
-      { property: "og:title", content: "Panel Administrativo | JG Motors" },
-      { property: "og:description", content: "Panel interno de JG Motors." },
+      { title: "Panel Administrativo | ClickMotores" },
+      { name: "description", content: "Panel interno de ClickMotores para inventario, leads y ventas." },
+      { property: "og:title", content: "Panel Administrativo | ClickMotores" },
+      { property: "og:description", content: "Panel interno de ClickMotores para inventario, leads y ventas." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

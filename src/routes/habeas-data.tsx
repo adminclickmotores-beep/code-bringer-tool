@@ -5,10 +5,10 @@ import { useJg } from "@/jg/JgApp";
 export const Route = createFileRoute("/habeas-data")({
   head: () => ({
     meta: [
-      { title: "Política de Habeas Data | JG Motors" },
-      { name: "description", content: "Política de tratamiento de datos personales de JG Motors." },
-      { property: "og:title", content: "Política de Habeas Data | JG Motors" },
-      { property: "og:description", content: "Política de tratamiento de datos personales de JG Motors." },
+      { title: "Política de Habeas Data | ClickMotores" },
+      { name: "description", content: "Política de tratamiento y protección de datos personales de la plataforma ClickMotores (operada por JG Motors)." },
+      { property: "og:title", content: "Política de Habeas Data | ClickMotores" },
+      { property: "og:description", content: "Política de tratamiento y protección de datos personales de la plataforma ClickMotores (operada por JG Motors)." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
