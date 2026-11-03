@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   ShieldCheck,
   Award,
-  Zap,
   Bike,
   Car,
   ArrowRight,
@@ -99,15 +98,23 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
         <div className="relative z-10 mx-auto w-full max-w-7xl min-w-0 px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
           <div className="animate-fade-up flex items-center gap-2">
-              <span className="badge bg-jg-red/15 text-jg-red border border-jg-red/30">
-                <Zap className="h-3.5 w-3.5" />
-                Cobertura Nacional | Colombia
+              <span className="inline-flex items-center gap-2.5 rounded-full border border-[#FF1E27]/60 bg-black/60 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-gray-200 backdrop-blur-md">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#FF1E27] opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#FF1E27]" />
+                </span>
+                Cobertura nacional · Colombia
               </span>
             </div>
 
-            <h1 className="mt-5 animate-fade-up font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white animate-delay-100">
-              Carros y motos multimarca 100% verificados,{' '}
-              <span className="text-gradient">listos para traspaso en toda Colombia</span>
+            <h1 className="mt-5 animate-fade-up animate-delay-100 font-display text-4xl font-black uppercase leading-[0.95] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+              <span className="block text-[#FF1E27]">Clickmotores</span>
+              <span className="mt-2 block text-white">
+                Carros y motos <span className="text-[#FF1E27]">100% verificados</span>
+              </span>
+              <span className="mt-3 block text-xl font-bold normal-case tracking-normal text-[#B9B9C4] sm:text-2xl md:text-3xl">
+                listos para traspaso en toda Colombia
+              </span>
             </h1>
 
             <p className="mt-4 max-w-xl animate-fade-up text-base sm:text-lg leading-relaxed text-gray-300 animate-delay-200">
