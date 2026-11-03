@@ -895,9 +895,9 @@ export function AdminPage({
           .section { font-size: 16px; margin: 20px 0 10px; padding-left: 10px; border-left: 4px solid #dc2626; }
           .catalog { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
           .card { border: 1px solid #d1d5db; border-radius: 8px; overflow: hidden; break-inside: avoid; page-break-inside: avoid; }
-          .photo { position: relative; }
-          .card img { display: block; width: 100%; height: 110px; object-fit: cover; background: #f3f4f6; }
-          .no-image { height: 110px; display: flex; align-items: center; justify-content: center; background: #f3f4f6; color: #6b7280; font-size: 11px; }
+          .photo { position: relative; background: #ffffff; }
+          .card img { display: block; width: 100%; height: 135px; object-fit: contain; object-position: center; background: #ffffff; }
+          .no-image { height: 135px; display: flex; align-items: center; justify-content: center; background: #f3f4f6; color: #6b7280; font-size: 11px; }
           .estado { position: absolute; top: 6px; left: 6px; font-size: 10px; font-weight: bold; padding: 2px 7px; border-radius: 20px; text-transform: uppercase; }
           .est-disp { background: #16a34a; color: #fff; }
           .est-sep { background: #eab308; color: #111; }
@@ -914,7 +914,7 @@ export function AdminPage({
             body { padding: 8px; }
             #estado-fotos { display: none; }
             .catalog { gap: 8px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-            .card img, .no-image { height: 105px; }
+            .card img, .no-image { height: 130px; }
           }
         </style>
       </head>
