@@ -319,6 +319,7 @@ export type Database = {
       }
       vehicles: {
         Row: {
+          ally_name: string | null
           brand: string
           ciudad: string | null
           consignado: boolean
@@ -351,6 +352,7 @@ export type Database = {
           year: number
         }
         Insert: {
+          ally_name?: string | null
           brand: string
           ciudad?: string | null
           consignado?: boolean
@@ -383,6 +385,7 @@ export type Database = {
           year: number
         }
         Update: {
+          ally_name?: string | null
           brand?: string
           ciudad?: string | null
           consignado?: boolean
