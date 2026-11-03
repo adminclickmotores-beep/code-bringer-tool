@@ -26,13 +26,20 @@ const displacementOptions = [
   { value: 'high', label: 'Alto (+250cc)' },
 ];
 
-function norm(value: string | null | undefined): string {
-  return (value ?? '').trim().toLowerCase();
+function norm(value: string | number | null | undefined): string {
+  return (value ?? '')
+    .toString()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .trim()
+    .toLowerCase();
 }
 
-function getDisplacementCategory(disp: string | null): string {
-  if (!disp) return 'none';
-  const match = disp.replace(',', '.').match(/(\d+(?:\.\d+)?)/);
+function getDisplacementCategory(disp: string | number | null): string {
+  if (disp == null || disp === '') return 'none';
+  const match = String(disp)
+    .replace(',', '.')
+    .match(/(\d+(?:\.\d+)?)/);
   if (!match || !match[1]) return 'none';
   const cc = parseFloat(match[1]);
   if (Number.isNaN(cc)) return 'none';
@@ -45,6 +52,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
   const [brandFilter, setBrandFilter] = useState('all');
+  const [modelFilter, setModelFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [displacementFilter, setDisplacementFilter] = useState('all');
   const [priceMin, setPriceMin] = useState('');
@@ -61,9 +69,24 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
     return Array.from(seen.values()).sort((a, b) => a.localeCompare(b, 'es'));
   }, [vehicles]);
 
+  const models = useMemo(() => {
+    const seen = new Map<string, string>();
+    for (const v of vehicles) {
+      if (brandFilter !== 'all' && norm(v.brand) !== norm(brandFilter)) continue;
+      const key = norm(v.model);
+      if (!key) continue;
+      if (!seen.has(key)) seen.set(key, (v.model ?? '').trim());
+    }
+    return Array.from(seen.values()).sort((a, b) => a.localeCompare(b, 'es'));
+  }, [vehicles, brandFilter]);
+
+  const soloDigitos = (s: string) => s.replace(/[^0-9]/g, '');
+
   const filtered = useMemo(() => {
-    const min = priceMin.trim() === '' ? NaN : Number(priceMin);
-    const max = priceMax.trim() === '' ? NaN : Number(priceMax);
+    const minRaw = soloDigitos(priceMin);
+    const maxRaw = soloDigitos(priceMax);
+    const min = minRaw === '' ? NaN : Number(minRaw);
+    const max = maxRaw === '' ? NaN : Number(maxRaw);
     return vehicles.filter((v) => {
       if (search) {
         const q = norm(search);
@@ -72,6 +95,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
       }
       if (typeFilter !== 'all' && norm(v.type) !== typeFilter) return false;
       if (brandFilter !== 'all' && norm(v.brand) !== norm(brandFilter)) return false;
+      if (modelFilter !== 'all' && norm(v.model) !== norm(modelFilter)) return false;
       if (statusFilter !== 'all' && norm(v.status) !== statusFilter) return false;
       if (displacementFilter !== 'all') {
         if (norm(v.type) === 'carro') return false;
@@ -85,11 +109,12 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
       if (r !== 0) return r;
       return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
     });
-  }, [vehicles, search, typeFilter, brandFilter, statusFilter, displacementFilter, priceMin, priceMax]);
+  }, [vehicles, search, typeFilter, brandFilter, modelFilter, statusFilter, displacementFilter, priceMin, priceMax]);
 
   const activeFilters =
     (typeFilter !== 'all' ? 1 : 0) +
     (brandFilter !== 'all' ? 1 : 0) +
+    (modelFilter !== 'all' ? 1 : 0) +
     (statusFilter !== 'all' ? 1 : 0) +
     (displacementFilter !== 'all' ? 1 : 0) +
     (priceMin ? 1 : 0) +
@@ -99,6 +124,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
     setSearch('');
     setTypeFilter('all');
     setBrandFilter('all');
+    setModelFilter('all');
     setStatusFilter('all');
     setDisplacementFilter('all');
     setPriceMin('');
@@ -190,12 +216,31 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
                 <label className="label-field">Marca</label>
                 <select
                   value={brandFilter}
-                  onChange={(e) => setBrandFilter(e.target.value)}
+                  onChange={(e) => {
+                    setBrandFilter(e.target.value);
+                    setModelFilter('all');
+                  }}
                   className="select-field"
                 >
                   <option value="all">Todas las marcas</option>
                   {brands.map((b) => (
                     <option key={b} value={b}>{b}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="label-field">
+                  Modelo{brandFilter !== 'all' ? ` (${brandFilter})` : ''}
+                </label>
+                <select
+                  value={modelFilter}
+                  onChange={(e) => setModelFilter(e.target.value)}
+                  className="select-field"
+                >
+                  <option value="all">Todos los modelos</option>
+                  {models.map((m) => (
+                    <option key={m} value={m}>{m}</option>
                   ))}
                 </select>
               </div>
@@ -251,17 +296,17 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
               </div>
             </div>
 
-            {activeFilters > 0 && (
-              <div className="mt-4 flex items-center justify-between border-t border-jg-silver/50 pt-4">
-                <span className="text-xs text-gray-500">
-                  {filtered.length} resultado{filtered.length !== 1 ? 's' : ''}
-                </span>
+            <div className="mt-4 flex items-center justify-between border-t border-jg-silver/50 pt-4">
+              <span className="text-xs text-gray-500">
+                {filtered.length} resultado{filtered.length !== 1 ? 's' : ''}
+              </span>
+              {activeFilters > 0 && (
                 <button onClick={clearAll} className="btn-ghost text-jg-red">
                   <X className="h-4 w-4" />
                   Limpiar filtros
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
 
