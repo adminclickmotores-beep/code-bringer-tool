@@ -11,6 +11,7 @@ import {
   Vehicle,
   VehicleAdminInput,
   Notification,
+  normalizeVehicle,
   supabase,
 } from '@/jg/lib/supabase';
 
@@ -80,7 +81,7 @@ export function JgApp({ children }: { children: ReactNode }) {
         .select('*')
         .order('created_at', { ascending: false });
       if (error) throw error;
-      setVehicles(data as Vehicle[]);
+      setVehicles(((data as Vehicle[] | null) ?? []).map(normalizeVehicle));
     } finally {
       setLoading(false);
     }

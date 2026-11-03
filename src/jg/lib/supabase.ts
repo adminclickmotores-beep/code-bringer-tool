@@ -166,8 +166,40 @@ export function formatCOP(value: number): string {
   }).format(value);
 }
 
-export function maskPlaca(placa: string | null): string {
-  if (!placa) return 'N/A';
+const KNOWN_TYPES = ['moto', 'carro'] as const;
+const KNOWN_STATUSES: Vehicle['status'][] = ['disponible', 'no_disponible', 'vendido', 'aliado'];
+const KNOWN_TAGS: NonNullable<Vehicle['tag']>[] = ['recien_ingresado', 'precio_rebajado', 'separado', 'vendido'];
+
+/**
+ * Normaliza tipo/estado/etiqueta tal como llegan de la base de datos
+ * (mayúsculas o espacios accidentales al crear el registro) para que el
+ * inventario, los filtros y los conteos reconozcan siempre cada vehículo.
+ * Los valores desconocidos se conservan tal cual: nada se oculta.
+ */
+export function normalizeVehicle<T extends Vehicle>(vehicle: T): T {
+  const typeKey = (vehicle.type ?? '').trim().toLowerCase();
+  const statusKey = (vehicle.status ?? '').trim().toLowerCase();
+  const rawTag = vehicle.tag == null ? null : String(vehicle.tag).trim().toLowerCase();
+  return {
+    ...vehicle,
+    type: (KNOWN_TYPES as readonly string[]).includes(typeKey)
+      ? (typeKey as Vehicle['type'])
+      : vehicle.type,
+    status: (KNOWN_STATUSES as readonly string[]).includes(statusKey)
+      ? (statusKey as Vehicle['status'])
+      : vehicle.status,
+    tag: rawTag == null || rawTag === ''
+      ? vehicle.tag
+      : ((KNOWN_TAGS as readonly string[]).includes(rawTag)
+        ? (rawTag as NonNullable<Vehicle['tag']>)
+        : vehicle.tag),
+    brand: typeof vehicle.brand === 'string' ? vehicle.brand.trim() : vehicle.brand,
+    model: typeof vehicle.model === 'string' ? vehicle.model.trim() : vehicle.model,
+    title: typeof vehicle.title === 'string' ? vehicle.title.trim() : vehicle.title,
+  };
+}
+
+export function maskPlaca(placa: string | null): string {  if (!placa) return 'N/A';
   const trimmed = placa.trim();
   if (trimmed.length === 0) return 'N/A';
   const last = trimmed.slice(-1).toUpperCase();

@@ -31,8 +31,12 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
 
   if (!vehicle) return null;
 
-  const status = STATUS_CONFIG[vehicle.status];
-  const tag = vehicle.tag ? TAG_CONFIG[vehicle.tag] : null;
+  const status = STATUS_CONFIG[vehicle.status] ?? {
+    label: vehicle.status ? String(vehicle.status) : 'Sin estado',
+    class: 'bg-gray-500/15 text-gray-300 border border-gray-500/30',
+    dot: 'bg-gray-500',
+  };
+  const tag = vehicle.tag ? (TAG_CONFIG[vehicle.tag] ?? null) : null;
   const images = vehicle.image_urls?.length ? vehicle.image_urls : [];
   const canBuy = vehicle.status === 'disponible' || vehicle.status === 'aliado';
   const contact = contactTarget(vehicle);
