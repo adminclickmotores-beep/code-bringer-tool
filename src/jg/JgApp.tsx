@@ -1,3 +1,4 @@
+import type React from 'react';
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { useLocation, useNavigate } from '@tanstack/react-router';
@@ -49,7 +50,9 @@ type Ctx = {
   logout: () => Promise<void>;
 };
 
-const JgContext = createContext<Ctx | null>(null);
+// Keep a single context instance across hot reloads so pages and the shell never disagree.
+const g = globalThis as unknown as { __jgContext?: React.Context<Ctx | null> };
+const JgContext = g.__jgContext ?? (g.__jgContext = createContext<Ctx | null>(null));
 
 export function useJg() {
   const ctx = useContext(JgContext);
