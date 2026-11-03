@@ -47,12 +47,12 @@ export function SalesChatbot({ onNavigate }: SalesChatbotProps) {
               </div>
               <span className="font-display text-sm font-bold text-jg-text-dark">Asistente ClickMotores</span>
             </div>
-            <button onClick={() => setOpen(false)} className="rounded-lg p-1 text-gray-600 transition-colors hover:bg-jg-silver hover:text-jg-text-dark">
+            <button onClick={() => setOpen(false)} className="rounded-lg p-1 text-gray-400 transition-colors hover:bg-jg-silver hover:text-jg-text-dark">
               <X className="h-4 w-4" />
             </button>
           </div>
           <div className="space-y-3 p-4">
-            <div className="rounded-xl rounded-tl-sm bg-jg-dark px-3 py-2.5 text-sm text-gray-600">
+            <div className="rounded-xl rounded-tl-sm bg-jg-dark px-3 py-2.5 text-sm text-gray-400">
               ¡Hola! 🚗🏍️ ¿Buscas comprar un vehículo verificado o vender el tuyo?
             </div>
             <div className="space-y-2">
@@ -60,7 +60,7 @@ export function SalesChatbot({ onNavigate }: SalesChatbotProps) {
                 <button
                   key={idx}
                   onClick={reply.action}
-                  className="flex w-full items-center gap-2.5 rounded-lg border border-jg-silver/50 bg-jg-dark px-3 py-2.5 text-left text-sm text-gray-600 transition-all hover:border-jg-red/40 hover:text-jg-text-dark"
+                  className="flex w-full items-center gap-2.5 rounded-lg border border-jg-silver/50 bg-jg-dark px-3 py-2.5 text-left text-sm text-gray-400 transition-all hover:border-jg-red/40 hover:text-jg-text-dark"
                 >
                   <reply.icon className="h-4 w-4 shrink-0 text-jg-red" />
                   {reply.label}

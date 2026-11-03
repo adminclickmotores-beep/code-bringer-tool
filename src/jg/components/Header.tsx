@@ -1,11 +1,12 @@
 import { Menu, X, Facebook, Lock, Instagram, Phone } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Logo } from './Logo';
 import { WHATSAPP_DISPLAY, FACEBOOK_URL, INSTAGRAM_URL, whatsappLink } from '@/jg/lib/supabase';
 
 interface HeaderProps {
   currentPage: string;
   onNavigate: (page: string) => void;
+  sessionEmail?: string | null;
 }
 
 const navItems = [
@@ -16,8 +17,18 @@ const navItems = [
   { id: 'contact', label: 'Contacto' },
 ];
 
-export function Header({ currentPage, onNavigate }: HeaderProps) {
+export function Header({ currentPage, onNavigate, sessionEmail }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const solid = scrolled || currentPage !== 'home';
 
   const handleNav = (page: string) => {
     onNavigate(page);
@@ -26,7 +37,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-jg-silver/30 bg-jg-black/95 backdrop-blur-xl">
+      <header className={`sticky top-0 z-50 border-b backdrop-blur-xl transition-all duration-300 ${solid ? 'border-white/10 bg-[#0A0A0A]/90 shadow-lg shadow-black/40' : 'border-transparent bg-transparent'}`}>
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <button onClick={() => handleNav('home')} className="transition-transform hover:scale-105">
             <Logo />
@@ -59,6 +70,9 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
             >
               <Lock className="h-3.5 w-3.5" />
               CMS
+              {sessionEmail && (
+                <span className="h-1.5 w-1.5 rounded-full bg-green-400" title={`Sesión: ${sessionEmail}`} />
+              )}
             </button>
           </nav>
 

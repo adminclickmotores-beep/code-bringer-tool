@@ -145,10 +145,10 @@
 
 /* JG Motors brand */
 @theme {
-  --color-jg-black:#121212; --color-jg-carbon:#FFFFFF; --color-jg-dark:#F3F4F6; --color-jg-silver:#E5E7EB;
-  --color-jg-gray:#D1D5DB; --color-jg-red:#dc2626; --color-jg-red-dark:#991b1b; --color-jg-red-light:#ef4444;
-  --color-jg-accent:#f5f5f5; --color-jg-body:#F8F9FA; --color-jg-surface:#FFFFFF; --color-jg-surface-2:#F1F3F5;
-  --color-jg-border-light:#E2E8F0; --color-jg-text-dark:#111827; --color-jg-text-muted:#4B5563;
+  --color-jg-black:#0A0A0A; --color-jg-carbon:#121212; --color-jg-dark:#1B1B1F; --color-jg-silver:#2A2A30;
+  --color-jg-gray:#A1A1AA; --color-jg-red:#FF1E27; --color-jg-red-dark:#B30D15; --color-jg-red-light:#FF5A60;
+  --color-jg-accent:#16161A; --color-jg-body:#0A0A0A; --color-jg-surface:#121214; --color-jg-surface-2:#1B1B1F;
+  --color-jg-border-light:#2A2A30; --color-jg-text-dark:#FFFFFF; --color-jg-text-muted:#B9B9C4;
   --color-jg-yellow:#FACC15; --color-jg-yellow-dark:#CA8A04;
   --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -158,18 +158,20 @@
   --animate-scale-in: scaleIn 0.2s ease-out forwards;
   --animate-pulse-red: pulseRed 2s ease-in-out infinite;
   --animate-shimmer: shimmer 2s linear infinite;
+  --animate-kenburns: kenburns 24s ease-in-out infinite alternate;
   @keyframes fadeIn { 0% {opacity:0} 100% {opacity:1} }
   @keyframes fadeUp { 0% {opacity:0; transform:translateY(20px)} 100% {opacity:1; transform:translateY(0)} }
   @keyframes slideDown { 0% {opacity:0; transform:translateY(-10px)} 100% {opacity:1; transform:translateY(0)} }
   @keyframes scaleIn { 0% {opacity:0; transform:scale(0.95)} 100% {opacity:1; transform:scale(1)} }
   @keyframes pulseRed { 0%,100% {box-shadow:0 0 0 0 rgba(220,38,38,0.4)} 50% {box-shadow:0 0 0 12px rgba(220,38,38,0)} }
   @keyframes shimmer { 0% {background-position:-1000px 0} 100% {background-position:1000px 0} }
+  @keyframes kenburns { 0% {transform:scale(1)} 100% {transform:scale(1.15)} }
 }
 
 @layer base {
   * {
     scrollbar-width: thin;
-    scrollbar-color: #ccc #f8f9fa;
+    scrollbar-color: #3a3a42 #0a0a0a;
   }
 
   *::-webkit-scrollbar {
@@ -178,11 +180,11 @@
   }
 
   *::-webkit-scrollbar-track {
-    background: #f1f3f5;
+    background: #141416;
   }
 
   *::-webkit-scrollbar-thumb {
-    background: #ccc;
+    background: #3a3a42;
     border-radius: 4px;
   }
 
@@ -195,8 +197,8 @@
   }
 
   body {
-    background-color: #F8F9FA;
-    color: #111827;
+    background-color: #0A0A0A;
+    color: #EDEDEF;
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -205,7 +207,7 @@
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-jg-red px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-jg-red-dark hover:shadow-lg hover:shadow-jg-red/30 active:scale-95;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-jg-red to-jg-red-dark px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-jg-red/40 hover:brightness-110 active:scale-95;
   }
 
   .btn-yellow {
@@ -213,7 +215,7 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-jg-silver bg-white px-6 py-3 text-sm font-semibold text-jg-text-dark transition-all duration-300 hover:border-jg-red hover:bg-jg-red/10 active:scale-95;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.06] px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-jg-red hover:bg-jg-red/10 hover:shadow-lg hover:shadow-jg-red/20 active:scale-95;
   }
 
   .btn-ghost {
@@ -221,31 +223,31 @@
   }
 
   .card {
-    @apply rounded-2xl border border-jg-silver bg-jg-surface shadow-sm transition-all duration-300;
+    @apply rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg shadow-black/30 backdrop-blur-xl transition-all duration-300;
   }
 
   .card-dark {
-    @apply rounded-2xl border border-jg-silver/50 bg-jg-carbon transition-all duration-300;
+    @apply rounded-2xl border border-white/10 bg-black/50 backdrop-blur-xl transition-all duration-300;
   }
 
   .card-hover {
-    @apply hover:border-jg-red/50 hover:shadow-xl hover:shadow-jg-red/10 hover:-translate-y-1;
+    @apply hover:-translate-y-1 hover:border-jg-red/50 hover:shadow-xl hover:shadow-jg-red/20;
   }
 
   .input-field {
-    @apply w-full rounded-lg border border-jg-border-light bg-jg-surface px-4 py-3 text-sm text-jg-text-dark placeholder-gray-400 transition-all duration-200 focus:border-jg-red focus:outline-none focus:ring-1 focus:ring-jg-red;
+    @apply w-full rounded-lg border border-white/10 bg-white/[0.05] px-4 py-3 text-base text-white placeholder-gray-500 transition-all duration-200 focus:border-jg-red focus:outline-none focus:ring-1 focus:ring-jg-red;
   }
 
   .input-field-dark {
-    @apply w-full rounded-lg border border-jg-silver bg-white px-4 py-3 text-sm text-jg-text-dark placeholder-gray-400 transition-all duration-200 focus:border-jg-red focus:outline-none focus:ring-1 focus:ring-jg-red;
+    @apply w-full rounded-lg border border-white/10 bg-white/[0.05] px-4 py-3 text-base text-white placeholder-gray-500 transition-all duration-200 focus:border-jg-red focus:outline-none focus:ring-1 focus:ring-jg-red;
   }
 
   .select-field {
-    @apply w-full cursor-pointer rounded-lg border border-jg-border-light bg-jg-surface px-4 py-3 text-sm text-jg-text-dark transition-all duration-200 focus:border-jg-red focus:outline-none focus:ring-1 focus:ring-jg-red;
+    @apply w-full cursor-pointer rounded-lg border border-white/10 bg-white/[0.05] px-4 py-3 text-base text-white transition-all duration-200 focus:border-jg-red focus:outline-none focus:ring-1 focus:ring-jg-red;
   }
 
   .select-field-dark {
-    @apply w-full cursor-pointer rounded-lg border border-jg-silver bg-white px-4 py-3 text-sm text-jg-text-dark transition-all duration-200 focus:border-jg-red focus:outline-none focus:ring-1 focus:ring-jg-red;
+    @apply w-full cursor-pointer rounded-lg border border-white/10 bg-white/[0.05] px-4 py-3 text-base text-white transition-all duration-200 focus:border-jg-red focus:outline-none focus:ring-1 focus:ring-jg-red;
   }
 
   .label-field {
@@ -265,7 +267,7 @@
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    background: linear-gradient(135deg, #FF1E27 0%, #FF5A60 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -276,8 +278,8 @@
   }
 
   .grid-pattern {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 50px 50px;
   }
 }
@@ -305,8 +307,8 @@
 }
 
 @layer base {
-  h1,h2,h3,h4,h5,h6 { color: #111827; }
-  select option { background: #FFFFFF; color: #111827; }
+  h1,h2,h3,h4,h5,h6 { color: #FFFFFF; }
+  select option { background: #16161A; color: #FFFFFF; }
 }
 
 /* GoIDE: sin zoom en celular al escribir (v2) */

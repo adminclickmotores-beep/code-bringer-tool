@@ -72,7 +72,7 @@ function Page() {
       <div className="w-full max-w-md">
         <Link
           to="/admin"
-          className="mb-6 flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-jg-text-dark"
+          className="mb-6 flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-jg-text-dark"
         >
           <ArrowLeft className="h-4 w-4" />
           Volver al panel
@@ -86,7 +86,7 @@ function Page() {
             <h1 className="font-display text-xl font-bold text-jg-text-dark">
               Restablecer contraseña
             </h1>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-sm text-gray-400">
               {isRecovery
                 ? "Escribe tu nueva contraseña."
                 : "Te enviamos un enlace para crear una nueva."}
@@ -97,7 +97,7 @@ function Page() {
             done ? (
               <div className="space-y-4 p-6 text-center">
                 <CheckCircle2 className="mx-auto h-10 w-10 text-green-600" />
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-400">
                   Tu contraseña ya quedó actualizada.
                 </p>
                 <Link to="/admin" className="btn-primary w-full">
@@ -143,7 +143,7 @@ function Page() {
           ) : sent ? (
             <div className="space-y-4 p-6 text-center">
               <CheckCircle2 className="mx-auto h-10 w-10 text-green-600" />
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-400">
                 Si ese correo existe, te enviamos un enlace. Revisa tu bandeja
                 y también el spam.
               </p>

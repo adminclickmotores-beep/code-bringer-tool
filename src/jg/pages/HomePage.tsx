@@ -46,7 +46,7 @@ function BankLogo({ name }: { name: string }) {
       </svg>
     ),
   };
-  return logos[name] ?? <span className="text-sm font-medium text-gray-600">{name}</span>;
+  return logos[name] ?? <span className="text-sm font-medium text-gray-400">{name}</span>;
 }
 
 const faqItems = [
@@ -92,9 +92,12 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
       {/* Hero */}
       <section className="relative flex min-h-[85vh] items-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroImage} alt="ClickMotores" className="h-full w-full object-cover" />
+          <img src={heroImage} alt="" aria-hidden="true" className="h-full w-full animate-kenburns object-cover" />
+          <video autoPlay loop muted playsInline preload="metadata" poster={heroImage} className="absolute inset-0 h-full w-full object-cover">
+            <source src="/videos/showroom.mp4" type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-gradient-to-r from-jg-black via-jg-black/85 to-jg-black/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-jg-black via-transparent to-jg-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-t from-jg-black via-jg-black/20 to-jg-black/60" />
           <div className="absolute inset-0 grid-pattern opacity-30" />
         </div>
 
@@ -108,7 +111,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
             </div>
 
             <h1 className="mt-5 animate-fade-up font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white animate-delay-100">
-              Conectamos personas, concesionarios y vehículos{' '}
+              Vitrina Digital de Vehículos{' '}
               <span className="text-gradient">con total transparencia</span>
             </h1>
 
@@ -156,7 +159,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                       if (e.key === 'Enter') onNavigate('catalog');
                     }}
                     placeholder={`Buscar ${activeTab === 'carro' ? 'carro' : 'moto'} por marca, modelo o ciudad...`}
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 text-jg-black rounded-lg text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-jg-red"
+                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 text-jg-black rounded-lg text-base border border-gray-200 focus:outline-none focus:ring-2 focus:ring-jg-red"
                   />
                 </div>
                 <button
@@ -172,8 +175,9 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
 
             {/* Botones de acción principales */}
             <div className="mt-6 flex flex-wrap gap-3">
-              <button onClick={() => onNavigate('catalog')} className="btn-secondary !bg-black/60 !text-white border border-white/20 hover:!bg-black">
-                Ver Inventario
+              <button onClick={() => onNavigate('catalog')} className="btn-primary !px-8 !py-3.5 !text-base">
+                Explorar Inventario
+                <ArrowRight className="h-4 w-4" />
               </button>
               <button onClick={() => onNavigate('sell')} className="btn-secondary !bg-white !text-jg-black hover:!bg-gray-100">
                 Vender / Consignar Vehículo
@@ -184,15 +188,15 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
             <div className="mt-10 flex animate-fade-up animate-delay-400 gap-6 sm:gap-10">
               <div>
                 <p className="font-display text-3xl font-bold text-jg-text-dark">{motosCount}</p>
-                <p className="text-xs text-gray-600">Motos disponibles</p>
+                <p className="text-xs text-gray-400">Motos disponibles</p>
               </div>
               <div className="border-l border-jg-silver pl-6 sm:pl-10">
                 <p className="font-display text-3xl font-bold text-jg-text-dark">{carrosCount}</p>
-                <p className="text-xs text-gray-600">Carros disponibles</p>
+                <p className="text-xs text-gray-400">Carros disponibles</p>
               </div>
               <div className="border-l border-jg-silver pl-6 sm:pl-10">
                 <p className="font-display text-3xl font-bold text-jg-text-dark">100%</p>
-                <p className="text-xs text-gray-600">Verificados</p>
+                <p className="text-xs text-gray-400">Verificados</p>
               </div>
             </div>
           </div>
@@ -237,7 +241,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                   <item.icon className="h-7 w-7" />
                 </div>
                 <h3 className="font-display text-lg font-bold text-jg-text-dark">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-600">{item.desc}</p>
+                <p className="mt-2 text-sm leading-relaxed text-gray-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -249,7 +253,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
               </div>
               <div>
                 <h3 className="font-display text-lg font-bold text-jg-text-dark">Motos Multicilindraje</h3>
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-gray-400">
                   Desde bajo cilindraje para la ciudad hasta alto cilindraje deportivo. Todas
                   verificadas y listas para rodar.
                 </p>
@@ -261,7 +265,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
               </div>
               <div>
                 <h3 className="font-display text-lg font-bold text-jg-text-dark">Carros Multimarca</h3>
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-gray-400">
                   Sedanes, SUVs y compactos de todas las marcas. En excelente estado y con
                   documentación al día.
                 </p>
@@ -325,8 +329,8 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <Search className="mb-4 h-12 w-12 text-gray-600" />
-              <p className="text-gray-600">No hay vehículos destacados en este momento.</p>
+              <Search className="mb-4 h-12 w-12 text-gray-400" />
+              <p className="text-gray-400">No hay vehículos destacados en este momento.</p>
             </div>
           )}
 
@@ -363,7 +367,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                   'Traslado y radicación de cuenta',
                   'Certificados de tradición (embargos)',
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
+                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-400">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
                     {item}
                   </li>
@@ -392,7 +396,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                   'SOAT con descuento especial',
                   'Pólizas todo riesgo para auto y moto',
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
+                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-400">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
                     {item}
                   </li>
@@ -426,7 +430,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 <h2 className="mt-4 font-display text-2xl font-bold text-jg-text-dark sm:text-3xl">
                   Vende o Consigna tu Vehículo
                 </h2>
-                <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:text-base">
+                <p className="mt-3 text-sm leading-relaxed text-gray-400 sm:text-base">
                   Pago único de <span className="font-semibold text-jg-text-dark">$100.000 COP</span> para
                   pauta publicitaria y búsqueda de compradores. Comisión del{' '}
                   <span className="font-semibold text-jg-text-dark">3%</span> para carros y{' '}
@@ -458,7 +462,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3">
                     <CheckCircle2 className="h-5 w-5 shrink-0 text-green-400" />
-                    <span className="text-sm text-gray-600">{item}</span>
+                    <span className="text-sm text-gray-400">{item}</span>
                   </div>
                 ))}
               </div>
@@ -487,12 +491,12 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 >
                   <span className="font-display text-sm font-bold text-jg-text-dark">{item.q}</span>
                   <ChevronDown
-                    className={`h-5 w-5 shrink-0 text-gray-600 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`}
+                    className={`h-5 w-5 shrink-0 text-gray-400 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`}
                   />
                 </button>
                 {openFaq === idx && (
                   <div className="animate-slide-down border-t border-jg-silver/50 px-5 py-4">
-                    <p className="text-sm leading-relaxed text-gray-600">{item.a}</p>
+                    <p className="text-sm leading-relaxed text-gray-400">{item.a}</p>
                   </div>
                 )}
               </div>

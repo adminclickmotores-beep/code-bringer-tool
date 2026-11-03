@@ -93,7 +93,7 @@ export function AdminLogin({ onBack, onSuccess }: AdminLoginProps) {
       <div className="w-full max-w-md">
         <button
           onClick={onBack}
-          className="mb-6 flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-jg-text-dark"
+          className="mb-6 flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-jg-text-dark"
         >
           <ArrowLeft className="h-4 w-4" />
           Volver al inicio
@@ -106,7 +106,7 @@ export function AdminLogin({ onBack, onSuccess }: AdminLoginProps) {
             </div>
             <Logo />
             <h1 className="mt-4 font-display text-xl font-bold text-jg-text-dark">Panel de Control</h1>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-sm text-gray-400">
               Ingresa con tus credenciales para administrar el inventario
             </p>
           </div>
@@ -159,7 +159,7 @@ export function AdminLogin({ onBack, onSuccess }: AdminLoginProps) {
             </div>
 
             <div className="flex items-center justify-between gap-2 text-sm">
-              <label className="flex cursor-pointer items-center gap-2 text-gray-600">
+              <label className="flex cursor-pointer items-center gap-2 text-gray-400">
                 <input
                   type="checkbox"
                   checked={remember}

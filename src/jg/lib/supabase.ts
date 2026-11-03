@@ -190,7 +190,7 @@ export const STATUS_CONFIG: Record<
   },
   vendido: {
     label: 'Vendido',
-    class: 'bg-gray-500/15 text-gray-600 border border-gray-500/30',
+    class: 'bg-gray-500/15 text-gray-300 border border-gray-500/30',
     dot: 'bg-gray-500',
   },
   aliado: {

@@ -39,7 +39,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
       onClick={onClick}
       className="card card-hover group cursor-pointer overflow-hidden"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-jg-surface-2">
+      <div className="relative aspect-[4/3] overflow-hidden bg-white/5">
         {images.length > 0 ? (
           <img
             src={images[currentImage]}
@@ -49,7 +49,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <ImageIcon className="h-12 w-12 text-gray-600" />
+            <ImageIcon className="h-12 w-12 text-gray-400" />
           </div>
         )}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
@@ -69,7 +69,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
           )}
         </div>
         <div className="absolute top-3 right-3">
-          <span className="badge border border-black/10 bg-white/80 backdrop-blur-sm text-jg-text-dark">
+          <span className="badge border border-white/20 bg-black/60 text-white backdrop-blur-sm">
             {vehicle.type === 'moto' ? (
               <Bike className="h-3.5 w-3.5" />
             ) : (
@@ -170,7 +170,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
         <div className="mt-4 flex items-center justify-between border-t border-jg-border-light pt-3">
           <div>
             <p className="text-xs text-jg-text-muted">Precio</p>
-            <p className="font-display text-xl font-bold text-gradient">{formatCOP(vehicle.price)}</p>
+            <p className="font-display text-xl font-bold text-jg-red">{formatCOP(vehicle.price)}</p>
           </div>
           <div className="flex items-center gap-1.5">
             {vehicle.instagram_url && (

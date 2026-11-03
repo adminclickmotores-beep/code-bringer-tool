@@ -203,7 +203,7 @@ export function JgApp({ children }: { children: ReactNode }) {
       }}
     >
       <div className="flex min-h-screen flex-col bg-jg-body">
-        <Header currentPage={currentPage} onNavigate={navigate} />
+        <Header currentPage={currentPage} onNavigate={navigate} sessionEmail={session?.user?.email ?? null} />
         <main className="flex-1">{children}</main>
         <Footer onNavigate={navigate} />
         {!isAdmin && <SalesChatbot onNavigate={navigate} />}

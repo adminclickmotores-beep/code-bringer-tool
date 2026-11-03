@@ -115,7 +115,7 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
               </>
             ) : (
               <div className="flex h-full w-full items-center justify-center">
-                <ImageIcon className="h-16 w-16 text-gray-600" />
+                <ImageIcon className="h-16 w-16 text-gray-400" />
               </div>
             )}
             <div className="absolute top-3 left-3 flex flex-col gap-1.5">
@@ -126,7 +126,7 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
               {tag && (
                 <span className={`badge ${tag.class}`}>{tag.label}</span>
               )}
-              <span className="badge border border-black/10 bg-white/80 backdrop-blur-sm text-jg-text-dark">
+              <span className="badge border border-white/20 bg-black/60 text-white backdrop-blur-sm">
                 {vehicle.type === 'moto' ? <Bike className="h-3.5 w-3.5" /> : <Car className="h-3.5 w-3.5" />}
                 {vehicle.type === 'moto' ? 'Moto' : 'Carro'}
               </span>

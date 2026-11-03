@@ -39,7 +39,7 @@ ${form.message}`;
           <h1 className="mt-4 font-display text-3xl font-bold text-jg-text-dark sm:text-4xl md:text-5xl">
             Contáctanos
           </h1>
-          <p className="mt-3 max-w-2xl text-sm text-gray-600 sm:text-base">
+          <p className="mt-3 max-w-2xl text-sm text-gray-400 sm:text-base">
             Estamos en Yumbo, Valle del Cauca. Escríbenos por WhatsApp, llámanos o visítanos. Te
             ayudamos a encontrar el vehículo ideal o a vender el tuyo.
           </p>
@@ -63,7 +63,7 @@ ${form.message}`;
                 <p className="text-xs text-gray-500">WhatsApp / Teléfono</p>
                 <p className="font-display text-lg font-bold text-jg-text-dark">{WHATSAPP_DISPLAY}</p>
               </div>
-              <Send className="h-4 w-4 text-gray-600 transition-colors group-hover:text-green-400" />
+              <Send className="h-4 w-4 text-gray-400 transition-colors group-hover:text-green-400" />
             </a>
 
 
@@ -81,7 +81,7 @@ ${form.message}`;
                 <p className="text-xs text-gray-500">Facebook</p>
                 <p className="font-display text-base font-bold text-jg-text-dark">ClickMotores</p>
               </div>
-              <Send className="h-4 w-4 text-gray-600 transition-colors group-hover:text-blue-400" />
+              <Send className="h-4 w-4 text-gray-400 transition-colors group-hover:text-blue-400" />
             </a>
 
             <div className="card flex items-center gap-4 p-5">
@@ -109,7 +109,7 @@ ${form.message}`;
           <div className="card overflow-hidden">
             <div className="border-b border-jg-silver/50 px-6 py-5">
               <h2 className="font-display text-xl font-bold text-jg-text-dark">Envíanos un mensaje</h2>
-              <p className="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-sm text-gray-400">
                 Se enviará por WhatsApp a {WHATSAPP_DISPLAY}.
               </p>
             </div>
@@ -120,7 +120,7 @@ ${form.message}`;
                   <MessageCircle className="h-8 w-8 text-green-400" />
                 </div>
                 <h3 className="font-display text-xl font-bold text-jg-text-dark">¡Mensaje enviado!</h3>
-                <p className="mt-2 max-w-md text-sm text-gray-600">
+                <p className="mt-2 max-w-md text-sm text-gray-400">
                   Hemos abierto WhatsApp con el mensaje listo para enviar. Te
                   responderemos a la brevedad.
                 </p>
