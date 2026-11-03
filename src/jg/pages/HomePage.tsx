@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { Vehicle, whatsappLink, logConsulta } from '@/jg/lib/supabase';
 import { VehicleCard } from '@/jg/components/VehicleCard';
+import { HeroClip } from '@/jg/components/HeroClip';
 
 interface HomePageProps {
   vehicles: Vehicle[];
@@ -23,8 +24,6 @@ interface HomePageProps {
   onNavigate: (page: string) => void;
   onVehicleClick: (vehicle: Vehicle) => void;
 }
-
-const heroImage = 'https://images.pexels.com/photos/38570/lamborghini-car-speed-prestige-38570.jpeg?auto=compress&cs=tinysrgb&h=650&w=940';
 
 function BankLogo({ name }: { name: string }) {
   const logos: Record<string, React.ReactElement> = {
@@ -91,15 +90,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
     <div className="animate-fade-in">
       {/* Hero */}
       <section className="relative flex min-h-[85vh] items-center overflow-hidden">
-        <div className="absolute inset-0">
-          <img src={heroImage} alt="" aria-hidden="true" className="h-full w-full animate-kenburns object-cover" />
-          <video autoPlay loop muted playsInline preload="metadata" poster={heroImage} className="absolute inset-0 h-full w-full object-cover">
-            <source src="/videos/showroom.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-jg-black via-jg-black/85 to-jg-black/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-jg-black via-jg-black/20 to-jg-black/60" />
-          <div className="absolute inset-0 grid-pattern opacity-30" />
-        </div>
+        <HeroClip />
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
