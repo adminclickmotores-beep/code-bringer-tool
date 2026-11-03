@@ -381,7 +381,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
               </div>
               <h3 className="font-display text-lg font-bold text-jg-text-dark">SOAT y Pólizas Todo Riesgo</h3>
               <p className="mt-1 text-sm text-gray-400">
-                Cotizaciones multiaseguradora con asesoría sin costo y SOAT con descuento especial.
+                SOAT a tarifa oficial y pólizas todo riesgo cotizadas con varias aseguradoras, con asesoría sin costo.
               </p>
               <SoatQuoteForm />
             </div>
