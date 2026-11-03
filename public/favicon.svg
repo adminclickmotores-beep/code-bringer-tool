@@ -1,18 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#121212"/>
-  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.25" fill="none" stroke="#2B2B2B" stroke-width="1.5"/>
-  <!-- lineas de velocidad: largos y opacidades distintas -->
-  <g stroke-linecap="round" fill="none">
-    <line x1="7" y1="21" x2="22" y2="21" stroke="#EF4444" stroke-width="3.6"/>
-    <line x1="7" y1="30" x2="28" y2="30" stroke="#DC2626" stroke-width="3.6"/>
-    <line x1="7" y1="39" x2="17.5" y2="39" stroke="#DC2626" stroke-width="3" opacity="0.55"/>
+  <rect width="64" height="64" rx="14" fill="#242424"/>
+  <!-- dial base arc: thick, high contrast -->
+  <path d="M 14 42 A 22 22 0 1 1 50 42" fill="none" stroke="#FFFFFF" stroke-width="6.5" stroke-linecap="butt"/>
+  <!-- red zone: top-right segment -->
+  <path d="M 44.5 22.5 A 22 22 0 0 1 50 42" fill="none" stroke="#E10600" stroke-width="6.5" stroke-linecap="butt"/>
+  <!-- ticks -->
+  <g stroke="#242424" stroke-width="2.4" stroke-linecap="butt">
+    <line x1="17.5" y1="33.5" x2="22.5" y2="35.5"/>
+    <line x1="22" y1="24.5" x2="25.5" y2="28"/>
+    <line x1="32" y1="20.5" x2="32" y2="25.5"/>
+    <line x1="42" y1="24.5" x2="38.5" y2="28"/>
   </g>
-  <!-- monograma CM en italica deportiva -->
-  <g transform="translate(27 13) skewX(-10)">
-    <text x="0" y="29" font-family="'Plus Jakarta Sans','Arial Black',Arial,sans-serif" font-size="26" font-weight="800" font-style="italic" letter-spacing="-1.5" fill="#FFFFFF">C<tspan fill="#EF4444">M</tspan></text>
-  </g>
-  <!-- base: linea de pista + punto rojo -->
-  <rect x="7" y="49" width="31" height="3.6" rx="1.8" fill="#DC2626"/>
-  <circle cx="52" cy="50.8" r="3.8" fill="#DC2626"/>
-  <circle cx="52" cy="50.8" r="1.6" fill="#121212"/>
+  <!-- needle pointing forward-right -->
+  <line x1="32" y1="42" x2="47.5" y2="22.5" stroke="#E10600" stroke-width="6" stroke-linecap="butt"/>
+  <!-- hub -->
+  <circle cx="32" cy="42" r="7" fill="#0A0A0A" stroke="#FFFFFF" stroke-width="2.5"/>
+  <circle cx="32" cy="42" r="2.4" fill="#E10600"/>
 </svg>
