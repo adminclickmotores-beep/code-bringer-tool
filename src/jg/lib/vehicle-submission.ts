@@ -27,6 +27,7 @@ export const vehicleSubmissionSchema = z.object({
   model: z.string().trim().min(1, 'Escribe el modelo.').max(80),
   year: z.coerce.number().int(),
   displacement: z.string().trim().max(30),
+  fuel: z.string().trim().max(30).default('Gasolina'),
   mileage: z.number().int().min(0).max(2_000_000),
   city: z.string().trim().min(2, 'Escribe la ciudad.').max(80),
   plate: z.string().trim().toUpperCase().regex(/^[A-Z0-9-]{3,10}$/, 'Escribe una placa válida.'),

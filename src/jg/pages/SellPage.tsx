@@ -10,7 +10,7 @@ import { useJg } from '@/jg/JgApp';
 import { PlansSection } from '@/jg/components/PlansSection';
 import { DirectPurchaseForm } from '@/jg/components/DirectPurchaseForm';
 import { ConsignmentPanel } from '@/jg/components/ConsignmentPanel';
-import { formatCOP, uploadPropertyCard, uploadVehiclePhoto } from '@/jg/lib/supabase';
+import { formatCOP, fuelOptions, uploadPropertyCard, uploadVehiclePhoto } from '@/jg/lib/supabase';
 import { submitVehicleRequest } from '@/jg/lib/vehicle-submission.functions';
 import {
   ALLOWED_IMAGE_TYPES,
@@ -59,6 +59,7 @@ export function SellPage() {
     model: '',
     year: new Date().getFullYear(),
     displacement: '',
+    fuel: 'Gasolina',
     mileage: 0,
     condition: '',
     askingPrice: 0,
@@ -224,7 +225,7 @@ export function SellPage() {
   const resetForm = () => {
     setForm({
       name: '', phone: '', vehicleType: 'moto',
-      brand: '', model: '', year: new Date().getFullYear(), displacement: '', mileage: 0,
+      brand: '', model: '', year: new Date().getFullYear(), displacement: '', fuel: 'Gasolina', mileage: 0,
       condition: '', askingPrice: 0, description: '', city: '', plate: '', photoUrls: [],
       propertyCardPaths: [], acceptedPrivacy: false,
     });
@@ -327,7 +328,7 @@ export function SellPage() {
                       <label className="label-field">Tipo de vehículo *</label>
                       <div className="grid grid-cols-2 gap-3">
                         {(['moto', 'carro'] as const).map((type) => (
-                          <Button key={type} type="button" variant="outline" onClick={() => setForm({ ...form, vehicleType: type })} className={`h-12 ${form.vehicleType === type ? 'border-jg-red bg-jg-red/10 text-jg-red' : ''}`}>
+                          <Button key={type} type="button" variant="outline" onClick={() => setForm({ ...form, vehicleType: type, fuel: fuelOptions(type).includes(form.fuel) ? form.fuel : 'Gasolina' })} className={`h-12 ${form.vehicleType === type ? 'border-jg-red bg-jg-red/10 text-jg-red' : ''}`}>
                             {type === 'moto' ? <Bike /> : <Car />} {type === 'moto' ? 'Moto' : 'Carro'}
                           </Button>
                         ))}
@@ -341,6 +342,7 @@ export function SellPage() {
                       <div><label className="label-field" htmlFor="city">Ciudad *</label><input id="city" maxLength={80} value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className="input-field" placeholder="Ej. Cali" /></div>
                       <div><label className="label-field" htmlFor="plate">Placa completa *</label><input id="plate" maxLength={10} value={form.plate} onChange={(e) => setForm({ ...form, plate: e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '') })} className="input-field uppercase" placeholder="ABC123" /></div>
                       {form.vehicleType === 'moto' && <div><label className="label-field" htmlFor="displacement">Cilindraje</label><input id="displacement" maxLength={30} value={form.displacement} onChange={(e) => setForm({ ...form, displacement: e.target.value })} className="input-field" placeholder="Ej. 200 cc" /></div>}
+                      <div><label className="label-field" htmlFor="fuel">Tipo de combustible *</label><select id="fuel" value={form.fuel} onChange={(e) => setForm({ ...form, fuel: e.target.value })} className="input-field">{fuelOptions(form.vehicleType).map((f) => <option key={f}>{f}</option>)}</select></div>
                       <div><label className="label-field" htmlFor="condition">Estado</label><input id="condition" maxLength={120} value={form.condition} onChange={(e) => setForm({ ...form, condition: e.target.value })} className="input-field" placeholder="Bueno, excelente…" /></div>
                     </div>
                   </div>
