@@ -286,7 +286,7 @@ export function SellPage() {
                 <h2 className="mt-4 text-lg font-bold text-jg-text-dark">{card.title}</h2>
                 <span className="mt-2 inline-block rounded-full bg-jg-red/10 px-3 py-1 text-xs font-semibold text-jg-red">{card.badge}</span>
                 <p className="mt-2 min-h-16 text-sm text-jg-text-muted">{card.desc}</p>
-                <Button type="button" variant={selected ? 'default' : 'outline'} className={`mt-5 w-full ${selected ? 'bg-jg-red text-primary-foreground hover:bg-jg-red-dark' : ''}`} onClick={() => chooseMode(card.id)}>
+                <Button type="button" variant={selected ? 'default' : 'outline'} className={`mt-5 w-full ${selected ? 'bg-jg-red text-white hover:bg-jg-red-dark' : ''}`} onClick={() => chooseMode(card.id)}>
                   {selected ? <><Check className="h-4 w-4" /> Seleccionada</> : 'Elegir modalidad'}
                 </Button>
               </article>
@@ -302,7 +302,7 @@ export function SellPage() {
               <div className="grid grid-cols-3 gap-2" aria-label={`Paso ${step} de 3`}>
                 {steps.map((item) => (
                   <div key={item.number} className="relative text-center">
-                    <div className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full border text-sm font-bold ${step >= item.number ? 'border-jg-red bg-jg-red text-primary-foreground' : 'border-jg-gray bg-jg-surface text-jg-text-muted'}`}>
+                    <div className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full border text-sm font-bold ${step >= item.number ? 'border-jg-red bg-jg-red text-white' : 'border-jg-gray bg-jg-surface text-jg-text-muted'}`}>
                       {step > item.number ? <Check className="h-4 w-4" /> : item.number}
                     </div>
                     <p className={`mt-2 text-xs font-semibold sm:text-sm ${step >= item.number ? 'text-jg-text-dark' : 'text-jg-text-muted'}`}>{item.label}</p>
@@ -397,7 +397,7 @@ export function SellPage() {
                 {(stepError || submitError) && <div role="alert" className="mt-6 flex gap-2 rounded-lg border border-jg-red/30 bg-jg-red/10 p-3 text-sm text-jg-red"><AlertCircle className="h-5 w-5 shrink-0" />{stepError || submitError}</div>}
                 <div className="mt-8 flex items-center justify-between border-t border-jg-silver pt-5">
                   <Button type="button" variant="outline" disabled={step === 1 || submitting} onClick={() => { setStepError(null); setStep((current) => Math.max(1, current - 1)); }}><ArrowLeft /> Atrás</Button>
-                  {step < 3 ? <Button type="button" className="bg-jg-red text-primary-foreground hover:bg-jg-red-dark" onClick={continueStep}>Continuar <ArrowRight /></Button> : <Button type="submit" className="bg-jg-red text-primary-foreground hover:bg-jg-red-dark" disabled={submitting || !form.acceptedPrivacy}>{submitting ? <Loader2 className="animate-spin" /> : <Send />}{submitting ? 'Enviando…' : 'Enviar solicitud'}</Button>}
+                  {step < 3 ? <Button type="button" className="bg-jg-red text-white hover:bg-jg-red-dark" onClick={continueStep}>Continuar <ArrowRight /></Button> : <Button type="submit" className="bg-jg-red text-white hover:bg-jg-red-dark" disabled={submitting || !form.acceptedPrivacy}>{submitting ? <Loader2 className="animate-spin" /> : <Send />}{submitting ? 'Enviando…' : 'Enviar solicitud'}</Button>}
                 </div>
               </form>
             )}

@@ -72,7 +72,7 @@ export function ConsignmentPanel() {
           <label className="flex cursor-pointer items-start gap-3"><input type="checkbox" checked={f.acceptedPrivacy} onChange={(e) => setF({ ...f, acceptedPrivacy: e.target.checked })} className="mt-1 h-4 w-4 accent-jg-red" /><span className="text-sm text-jg-text-muted">Autorizo a JG Motors, operador de ClickMotores, a tratar mis datos para contactarme (Habeas Data).</span></label>
           {error && <div role="alert" className="flex gap-2 rounded-lg border border-jg-red/30 bg-jg-red/10 p-3 text-sm text-jg-red"><AlertCircle className="h-5 w-5 shrink-0" />{error}</div>}
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Button type="submit" className="flex-1 bg-jg-red text-primary-foreground hover:bg-jg-red-dark" disabled={sending || !f.acceptedPrivacy}>
+            <Button type="submit" className="flex-1 bg-jg-red text-white hover:bg-jg-red-dark" disabled={sending || !f.acceptedPrivacy}>
               {sending ? <Loader2 className="animate-spin" /> : <PhoneCall />} Quiero que vendan mi vehículo
             </Button>
             <Button type="button" variant="outline" className="flex-1" asChild>

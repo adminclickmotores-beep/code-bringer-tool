@@ -203,6 +203,13 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Las listas desplegables nativas heredan el texto claro del tema:
+     se fuerzan opciones oscuras sobre fondo claro para que siempre se lean. */
+  select option {
+    color: #111827;
+    background-color: #ffffff;
+  }
 }
 
 @layer components {
