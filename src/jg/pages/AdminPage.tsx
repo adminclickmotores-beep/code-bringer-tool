@@ -805,7 +805,7 @@ export function AdminPage({
     const ordered = [...vehicles].sort((a, b) => {
       const r = rankBrochure(a) - rankBrochure(b);
       if (r !== 0) return r;
-      return getVehicleTitle(a).localeCompare(getVehicleTitle(b), 'es');
+      return Number(b.price ?? 0) - Number(a.price ?? 0);
     });
 
     const onlyType = (type: string): Vehicle[] =>
@@ -919,7 +919,7 @@ export function AdminPage({
       <body>
         <header>
           <h1>JG Motors &amp; ClickMotores</h1>
-          <p>${escapeHtml(catalogTitle)} · Orden: disponibles primero, separados después, vendidos al final</p>
+          <p>${escapeHtml(catalogTitle)} · Disponibles primero, separados después y vendidos al final · Precio de mayor a menor</p>
           <p>Fecha: ${escapeHtml(new Date().toLocaleDateString('es-CO'))} · WhatsApp: +57 333 276 5584</p>
         </header>
         <p class="legend">Motos y carros publicados. Dentro de cada grupo van primero los disponibles, luego los separados y al final los vendidos.</p>
