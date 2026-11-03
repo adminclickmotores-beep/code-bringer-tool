@@ -6,7 +6,7 @@ interface LogoProps {
 export function Logo({ className = '', showText = true }: LogoProps) {
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
-      <img src="/favicon.svg" alt="ClickMotores" className="h-10 w-10 shrink-0 rounded-xl" />
+      <img src="/logo.svg" alt="ClickMotores" className="h-10 w-10 shrink-0 rounded-xl" />
       {showText && (
         <div className="flex flex-col leading-none">
           <span className="font-display text-lg font-extrabold tracking-tight text-white">
