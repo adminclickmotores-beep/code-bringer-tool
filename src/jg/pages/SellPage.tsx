@@ -10,7 +10,7 @@ import { useJg } from '@/jg/JgApp';
 import { PlansSection } from '@/jg/components/PlansSection';
 import { DirectPurchaseForm } from '@/jg/components/DirectPurchaseForm';
 import { ConsignmentPanel } from '@/jg/components/ConsignmentPanel';
-import { formatCOP, uploadPropertyCard, uploadVehiclePhoto } from '@/jg/lib/supabase';
+import { formatCOP, fuelOptions, uploadPropertyCard, uploadVehiclePhoto } from '@/jg/lib/supabase';
 import { submitVehicleRequest } from '@/jg/lib/vehicle-submission.functions';
 import {
   ALLOWED_IMAGE_TYPES,
@@ -59,6 +59,7 @@ export function SellPage() {
     model: '',
     year: new Date().getFullYear(),
     displacement: '',
+    fuel: 'Gasolina',
     mileage: 0,
     condition: '',
     askingPrice: 0,
