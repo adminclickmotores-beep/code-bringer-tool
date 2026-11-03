@@ -211,30 +211,30 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:pb-10">
             {[
               {
                 icon: ShieldCheck,
                 title: '100% Verificados',
                 desc: 'Cada vehículo pasa por una inspección técnica completa. Garantizamos que no tienen chicharrones ni fallas ocultas.',
-                color: 'text-green-400',
+                color: 'text-white',
               },
               {
                 icon: Award,
                 title: 'Traspaso Legal Incluido',
                 desc: 'Gestionamos todo el trámite de traspaso a nombre del nuevo dueño. Sin complicaciones, sin dolores de cabeza.',
-                color: 'text-blue-400',
+                color: 'text-jg-red-light',
               },
               {
                 icon: Handshake,
                 title: 'Consignación y Retomas',
                 desc: 'Vendemos tu vehículo por consignación o recibimos tu moto como parte de pago. Soluciones flexibles para ti.',
-                color: 'text-yellow-400',
+                color: 'text-white',
               },
             ].map((item, idx) => (
-              <div key={idx} className="card group p-6 transition-all duration-300 hover:border-jg-red/40">
+              <div key={idx} className={`card group bg-gradient-to-b from-white/[0.07] to-black/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-jg-red/40 ${idx === 1 ? 'lg:translate-y-10' : ''}`}>
                 <div className={`mb-4 inline-flex rounded-xl bg-jg-dark p-3 ${item.color} transition-transform group-hover:scale-110`}>
-                  <item.icon className="h-7 w-7" />
+                  <item.icon className="h-7 w-7" strokeWidth={1.5} />
                 </div>
                 <h3 className="font-display text-lg font-bold text-jg-text-dark">{item.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-gray-400">{item.desc}</p>
@@ -275,12 +275,19 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
       <section className="border-t border-jg-silver/50 bg-jg-carbon/50 py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="section-title">Financiamos tu vehículo con las mejores entidades</h2>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-6">
-            {['Sufi', 'Banco de Bogotá', 'Santander Finandina'].map((bank) => (
-              <div key={bank} className="card flex h-20 w-52 items-center justify-center p-4 transition-all hover:border-jg-red/40">
-                <BankLogo name={bank} />
-              </div>
-            ))}
+          <div className="mt-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+            <div className="animate-marquee flex w-max items-center gap-6 pr-6">
+              {['Sufi', 'Banco de Bogotá', 'Santander Finandina'].map((bank) => (
+                <div key={bank} className="card flex h-20 w-52 shrink-0 items-center justify-center p-4 opacity-60 grayscale transition-all duration-300 hover:border-jg-red/40 hover:opacity-100 hover:grayscale-0">
+                  <BankLogo name={bank} />
+                </div>
+              ))}
+              {['Sufi', 'Banco de Bogotá', 'Santander Finandina'].map((bank) => (
+                <div key={`dup-${bank}`} aria-hidden="true" className="card flex h-20 w-52 shrink-0 items-center justify-center p-4 opacity-60 grayscale transition-all duration-300 hover:border-jg-red/40 hover:opacity-100 hover:grayscale-0">
+                  <BankLogo name={bank} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

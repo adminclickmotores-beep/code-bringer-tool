@@ -50,7 +50,7 @@ export function SoatQuoteForm() {
 
   if (estado === 'exito') {
     return (
-      <div className="mt-4 rounded-xl border border-emerald-400/30 bg-emerald-400/10 p-5 text-center">
+      <div className="panel-digital mt-4 rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-5 text-center">
         <CheckCircle2 className="mx-auto h-10 w-10 text-emerald-400" />
         <p className="mt-3 font-display text-base font-bold text-white">¡Solicitud recibida!</p>
         <p className="mt-2 text-sm leading-relaxed text-gray-300">
@@ -73,7 +73,11 @@ export function SoatQuoteForm() {
   }
 
   return (
-    <form onSubmit={enviar} className="mt-4 w-full min-w-0 space-y-3">
+    <form onSubmit={enviar} className="panel-digital mt-4 w-full min-w-0 space-y-3 rounded-2xl border border-white/10 bg-black/50 p-4 sm:p-5">
+      <div className="flex items-center gap-2 border-b border-white/10 pb-3">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-[#FF1E27]" />
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400">Cotizador digital</p>
+      </div>
       <div>
         <label htmlFor="soat-placa" className="mb-1.5 block text-xs font-semibold text-gray-300">
           Placa del vehículo

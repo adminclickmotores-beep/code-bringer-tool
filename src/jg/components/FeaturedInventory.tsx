@@ -86,13 +86,16 @@ export function FeaturedInventory({ onVerTodo }: { onVerTodo: () => void }) {
     <div>
       <style>{`
         @media (hover: hover) and (pointer: fine) {
-          .fi-card { transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1), border-color 220ms ease, box-shadow 220ms ease; }
-          .fi-card:hover { transform: scale(1.03); }
+          .fi-card { position: relative; transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1), border-color 220ms ease, box-shadow 220ms ease; }
+          .fi-card:hover { transform: scale(1.03) translateY(-4px); }
+          .fi-card::after { content: ""; position: absolute; left: 1.25rem; right: 1.25rem; bottom: 0; height: 2px; border-radius: 9999px; background: #FF1E27; transform: scaleX(0); transition: transform 300ms cubic-bezier(0.23, 1, 0.32, 1); }
+          .fi-card:hover::after { transform: scaleX(1); }
           .fi-img { transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1); }
           .fi-card:hover .fi-img { transform: scale(1.08); }
         }
         @media (prefers-reduced-motion: reduce) {
           .fi-card, .fi-img { transition: none; }
+          .fi-card::after { display: none; }
           .fi-card:hover { transform: none; }
           .fi-card:hover .fi-img { transform: none; }
         }
