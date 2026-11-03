@@ -5,10 +5,10 @@ import { useJg } from "@/jg/JgApp";
 export const Route = createFileRoute("/financiacion")({
   head: () => ({
     meta: [
-      { title: "Financiación de Vehículos | JG Motors" },
-      { name: "description", content: "Financiación bancaria para tu moto o carro usado en Yumbo y Cali." },
-      { property: "og:title", content: "Financiación de Vehículos | JG Motors" },
-      { property: "og:description", content: "Financiación bancaria para tu moto o carro usado en Yumbo y Cali." },
+      { title: "Financiación de Vehículos Multimarca | ClickMotores" },
+      { name: "description", content: "Financiación ágil para carros y motos usadas a través de ClickMotores con las principales entidades aliadas." },
+      { property: "og:title", content: "Financiación de Vehículos Multimarca | ClickMotores" },
+      { property: "og:description", content: "Financiación ágil para carros y motos usadas a través de ClickMotores con las principales entidades aliadas." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

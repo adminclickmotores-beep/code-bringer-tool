@@ -5,10 +5,10 @@ import { useJg } from "@/jg/JgApp";
 export const Route = createFileRoute("/terminos")({
   head: () => ({
     meta: [
-      { title: "Términos y Condiciones | JG Motors" },
-      { name: "description", content: "Términos y condiciones de uso de los servicios de JG Motors." },
-      { property: "og:title", content: "Términos y Condiciones | JG Motors" },
-      { property: "og:description", content: "Términos y condiciones de uso de los servicios de JG Motors." },
+      { title: "Términos y Condiciones | ClickMotores" },
+      { name: "description", content: "Términos y condiciones de la plataforma ClickMotores, operada legalmente por JG Motors." },
+      { property: "og:title", content: "Términos y Condiciones | ClickMotores" },
+      { property: "og:description", content: "Términos y condiciones de la plataforma ClickMotores, operada legalmente por JG Motors." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

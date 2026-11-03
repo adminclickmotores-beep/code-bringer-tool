@@ -5,10 +5,10 @@ import { useJg } from "@/jg/JgApp";
 export const Route = createFileRoute("/contacto")({
   head: () => ({
     meta: [
-      { title: "Contacto | JG Motors" },
-      { name: "description", content: "Contáctanos por WhatsApp o visítanos en Yumbo, Valle del Cauca." },
-      { property: "og:title", content: "Contacto | JG Motors" },
-      { property: "og:description", content: "Contáctanos por WhatsApp o visítanos en Yumbo, Valle del Cauca." },
+      { title: "Contacto y Asesoría | ClickMotores Vitrina Virtual" },
+      { name: "description", content: "Comunícate con ClickMotores por WhatsApp o agenda tu asesoría para comprar, vender o publicar tu vehículo." },
+      { property: "og:title", content: "Contacto y Asesoría | ClickMotores Vitrina Virtual" },
+      { property: "og:description", content: "Comunícate con ClickMotores por WhatsApp o agenda tu asesoría para comprar, vender o publicar tu vehículo." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

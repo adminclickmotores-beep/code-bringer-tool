@@ -5,10 +5,10 @@ import { useJg } from "@/jg/JgApp";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "JG Motors | Motos y Carros Usados en Yumbo y Cali" },
-      { name: "description", content: "Compraventa de carros y motos usadas en Yumbo y Cali. Compra directa, consignación, retomas, financiación y trámites de tránsito." },
-      { property: "og:title", content: "JG Motors | Motos y Carros Usados en Yumbo y Cali" },
-      { property: "og:description", content: "Compraventa de carros y motos usadas en Yumbo y Cali. Compra directa, consignación, retomas, financiación y trámites de tránsito." },
+      { title: "ClickMotores | Vitrina Virtual y Comercializadora de Carros y Motos Multimarca" },
+      { name: "description", content: "Plataforma digital, vitrina virtual y comercializadora multimarca de carros y motos usadas. Publica gratis, compra de contado, consignación y financiación con ClickMotores." },
+      { property: "og:title", content: "ClickMotores | Vitrina Virtual y Comercializadora de Carros y Motos Multimarca" },
+      { property: "og:description", content: "Plataforma digital, vitrina virtual y comercializadora multimarca de carros y motos usadas. Publica gratis, compra de contado, consignación y financiación con ClickMotores." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
