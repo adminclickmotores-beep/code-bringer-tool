@@ -204,6 +204,11 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
               </div>
             )}
 
+            {vehicle.status === 'aliado' && vehicle.ally_name && (
+              <p className="mt-3 rounded-lg border border-blue-500/30 bg-blue-500/10 px-4 py-2.5 text-sm text-blue-700">
+                🤝 En exhibición con vitrina aliada: <strong>{vehicle.ally_name}</strong>
+              </p>
+            )}
             {vehicle.instagram_url && (
               <a
                 href={vehicle.instagram_url}
