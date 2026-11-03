@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Bike, Car, Gauge, Calendar, Fuel, Settings2, ImageIcon, ShieldCheck, Instagram, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Bike, Car, Gauge, Calendar, Fuel, Settings2, ImageIcon, ShieldCheck, Instagram, MapPin, ChevronLeft, ChevronRight, Share2, Check } from 'lucide-react';
 import { Vehicle, formatCOP, STATUS_CONFIG, TAG_CONFIG, whatsappLink, whatsappLinkTo, logConsulta, maskPlaca } from '@/jg/lib/supabase';
+import { compartirVehiculo } from '@/jg/lib/compartir';
 import { contactTarget } from '@/jg/lib/plans';
 
 interface VehicleCardProps {
@@ -17,6 +18,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
   const tag = vehicle.tag ? (TAG_CONFIG[vehicle.tag] ?? null) : null;
   const images = vehicle.image_urls?.filter(Boolean) ?? [];
   const [currentImage, setCurrentImage] = useState(0);
+  const [copiado, setCopiado] = useState(false);
   const contact = contactTarget(vehicle);
   const isExpiredThirdParty = vehicle.listing_owner === 'tercero' && contact === 'none' && vehicle.status !== 'vendido' && vehicle.status !== 'no_disponible';
   const waHref = contact === 'owner'
@@ -26,6 +28,15 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
   const handleWaClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     logConsulta('whatsapp_click', vehicle.title);
+  };
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const resultado = await compartirVehiculo(vehicle);
+    if (resultado === 'copiado') {
+      setCopiado(true);
+      window.setTimeout(() => setCopiado(false), 2000);
+    }
   };
 
   const prevImage = (e: React.MouseEvent) => {
@@ -177,6 +188,15 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
             <p className="font-display text-xl font-bold text-jg-red">{formatCOP(vehicle.price)}</p>
           </div>
           <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={handleShare}
+              aria-label="Compartir vehículo"
+              title={copiado ? '¡Enlace copiado!' : 'Compartir'}
+              className="rounded-lg bg-blue-500/15 p-2.5 text-blue-600 transition-all hover:bg-blue-500 hover:text-white"
+            >
+              {copiado ? <Check className="h-5 w-5" /> : <Share2 className="h-5 w-5" />}
+            </button>
             {vehicle.instagram_url && (
               <a
                 href={vehicle.instagram_url}

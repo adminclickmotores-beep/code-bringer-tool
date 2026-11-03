@@ -1,5 +1,5 @@
 import type React from 'react';
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { Header } from '@/jg/components/Header';
@@ -94,6 +94,33 @@ export function JgApp({ children }: { children: ReactNode }) {
       console.error('Error cargando vehículos:', error);
     });
   }, [loadVehicles]);
+
+  // Enlace compartido: ?vehiculo=<id> abre la ficha automáticamente.
+  const enlaceProfundoAbierto = useRef(false);
+  useEffect(() => {
+    if (enlaceProfundoAbierto.current || loading || vehicles.length === 0) return;
+    enlaceProfundoAbierto.current = true;
+    try {
+      const id = new URLSearchParams(window.location.search).get('vehiculo');
+      if (!id) return;
+      const coincidencia = vehicles.find((v) => String(v.id) === id);
+      if (coincidencia) setSelectedVehicle(coincidencia);
+    } catch {
+      /* URL no legible: se ignora el enlace profundo */
+    }
+  }, [loading, vehicles]);
+
+  // Mantiene el enlace de la ficha abierta en la barra de direcciones.
+  useEffect(() => {
+    try {
+      const url = new URL(window.location.href);
+      if (selectedVehicle) url.searchParams.set('vehiculo', String(selectedVehicle.id));
+      else url.searchParams.delete('vehiculo');
+      window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+    } catch {
+      /* entorno sin historial: no se sincroniza la URL */
+    }
+  }, [selectedVehicle]);
 
   const addVehicle = useCallback(
     async (vehicle: VehicleAdminInput) => {

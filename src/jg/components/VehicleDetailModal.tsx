@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { X, ChevronLeft, ChevronRight, Bike, Car, Calendar, Gauge, Fuel, Settings2, ImageIcon, ShieldCheck, Instagram, MapPin, CalendarClock } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Bike, Car, Calendar, Gauge, Fuel, Settings2, ImageIcon, ShieldCheck, Instagram, MapPin, CalendarClock, Share2, Check } from 'lucide-react';
 import { Vehicle, formatCOP, STATUS_CONFIG, TAG_CONFIG, whatsappLink, whatsappLinkTo, logConsulta, maskPlaca } from '@/jg/lib/supabase';
+import { compartirVehiculo } from '@/jg/lib/compartir';
 import { contactTarget } from '@/jg/lib/plans';
 
 interface VehicleDetailModalProps {
@@ -10,6 +11,7 @@ interface VehicleDetailModalProps {
 
 export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps) {
   const [currentImage, setCurrentImage] = useState(0);
+  const [copiado, setCopiado] = useState(false);
 
   useEffect(() => {
     setCurrentImage(0);
@@ -43,6 +45,14 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
   const contactHref = contact === 'owner'
     ? whatsappLinkTo(vehicle.owner_phone, `Hola${vehicle.owner_name ? ` ${vehicle.owner_name}` : ''}, vi tu vehículo ${vehicle.title} (${maskPlaca(vehicle.placa_completa)}) publicado en ClickMotores y me interesa. ¿Sigue disponible?`)
     : whatsappLink(`Hola ClickMotores, estoy interesado en el vehículo: ${vehicle.title} - ${formatCOP(vehicle.price)}. ¿Me puedes dar más información?`);
+
+  const handleShare = async () => {
+    const resultado = await compartirVehiculo(vehicle);
+    if (resultado === 'copiado') {
+      setCopiado(true);
+      window.setTimeout(() => setCopiado(false), 2000);
+    }
+  };
 
   const nextImage = () => setCurrentImage((prev) => (prev + 1) % Math.max(images.length, 1));
   const prevImage = () => setCurrentImage((prev) => (prev - 1 + Math.max(images.length, 1)) % Math.max(images.length, 1));
@@ -226,6 +236,14 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
             )}
 
             <div className="mt-auto pt-5">
+              <button
+                type="button"
+                onClick={handleShare}
+                className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border border-blue-500/30 bg-blue-500/10 px-6 py-3 text-sm font-semibold text-blue-700 transition-all hover:bg-blue-500/20"
+              >
+                {copiado ? <Check className="h-5 w-5" /> : <Share2 className="h-5 w-5" />}
+                {copiado ? '¡Enlace copiado!' : 'Compartir este vehículo'}
+              </button>
               {canBuy && contact !== 'none' ? (
                 <a
                   href={contactHref}
