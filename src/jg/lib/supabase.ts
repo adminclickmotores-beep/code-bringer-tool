@@ -21,7 +21,7 @@ export type Vehicle = {
   fuel: string | null;
   featured: boolean;
   created_at: string;
-  tag: 'recien_ingresado' | 'precio_rebajado' | 'separado' | null;
+  tag: 'recien_ingresado' | 'precio_rebajado' | 'separado' | 'vendido' | null;
   instagram_url: string | null;
   consignado: boolean;
   original_price: number | null;
@@ -35,6 +35,7 @@ export type Vehicle = {
   internal_status?: 'reservado' | 'propio' | 'consignacion' | 'retirado' | null;
   owner_name?: string | null;
   owner_phone?: string | null;
+  ally_name?: string | null;
 };
 
 export type VehicleInput = Omit<Vehicle, 'id' | 'created_at'>;
@@ -215,7 +216,18 @@ export const TAG_CONFIG: Record<
     label: 'Separado',
     class: 'bg-yellow-500/90 text-black',
   },
+  vendido: {
+    label: 'Vendido',
+    class: 'bg-gray-700/90 text-white',
+  },
 };
+
+/** Opciones de combustible según el tipo de vehículo. */
+export function fuelOptions(type: 'moto' | 'carro'): string[] {
+  return type === 'moto'
+    ? ['Gasolina', 'Eléctrico']
+    : ['Gasolina', 'Diésel', 'Eléctrico', 'Híbrido', 'Gasolina / gas', 'Otro'];
+}
 
 export async function uploadVehiclePhoto(file: File): Promise<string> {
   const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';

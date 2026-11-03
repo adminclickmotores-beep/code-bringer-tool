@@ -51,12 +51,13 @@ type VehicleForm = {
   transmission: string;
   fuel: string;
   city: string;
-  tag: VehicleTag;
+  tag: VehicleTag | '';
   status: VehicleStatus;
   internal_status: InternalStatus;
   listing_owner: 'jg' | 'tercero';
   owner_name: string;
   owner_phone: string;
+  ally_name: string;
   image_urls: string[];
 };
 
@@ -86,6 +87,7 @@ const TAGS: VehicleTag[] = [
   'recien_ingresado',
   'precio_rebajado',
   'separado',
+  'vendido',
 ];
 const TAG_FILTERS: ('all' | VehicleTag)[] = ['all', ...TAGS];
 
@@ -120,6 +122,7 @@ const INITIAL_FORM: VehicleForm = {
   listing_owner: 'jg',
   owner_name: '',
   owner_phone: '',
+  ally_name: '',
   image_urls: [],
 };
 
@@ -328,12 +331,13 @@ export function AdminPage({
       transmission: vehicle.transmission || 'Automática',
       fuel: vehicle.fuel || 'Gasolina',
       city: vehicle.ciudad || 'Yumbo',
-      tag: vehicle.tag || INITIAL_FORM.tag,
+      tag: vehicle.tag ?? '',
       status: vehicle.status || 'disponible',
       internal_status: (vehicle.internal_status as InternalStatus) || 'propio',
       listing_owner: vehicle.listing_owner === 'tercero' ? 'tercero' : 'jg',
       owner_name: vehicle.owner_name || '',
       owner_phone: vehicle.owner_phone || '',
+      ally_name: vehicle.ally_name || '',
       image_urls: getImageUrls(vehicle),
     });
 
@@ -486,9 +490,10 @@ export function AdminPage({
       price,
       mileage,
       transmission: form.transmission,
-      fuel: form.fuel,
+      fuel: fuelOptions(form.type).includes(form.fuel) ? form.fuel : 'Gasolina',
       ciudad: form.city.trim() || 'Yumbo',
-      tag: form.tag,
+      tag: form.tag || null,
+      ally_name: form.status === 'aliado' ? form.ally_name.trim() || null : null,
       status: form.status,
       internal_status: form.internal_status,
       consignado: form.internal_status === 'consignacion',
@@ -1284,12 +1289,9 @@ export function AdminPage({
                         }
                         className="mt-2 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-3 text-white"
                       >
-                        <option>Gasolina</option>
-                        <option>Diésel</option>
-                        <option>Eléctrico</option>
-                        <option>Híbrido</option>
-                        <option>Gasolina / gas</option>
-                        <option>Otro</option>
+                        {fuelOptions(form.type).map((f) => (
+                          <option key={f}>{f}</option>
+                        ))}
                       </select>
                     </label>
 
@@ -1309,10 +1311,11 @@ export function AdminPage({
                       <select
                         value={form.tag}
                         onChange={(event) =>
-                          updateForm('tag', event.target.value as VehicleTag)
+                          updateForm('tag', event.target.value as VehicleTag | '')
                         }
                         className="mt-2 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-3 text-white"
                       >
+                        <option value="">Sin etiqueta</option>
                         {TAGS.map((tag) => (
                           <option key={tag} value={tag}>
                             {tag.replace(/_/g, ' ')}
@@ -1340,6 +1343,20 @@ export function AdminPage({
                         ))}
                       </select>
                     </label>
+
+                    {form.status === 'aliado' && (
+                      <label className="text-sm text-gray-300">
+                        Nombre de la compraventa aliada
+                        <input
+                          type="text"
+                          value={form.ally_name}
+                          onChange={(event) => updateForm('ally_name', event.target.value)}
+                          placeholder="Ej: Autos del Valle"
+                          maxLength={80}
+                          className="mt-2 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-3 text-white"
+                        />
+                      </label>
+                    )}
 
                     <label className="text-sm text-gray-300">
                       Estado interno (solo visible para ti)
