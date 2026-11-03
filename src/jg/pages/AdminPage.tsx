@@ -34,6 +34,7 @@ import {
   Vehicle,
   VehicleAdminInput,
   uploadVehiclePhoto,
+  fuelOptions,
 } from '@/jg/lib/supabase';
 
 type VehicleType = 'carro' | 'moto';
@@ -261,7 +262,7 @@ export function AdminPage({
 
   const filteredVehicles = useMemo(() => {
     return vehicles.filter((vehicle) => {
-      const normalizedTag = normalizeText(vehicle.tag || INITIAL_FORM.tag);
+      const normalizedTag = normalizeText(vehicle.tag || '');
       const normalizedType = normalizeText(vehicle.type || 'carro');
       const normalizedStatus = normalizeText(vehicle.status);
 
@@ -660,7 +661,7 @@ export function AdminPage({
       ['Transmisión', vehicle.transmission],
       ['Combustible', vehicle.fuel],
       ['Ciudad', vehicle.ciudad || 'Yumbo'],
-      ['Etiqueta comercial', vehicle.tag || INITIAL_FORM.tag],
+      ['Etiqueta comercial', vehicle.tag || 'sin etiqueta'],
       ['Estado', STATUS_LABELS[vehicle.status]],
     ];
 
@@ -799,7 +800,7 @@ export function AdminPage({
           <article class="card">
             ${imageHtml}
             <div class="details">
-              <span class="tag">${escapeHtml(vehicle.tag || INITIAL_FORM.tag)}</span>
+              <span class="tag">${escapeHtml(vehicle.tag || 'sin etiqueta')}</span>
               <h2>${escapeHtml(getVehicleTitle(vehicle))}</h2>
               <p>
                 ${escapeHtml(vehicle.year || '')}
@@ -1571,7 +1572,7 @@ export function AdminPage({
 
                           <td className="px-4 py-4">
                             <span className="rounded-full bg-gray-800 px-2.5 py-1 text-xs">
-                              {String(vehicle.tag || INITIAL_FORM.tag).replace(
+                              {String(vehicle.tag || 'sin etiqueta').replace(
                                 /_/g,
                                 ' ',
                               )}

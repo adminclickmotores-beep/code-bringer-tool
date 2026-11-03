@@ -161,6 +161,7 @@ export const submitVehicleRequest = createServerFn({ method: 'POST' })
           model: data.model,
           year: data.year,
           displacement: data.displacement || null,
+          fuel: data.fuel || 'Gasolina',
           price: data.askingPrice,
           mileage: data.mileage,
           status: 'disponible',
