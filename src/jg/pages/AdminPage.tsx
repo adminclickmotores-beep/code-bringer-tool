@@ -847,7 +847,7 @@ export function AdminPage({
               : 'est-sep';
 
       const imageHtml = firstImage
-        ? `<img src="${escapeHtml(firstImage)}" alt="${escapeHtml(getVehicleTitle(vehicle))}" loading="lazy" />`
+        ? `<img src="${escapeHtml(firstImage)}" alt="${escapeHtml(getVehicleTitle(vehicle))}" loading="eager" decoding="async" referrerpolicy="no-referrer" />`
         : `<div class="no-image">Sin foto</div>`;
 
       return `
@@ -908,9 +908,11 @@ export function AdminPage({
           .details .meta { font-size: 10.5px; margin: 2px 0; color: #4b5563; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
           .price { font-size: 13px !important; color: #15803d; font-weight: bold; margin: 5px 0 0 !important; }
           footer { margin-top: 22px; padding-top: 12px; border-top: 1px solid #ddd; text-align: center; font-size: 11px; color: #6b7280; }
+          #estado-fotos { margin-top: 14px; font-size: 12px; color: #6b7280; text-align: center; }
           @media screen and (max-width: 700px) { .catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
           @media print {
             body { padding: 8px; }
+            #estado-fotos { display: none; }
             .catalog { gap: 8px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
             .card img, .no-image { height: 105px; }
           }
@@ -929,6 +931,25 @@ export function AdminPage({
           <p>JG Motors &amp; ClickMotores · Yumbo / Cali · WhatsApp +57 333 276 5584</p>
           <p>Precios y disponibilidad sujetos a confirmación.</p>
         </footer>
+        <div id="estado-fotos">Cargando fotos… el diálogo de impresión aparece solo cuando estén listas.</div>
+        <script>
+          (function () {
+            var aviso = document.getElementById('estado-fotos');
+            function listas() {
+              var imgs = Array.prototype.slice.call(document.images || []);
+              return imgs.every(function (img) { return img.complete; });
+            }
+            function imprimir() {
+              if (aviso) aviso.style.display = 'none';
+              setTimeout(function () { window.print(); }, 350);
+            }
+            var inicio = Date.now();
+            (function esperar() {
+              if (listas() || Date.now() - inicio > 9000) imprimir();
+              else setTimeout(esperar, 200);
+            })();
+          })();
+        </script>
       </body>
       </html>
     `);
@@ -936,9 +957,29 @@ export function AdminPage({
     printWindow.document.close();
     printWindow.focus();
 
-    printWindow.onload = () => {
-      printWindow.print();
+    const inicioEspera = Date.now();
+    const esperarFotos = (): void => {
+      try {
+        const imgs = Array.from(
+          printWindow.document.images || [],
+        ) as HTMLImageElement[];
+        const pendientes = imgs.filter((img) => !img.complete);
+        if (pendientes.length === 0 || Date.now() - inicioEspera > 9000) {
+          printWindow.focus();
+          printWindow.print();
+          return;
+        }
+      } catch {
+        try {
+          printWindow.print();
+        } catch {
+          /* ventana cerrada por el usuario */
+        }
+        return;
+      }
+      window.setTimeout(esperarFotos, 250);
     };
+    window.setTimeout(esperarFotos, 400);
   };
 
   const tabs = [
