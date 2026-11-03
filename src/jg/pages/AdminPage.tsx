@@ -165,6 +165,19 @@ function escapeCSV(value: unknown) {
   return `"${String(value ?? '').replace(/"/g, '""')}"`;
 }
 
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error && error.message.trim()) {
+    return error.message;
+  }
+  if (typeof error === 'object' && error !== null) {
+    const message = (error as { message?: unknown }).message;
+    if (typeof message === 'string' && message.trim()) {
+      return message;
+    }
+  }
+  return 'Verifica la conexión y los datos.';
+}
+
 const getVehicleTitle = (vehicle: Vehicle) =>
   vehicle.title ||
   `${vehicle.brand || ''} ${vehicle.model || ''}`.trim() ||
@@ -524,9 +537,7 @@ export function AdminPage({
       console.error('Error guardando vehículo:', error);
 
       setFormError(
-        error instanceof Error
-          ? `No fue posible guardar el vehículo: ${error.message}`
-          : 'No fue posible guardar el vehículo. Verifica la conexión y los datos.',
+        `No fue posible guardar el vehículo: ${getErrorMessage(error)}`,
       );
     }
   };
