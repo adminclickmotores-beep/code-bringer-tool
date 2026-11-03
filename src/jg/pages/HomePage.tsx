@@ -102,12 +102,13 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
             </div>
 
             <h1 className="mt-5 animate-fade-up font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white animate-delay-100">
-              Vitrina Digital de Vehículos{' '}
-              <span className="text-gradient">con total transparencia</span>
+              Carros y motos multimarca 100% verificados,{' '}
+              <span className="text-gradient">listos para traspaso en toda Colombia</span>
             </h1>
 
             <p className="mt-4 max-w-xl animate-fade-up text-base sm:text-lg leading-relaxed text-gray-300 animate-delay-200">
-              Vitrina virtual y comercialización de carros y motos multimarca 100% verificados, sin chicharrones y con traspaso legal garantizado a nivel nacional.
+              Somos tu vitrina virtual de vehículos verificados: cada carro y moto pasa por inspección técnica completa, sin fallas ocultas ni sorpresas, con historial transparente y traspaso legal garantizado a nivel nacional.
+              Explora nuestro inventario o publica tu vehículo y véndelo con respaldo profesional.
             </p>
 
             {/* Pestañas CARROS / MOTOS y Buscador Rápido */}
