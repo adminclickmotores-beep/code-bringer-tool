@@ -89,10 +89,10 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
   return (
     <div className="animate-fade-in">
       {/* Hero */}
-      <section className="relative flex min-h-[85vh] items-center overflow-hidden">
+      <section className="relative flex min-h-[92svh] items-center overflow-hidden py-14 sm:py-20">
         <HeroClip />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 mx-auto w-full max-w-7xl min-w-0 px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
           <div className="animate-fade-up flex items-center gap-2">
               <span className="badge bg-jg-red/15 text-jg-red border border-jg-red/30">
@@ -112,15 +112,15 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
             </p>
 
             {/* Pestañas CARROS / MOTOS y Buscador Rápido */}
-            <div className="mt-8 animate-fade-up animate-delay-300 w-full max-w-xl">
-              <div className="flex gap-2 mb-3">
+            <div className="mt-8 animate-fade-up animate-delay-300 w-full max-w-xl min-w-0">
+              <div className="flex flex-wrap gap-2 mb-3">
                 <button
                   type="button"
                   onClick={() => setActiveTab('carro')}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-t-lg font-bold text-sm transition-colors ${
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-t-xl font-bold text-sm transition-all ${
                     activeTab === 'carro'
-                      ? 'bg-white text-jg-black shadow'
-                      : 'bg-black/50 text-gray-300 hover:text-white border border-white/10'
+                      ? 'bg-white text-jg-black shadow-lg'
+                      : 'bg-white/10 text-gray-200 backdrop-blur-md border border-white/15 hover:bg-white/20 hover:text-white'
                   }`}
                 >
                   <Car className="h-4 w-4 text-jg-red" />
@@ -129,10 +129,10 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 <button
                   type="button"
                   onClick={() => setActiveTab('moto')}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-t-lg font-bold text-sm transition-colors ${
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-t-xl font-bold text-sm transition-all ${
                     activeTab === 'moto'
-                      ? 'bg-white text-jg-black shadow'
-                      : 'bg-black/50 text-gray-300 hover:text-white border border-white/10'
+                      ? 'bg-white text-jg-black shadow-lg'
+                      : 'bg-white/10 text-gray-200 backdrop-blur-md border border-white/15 hover:bg-white/20 hover:text-white'
                   }`}
                 >
                   <Bike className="h-4 w-4 text-jg-red" />
@@ -140,8 +140,8 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 </button>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-2 bg-white/95 backdrop-blur p-2.5 rounded-b-xl rounded-tr-xl shadow-xl border border-white/20">
-                <div className="relative flex-1">
+              <div className="flex flex-col sm:flex-row gap-2 rounded-b-2xl rounded-tr-2xl border border-white/25 bg-white/10 p-2.5 shadow-2xl shadow-black/40 backdrop-blur-xl [-webkit-backdrop-filter:blur(20px)]">
+                <div className="relative flex-1 min-w-0">
                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <input
                     type="text"
@@ -151,13 +151,13 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                       if (e.key === 'Enter') onNavigate('catalog');
                     }}
                     placeholder={`Buscar ${activeTab === 'carro' ? 'carro' : 'moto'} por marca, modelo o ciudad...`}
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 text-jg-black rounded-lg text-base border border-gray-200 focus:outline-none focus:ring-2 focus:ring-jg-red"
+                    className="w-full min-w-0 pl-10 pr-4 py-3 bg-white text-jg-black rounded-xl text-base border border-white/40 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#FF1E27] focus:border-transparent"
                   />
                 </div>
                 <button
                   type="button"
                   onClick={() => onNavigate('catalog')}
-                  className="btn-primary !py-2.5 whitespace-nowrap"
+                  className="flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#FF1E27] px-7 py-3 text-base font-bold text-white shadow-lg shadow-[#FF1E27]/30 transition-all hover:bg-[#D9111A] hover:shadow-xl hover:shadow-[#FF1E27]/40 hover:-translate-y-px active:bg-[#B30D15] active:translate-y-0 active:scale-[0.98]"
                 >
                   Buscar
                   <ArrowRight className="h-4 w-4" />
@@ -177,18 +177,18 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
             </div>
 
 
-            <div className="mt-10 flex animate-fade-up animate-delay-400 gap-6 sm:gap-10">
+            <div className="mt-10 flex flex-wrap animate-fade-up animate-delay-400 gap-6 sm:gap-10">
               <div>
-                <p className="font-display text-3xl font-bold text-jg-text-dark">{motosCount}</p>
-                <p className="text-xs text-gray-400">Motos disponibles</p>
+                <p className="font-display text-3xl font-bold text-white">{motosCount}</p>
+                <p className="text-xs text-gray-300">Motos disponibles</p>
               </div>
-              <div className="border-l border-jg-silver pl-6 sm:pl-10">
-                <p className="font-display text-3xl font-bold text-jg-text-dark">{carrosCount}</p>
-                <p className="text-xs text-gray-400">Carros disponibles</p>
+              <div className="border-l border-white/25 pl-6 sm:pl-10">
+                <p className="font-display text-3xl font-bold text-white">{carrosCount}</p>
+                <p className="text-xs text-gray-300">Carros disponibles</p>
               </div>
-              <div className="border-l border-jg-silver pl-6 sm:pl-10">
-                <p className="font-display text-3xl font-bold text-jg-text-dark">100%</p>
-                <p className="text-xs text-gray-400">Verificados</p>
+              <div className="border-l border-white/25 pl-6 sm:pl-10">
+                <p className="font-display text-3xl font-bold text-white">100%</p>
+                <p className="text-xs text-gray-300">Verificados</p>
               </div>
             </div>
           </div>
