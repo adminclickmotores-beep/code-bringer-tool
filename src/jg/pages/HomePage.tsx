@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { Vehicle, whatsappLink, logConsulta } from '@/jg/lib/supabase';
 import { VehicleCard } from '@/jg/components/VehicleCard';
+import { FeaturedInventory } from '@/jg/components/FeaturedInventory';
 import { HeroClip } from '@/jg/components/HeroClip';
 
 interface HomePageProps {
@@ -320,10 +321,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <Search className="mb-4 h-12 w-12 text-gray-400" />
-              <p className="text-gray-400">No hay vehículos destacados en este momento.</p>
-            </div>
+            <FeaturedInventory onVerTodo={() => onNavigate('catalog')} />
           )}
 
           <div className="mt-8 text-center sm:hidden">
