@@ -1,15 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#EF4444"/>
-      <stop offset="1" stop-color="#B91C1C"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
-  <g transform="skewX(-12) translate(6 0)">
-    <path d="M27 17 H16 Q9 17 9 24 V40 Q9 47 16 47 H27 V40.5 H17.5 Q15.5 40.5 15.5 38.5 V25.5 Q15.5 23.5 17.5 23.5 H27 Z" fill="#FFFFFF"/>
-    <path d="M30 47 V17 H36.5 L42 30 L47.5 17 H54 V47 H47.8 V30 L43.8 39 H40.2 L36.2 30 V47 Z" fill="#FFFFFF"/>
+  <rect width="64" height="64" rx="14" fill="#121212"/>
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.25" fill="none" stroke="#2B2B2B" stroke-width="1.5"/>
+  <!-- lineas de velocidad: largos y opacidades distintas -->
+  <g stroke-linecap="round" fill="none">
+    <line x1="7" y1="21" x2="22" y2="21" stroke="#EF4444" stroke-width="3.6"/>
+    <line x1="7" y1="30" x2="28" y2="30" stroke="#DC2626" stroke-width="3.6"/>
+    <line x1="7" y1="39" x2="17.5" y2="39" stroke="#DC2626" stroke-width="3" opacity="0.55"/>
   </g>
-  <path d="M8 54 H30" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
-  <path d="M34 54 H44" stroke="#111827" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+  <!-- monograma CM en italica deportiva -->
+  <g transform="translate(27 13) skewX(-10)">
+    <text x="0" y="29" font-family="'Plus Jakarta Sans','Arial Black',Arial,sans-serif" font-size="26" font-weight="800" font-style="italic" letter-spacing="-1.5" fill="#FFFFFF">C<tspan fill="#EF4444">M</tspan></text>
+  </g>
+  <!-- base: linea de pista + punto rojo -->
+  <rect x="7" y="49" width="31" height="3.6" rx="1.8" fill="#DC2626"/>
+  <circle cx="52" cy="50.8" r="3.8" fill="#DC2626"/>
+  <circle cx="52" cy="50.8" r="1.6" fill="#121212"/>
 </svg>
