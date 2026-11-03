@@ -35,14 +35,30 @@ function norm(value: string | number | null | undefined): string {
     .toLowerCase();
 }
 
-function getDisplacementCategory(disp: string | number | null): string {
-  if (disp == null || disp === '') return 'none';
-  const match = String(disp)
-    .replace(',', '.')
-    .match(/(\d+(?:\.\d+)?)/);
-  if (!match || !match[1]) return 'none';
-  const cc = parseFloat(match[1]);
-  if (Number.isNaN(cc)) return 'none';
+function getDisplacementCc(disp: string | number | null | undefined, fallbackText = ''): number | null {
+  const texts = [disp == null ? '' : String(disp), fallbackText].filter(Boolean);
+  for (const text of texts) {
+    // Acepta "150", "150cc", "150 cc", "200 c.c.", "1,250", "XTZ 150"
+    const cleaned = text.replace(/,/g, '.').toLowerCase().replace(/c\.?\s*c\.?/g, '');
+    const match = cleaned.match(/(\d+(?:\.\d+)?)/);
+    if (!match || !match[1]) continue;
+    const cc = parseFloat(match[1]);
+    if (Number.isNaN(cc)) continue;
+    // Si viene con punto de miles ("1.250") parseFloat da 1.25: corregirlo
+    if (cc < 50 && match[1].includes('.')) {
+      const sinPunto = Number(match[1].replace(/\./g, ''));
+      if (!Number.isNaN(sinPunto) && sinPunto >= 50) return sinPunto;
+    }
+    if (cc < 50) continue;
+    return cc;
+  }
+  return null;
+}
+
+function getDisplacementCategory(disp: string | number | null, vehicle?: Vehicle): string {
+  const fallback = vehicle ? [vehicle.title, vehicle.brand, vehicle.model].filter(Boolean).join(' ') : '';
+  const cc = getDisplacementCc(disp, fallback);
+  if (cc == null) return 'none';
   if (cc <= 150) return 'low';
   if (cc <= 250) return 'mid';
   return 'high';
@@ -99,7 +115,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
       if (statusFilter !== 'all' && norm(v.status) !== statusFilter) return false;
       if (displacementFilter !== 'all') {
         if (norm(v.type) === 'carro') return false;
-        if (getDisplacementCategory(v.displacement) !== displacementFilter) return false;
+        if (getDisplacementCategory(v.displacement, v) !== displacementFilter) return false;
       }
       if (!Number.isNaN(min) && (v.price ?? 0) < min) return false;
       if (!Number.isNaN(max) && (v.price ?? 0) > max) return false;
@@ -200,7 +216,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
                     <Bike className="h-4 w-4" /> Moto
                   </button>
                   <button
-                    onClick={() => setTypeFilter('carro')}
+                    onClick={() => { setTypeFilter('carro'); setDisplacementFilter('all'); }}
                     className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
                       typeFilter === 'carro'
                         ? 'border-jg-red bg-jg-red/10 text-jg-red'
