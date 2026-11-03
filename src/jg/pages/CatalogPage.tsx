@@ -26,11 +26,16 @@ const displacementOptions = [
   { value: 'high', label: 'Alto (+250cc)' },
 ];
 
+function norm(value: string | null | undefined): string {
+  return (value ?? '').trim().toLowerCase();
+}
+
 function getDisplacementCategory(disp: string | null): string {
   if (!disp) return 'none';
-  const match = disp.match(/(\d+)/);
-  if (!match) return 'none';
-  const cc = parseInt(match[1]);
+  const match = disp.replace(',', '.').match(/(\d+(?:\.\d+)?)/);
+  if (!match || !match[1]) return 'none';
+  const cc = parseFloat(match[1]);
+  if (Number.isNaN(cc)) return 'none';
   if (cc <= 150) return 'low';
   if (cc <= 250) return 'mid';
   return 'high';
@@ -47,27 +52,33 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
   const [showFilters, setShowFilters] = useState(false);
 
   const brands = useMemo(() => {
-    const set = new Set(vehicles.map((v) => v.brand));
-    return Array.from(set).sort();
+    const seen = new Map<string, string>();
+    for (const v of vehicles) {
+      const key = norm(v.brand);
+      if (!key) continue;
+      if (!seen.has(key)) seen.set(key, (v.brand ?? '').trim());
+    }
+    return Array.from(seen.values()).sort((a, b) => a.localeCompare(b, 'es'));
   }, [vehicles]);
 
   const filtered = useMemo(() => {
+    const min = priceMin.trim() === '' ? NaN : Number(priceMin);
+    const max = priceMax.trim() === '' ? NaN : Number(priceMax);
     return vehicles.filter((v) => {
       if (search) {
-        const q = search.toLowerCase();
-        if (!v.title.toLowerCase().includes(q) && !v.brand.toLowerCase().includes(q) && !v.model.toLowerCase().includes(q)) {
-          return false;
-        }
+        const q = norm(search);
+        const hay = [v.title, v.brand, v.model, v.ciudad, String(v.year ?? '')].map(norm).join(' ');
+        if (!hay.includes(q)) return false;
       }
-      if (typeFilter !== 'all' && v.type !== typeFilter) return false;
-      if (brandFilter !== 'all' && v.brand !== brandFilter) return false;
-      if (statusFilter !== 'all' && v.status !== statusFilter) return false;
+      if (typeFilter !== 'all' && norm(v.type) !== typeFilter) return false;
+      if (brandFilter !== 'all' && norm(v.brand) !== norm(brandFilter)) return false;
+      if (statusFilter !== 'all' && norm(v.status) !== statusFilter) return false;
       if (displacementFilter !== 'all') {
-        if (v.type === 'carro') return false;
+        if (norm(v.type) === 'carro') return false;
         if (getDisplacementCategory(v.displacement) !== displacementFilter) return false;
       }
-      if (priceMin && v.price < parseInt(priceMin)) return false;
-      if (priceMax && v.price > parseInt(priceMax)) return false;
+      if (!Number.isNaN(min) && (v.price ?? 0) < min) return false;
+      if (!Number.isNaN(max) && (v.price ?? 0) > max) return false;
       return true;
     }).sort((a, b) => {
       const r = catalogRank(a) - catalogRank(b);
