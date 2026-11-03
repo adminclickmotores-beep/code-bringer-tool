@@ -37,7 +37,14 @@ export function Header({ currentPage, onNavigate, sessionEmail }: HeaderProps) {
 
   return (
     <>
-      <header className={`sticky top-0 z-50 border-b backdrop-blur-xl transition-all duration-300 ${solid ? 'border-white/10 bg-[#0A0A0A]/90 shadow-lg shadow-black/40' : 'border-transparent bg-transparent'}`}>
+      <header
+        style={
+          solid
+            ? { backgroundColor: 'rgba(10, 10, 10, 0.85)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }
+            : { backgroundColor: 'rgba(7, 7, 7, 0.4)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }
+        }
+        className={`sticky top-0 z-50 border-b transition-[background-color,border-color,box-shadow] duration-300 ease-in-out ${solid ? 'border-white/[0.08] shadow-lg shadow-black/40' : 'border-transparent'}`}
+      >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <button onClick={() => handleNav('home')} className="transition-transform hover:scale-105">
             <Logo />
@@ -48,15 +55,15 @@ export function Header({ currentPage, onNavigate, sessionEmail }: HeaderProps) {
               <button
                 key={item.id}
                 onClick={() => handleNav(item.id)}
-                className={`relative rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                className={`relative rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 ease-out ${
                   currentPage === item.id
                     ? 'text-white'
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-[#B9B9C4] hover:text-white'
                 }`}
               >
                 {item.label}
                 {currentPage === item.id && (
-                  <span className="absolute bottom-0 left-1/2 h-0.5 w-6 -translate-x-1/2 rounded-full bg-jg-red" />
+                  <span className="absolute -bottom-px left-1/2 h-0.5 w-6 -translate-x-1/2 rounded-full bg-[#FF1E27] shadow-[0_0_8px_rgba(255,30,39,0.9)]" />
                 )}
               </button>
             ))}

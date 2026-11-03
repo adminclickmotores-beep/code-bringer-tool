@@ -349,6 +349,19 @@
   select option { background: #16161A; color: #FFFFFF; }
 }
 
+/* Transición de página: fundido suave desde la oscuridad (0.5s ease-in-out) */
+.page-fade {
+  background-color: #070707;
+  animation: pageFadeIn 0.5s ease-in-out;
+}
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-fade { animation-duration: 0.01ms; }
+}
+
 /* GoIDE: sin zoom en celular al escribir (v2) */
 @media (hover: none) and (pointer: coarse) {
   input, select, textarea { font-size: max(16px, 1em) !important; }
