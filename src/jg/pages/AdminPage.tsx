@@ -243,7 +243,7 @@ export function AdminPage({
   const [searchTerm, setSearchTerm] = useState('');
 
   const [brochureType, setBrochureType] =
-    useState<VehicleType>('carro');
+    useState<'completo' | VehicleType>('completo');
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -773,19 +773,54 @@ export function AdminPage({
   };
 
   const handleGenerateBrochure = () => {
-    const brochureVehicles = activeVehicles.filter((vehicle) => {
-      const type = normalizeText(vehicle.type || 'carro');
+    const rankBrochure = (vehicle: Vehicle): number => {
+      const tag = normalizeText(vehicle.tag || '');
+      const internal = normalizeText(
+        (vehicle.internal_status as unknown as string) || '',
+      );
+      const status = normalizeText(vehicle.status || '');
+      if (status === 'vendido' || tag === 'vendido') return 2;
+      if (
+        tag === 'separado' ||
+        internal === 'reservado' ||
+        status === 'no_disponible'
+      )
+        return 1;
+      return 0;
+    };
 
-      const isCorrectType =
-        type === normalizeText(brochureType);
+    const statusLabel = (vehicle: Vehicle): string => {
+      const tag = normalizeText(vehicle.tag || '');
+      const internal = normalizeText(
+        (vehicle.internal_status as unknown as string) || '',
+      );
+      const status = normalizeText(vehicle.status || '');
+      if (status === 'vendido' || tag === 'vendido') return 'Vendido';
+      if (tag === 'separado' || internal === 'reservado') return 'Separado';
+      if (status === 'no_disponible') return 'Separado';
+      if (status === 'aliado') return 'Aliado';
+      return 'Disponible';
+    };
 
-      return isCorrectType;
+    const ordered = [...vehicles].sort((a, b) => {
+      const r = rankBrochure(a) - rankBrochure(b);
+      if (r !== 0) return r;
+      return getVehicleTitle(a).localeCompare(getVehicleTitle(b), 'es');
     });
 
-    if (brochureVehicles.length === 0) {
-      window.alert(
-        `No hay ${brochureType === 'carro' ? 'carros' : 'motos'} publicados para generar el catálogo.`,
+    const onlyType = (type: string): Vehicle[] =>
+      ordered.filter(
+        (vehicle) =>
+          normalizeText(vehicle.type || 'carro') === type &&
+          (brochureType === 'completo' ||
+            normalizeText(brochureType) === type),
       );
+
+    const motos = onlyType('moto');
+    const carros = onlyType('carro');
+
+    if (motos.length === 0 && carros.length === 0) {
+      window.alert('No hay vehículos registrados para generar el catálogo.');
       return;
     }
 
@@ -798,33 +833,50 @@ export function AdminPage({
       return;
     }
 
-    const cards = brochureVehicles
-      .map((vehicle) => {
-        const images = getImageUrls(vehicle);
-        const firstImage = images[0];
+    const cardHtml = (vehicle: Vehicle): string => {
+      const images = getImageUrls(vehicle);
+      const firstImage = images[0];
+      const estado = statusLabel(vehicle);
+      const estadoClass =
+        estado === 'Disponible'
+          ? 'est-disp'
+          : estado === 'Aliado'
+            ? 'est-aliado'
+            : estado === 'Vendido'
+              ? 'est-vendido'
+              : 'est-sep';
 
-        const imageHtml = firstImage
-          ? `<img src="${escapeHtml(firstImage)}" alt="${escapeHtml(getVehicleTitle(vehicle))}" />`
-          : `<div class="no-image">Fotografía no disponible</div>`;
+      const imageHtml = firstImage
+        ? `<img src="${escapeHtml(firstImage)}" alt="${escapeHtml(getVehicleTitle(vehicle))}" loading="lazy" />`
+        : `<div class="no-image">Sin foto</div>`;
 
-        return `
-          <article class="card">
-            ${imageHtml}
-            <div class="details">
-              <span class="tag">${escapeHtml(vehicle.tag || 'sin etiqueta')}</span>
-              <h2>${escapeHtml(getVehicleTitle(vehicle))}</h2>
-              <p>
-                ${escapeHtml(vehicle.year || '')}
-                · ${escapeHtml(vehicle.ciudad || 'Yumbo')}
-              </p>
-              <p>Transmisión: ${escapeHtml(vehicle.transmission || 'No especificada')}</p>
-              <p>Combustible: ${escapeHtml(vehicle.fuel || 'No especificado')}</p>
-              <p class="price">${escapeHtml(formatCOP(vehicle.price))}</p>
-            </div>
-          </article>
-        `;
-      })
-      .join('');
+      return `
+        <article class="card">
+          <div class="photo">${imageHtml}<span class="estado ${estadoClass}">${escapeHtml(estado)}</span></div>
+          <div class="details">
+            <h2>${escapeHtml(getVehicleTitle(vehicle))}</h2>
+            <p class="meta">${escapeHtml(vehicle.brand || '')} ${escapeHtml(vehicle.model || '')} · ${escapeHtml(vehicle.year || '')}</p>
+            <p class="meta">${escapeHtml(vehicle.ciudad || 'Yumbo')}${vehicle.mileage ? ` · ${escapeHtml(String(vehicle.mileage))} km` : ''}</p>
+            <p class="price">${escapeHtml(formatCOP(vehicle.price))}</p>
+          </div>
+        </article>
+      `;
+    };
+
+    const sectionHtml = (title: string, list: Vehicle[]): string => {
+      if (list.length === 0) return '';
+      return `
+        <h2 class="section">${title} (${list.length})</h2>
+        <main class="catalog">${list.map(cardHtml).join('')}</main>
+      `;
+    };
+
+    const catalogTitle =
+      brochureType === 'moto'
+        ? 'Catálogo de motocicletas'
+        : brochureType === 'carro'
+          ? 'Catálogo de carros'
+          : 'Catálogo de motos y carros';
 
     printWindow.document.write(`
       <!DOCTYPE html>
@@ -832,88 +884,50 @@ export function AdminPage({
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Catálogo ${escapeHtml(brochureType)} - ClickMotores</title>
+        <title>${escapeHtml(catalogTitle)} - ClickMotores</title>
         <style>
           * { box-sizing: border-box; }
-          body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 24px;
-            color: #111827;
-          }
-          header {
-            border-bottom: 3px solid #dc2626;
-            padding-bottom: 16px;
-            margin-bottom: 24px;
-          }
-          header h1 { color: #dc2626; margin: 0 0 8px; }
-          .catalog {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
-          }
-          .card {
-            border: 1px solid #d1d5db;
-            border-radius: 10px;
-            overflow: hidden;
-            break-inside: avoid;
-          }
-          .card img {
-            display: block;
-            width: 100%;
-            height: 190px;
-            object-fit: cover;
-          }
-          .no-image {
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f3f4f6;
-            color: #6b7280;
-          }
-          .details { padding: 14px; }
-          .details h2 { font-size: 18px; margin: 8px 0; }
-          .details p { font-size: 13px; margin: 7px 0; }
-          .tag {
-            display: inline-block;
-            padding: 4px 8px;
-            background: #fee2e2;
-            color: #b91c1c;
-            border-radius: 5px;
-            font-size: 11px;
-            text-transform: uppercase;
-          }
-          .price {
-            font-size: 19px !important;
-            color: #15803d;
-            font-weight: bold;
-          }
-          footer {
-            margin-top: 30px;
-            padding-top: 16px;
-            border-top: 1px solid #ddd;
-            text-align: center;
-            font-size: 12px;
-          }
+          body { font-family: Arial, sans-serif; margin: 0; padding: 20px; color: #111827; }
+          header { border-bottom: 3px solid #dc2626; padding-bottom: 12px; margin-bottom: 18px; }
+          header h1 { color: #dc2626; margin: 0 0 4px; font-size: 22px; }
+          header p { margin: 2px 0; font-size: 12px; color: #4b5563; }
+          .legend { font-size: 11px; color: #4b5563; margin: 0 0 14px; }
+          .section { font-size: 16px; margin: 20px 0 10px; padding-left: 10px; border-left: 4px solid #dc2626; }
+          .catalog { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+          .card { border: 1px solid #d1d5db; border-radius: 8px; overflow: hidden; break-inside: avoid; page-break-inside: avoid; }
+          .photo { position: relative; }
+          .card img { display: block; width: 100%; height: 110px; object-fit: cover; background: #f3f4f6; }
+          .no-image { height: 110px; display: flex; align-items: center; justify-content: center; background: #f3f4f6; color: #6b7280; font-size: 11px; }
+          .estado { position: absolute; top: 6px; left: 6px; font-size: 10px; font-weight: bold; padding: 2px 7px; border-radius: 20px; text-transform: uppercase; }
+          .est-disp { background: #16a34a; color: #fff; }
+          .est-sep { background: #eab308; color: #111; }
+          .est-vendido { background: #4b5563; color: #fff; }
+          .est-aliado { background: #2563eb; color: #fff; }
+          .details { padding: 8px 9px 10px; }
+          .details h2 { font-size: 12px; margin: 0 0 3px; line-height: 1.25; height: 30px; overflow: hidden; }
+          .details .meta { font-size: 10.5px; margin: 2px 0; color: #4b5563; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+          .price { font-size: 13px !important; color: #15803d; font-weight: bold; margin: 5px 0 0 !important; }
+          footer { margin-top: 22px; padding-top: 12px; border-top: 1px solid #ddd; text-align: center; font-size: 11px; color: #6b7280; }
+          @media screen and (max-width: 700px) { .catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
           @media print {
-            body { padding: 10px; }
-            .catalog { gap: 10px; }
+            body { padding: 8px; }
+            .catalog { gap: 8px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .card img, .no-image { height: 105px; }
           }
         </style>
       </head>
       <body>
         <header>
           <h1>JG Motors &amp; ClickMotores</h1>
-          <p>Catálogo comercial de ${brochureType === 'carro' ? 'carros' : 'motocicletas'}</p>
-          <p>Fecha: ${escapeHtml(new Date().toLocaleDateString('es-CO'))}</p>
+          <p>${escapeHtml(catalogTitle)} · Orden: disponibles primero, separados después, vendidos al final</p>
+          <p>Fecha: ${escapeHtml(new Date().toLocaleDateString('es-CO'))} · WhatsApp: +57 333 276 5584</p>
         </header>
-
-        <main class="catalog">${cards}</main>
-
+        <p class="legend">Motos y carros publicados. Dentro de cada grupo van primero los disponibles, luego los separados y al final los vendidos.</p>
+        ${sectionHtml('Motos', motos)}
+        ${sectionHtml('Carros', carros)}
         <footer>
-          <p>WhatsApp comercial: +57 333 276 5584</p>
-          <p>Los precios y la disponibilidad están sujetos a confirmación.</p>
+          <p>JG Motors &amp; ClickMotores · Yumbo / Cali · WhatsApp +57 333 276 5584</p>
+          <p>Precios y disponibilidad sujetos a confirmación.</p>
         </footer>
       </body>
       </html>
@@ -1797,51 +1811,65 @@ export function AdminPage({
               </h2>
 
               <p className="mt-3 text-sm leading-6 text-gray-400">
-                Genera una versión imprimible del inventario publicado,
-                organizada por tipo de vehículo.
+                Genera el catálogo completo en PDF: todas las motos y todos los
+                carros, con disponibles primero, separados después y vendidos
+                al final.
               </p>
 
               <div className="mt-7 flex flex-wrap justify-center gap-3">
                 <button
                   type="button"
+                  onClick={() => setBrochureType('completo')}
+                  className={`flex items-center gap-2 rounded-xl px-5 py-3 text-base font-semibold ${
+                    brochureType === 'completo'
+                      ? 'bg-jg-red text-white'
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  }`}
+                >
+                  <FileText className="h-5 w-5" />
+                  Completo (motos + carros)
+                </button>
+
+                <button
+                  type="button"
                   onClick={() => setBrochureType('carro')}
-                  className={`flex items-center gap-2 rounded-xl px-5 py-3 font-semibold ${
+                  className={`flex items-center gap-2 rounded-xl px-5 py-3 text-base font-semibold ${
                     brochureType === 'carro'
                       ? 'bg-jg-red text-white'
                       : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                   }`}
                 >
                   <Car className="h-5 w-5" />
-                  Catálogo de carros
+                  Solo carros
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setBrochureType('moto')}
-                  className={`flex items-center gap-2 rounded-xl px-5 py-3 font-semibold ${
+                  className={`flex items-center gap-2 rounded-xl px-5 py-3 text-base font-semibold ${
                     brochureType === 'moto'
                       ? 'bg-jg-red text-white'
                       : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                   }`}
                 >
                   <Bike className="h-5 w-5" />
-                  Catálogo de motos
+                  Solo motos
                 </button>
               </div>
 
               <div className="mt-5 rounded-xl border border-gray-800 bg-gray-950 p-5">
-                <p className="text-sm text-gray-400">
-                  Vehículos publicados disponibles para el catálogo
+                <p className="text-base text-gray-400">
+                  Vehículos incluidos en el catálogo
                 </p>
 
                 <p className="mt-2 text-3xl font-bold">
-                  {
-                    activeVehicles.filter(
-                      (vehicle) =>
-                        normalizeText(vehicle.type || 'carro') ===
-                        normalizeText(brochureType),
-                    ).length
-                  }
+                  {brochureType === 'completo'
+                    ? vehicles.length
+                    : vehicles.filter(
+                        (vehicle) =>
+                          normalizeText(vehicle.type || 'carro') ===
+                          normalizeText(brochureType),
+                      ).length}
                 </p>
               </div>
 
