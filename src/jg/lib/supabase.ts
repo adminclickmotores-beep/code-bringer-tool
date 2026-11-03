@@ -229,12 +229,73 @@ export function fuelOptions(type: 'moto' | 'carro'): string[] {
     : ['Gasolina', 'Diésel', 'Eléctrico', 'Híbrido', 'Gasolina / gas', 'Otro'];
 }
 
+const WATERMARK_TEXT = 'ClickMotores';
+
+function loadImageSource(file: File): Promise<CanvasImageSource & { width: number; height: number; close?: () => void }> {
+  if (typeof createImageBitmap === 'function') {
+    return createImageBitmap(file);
+  }
+  const url = URL.createObjectURL(file);
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(image);
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('No se pudo leer la imagen.'));
+    };
+    image.src = url;
+  });
+}
+
+/** Dibuja la marca de agua "ClickMotores" sobre la foto y devuelve un File listo para subir. */
+async function withClickMotoresWatermark(file: File): Promise<File> {
+  try {
+    const source = await loadImageSource(file);
+    const width = source.width as number;
+    const height = source.height as number;
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return file;
+    ctx.drawImage(source, 0, 0);
+    if (typeof source.close === 'function') source.close();
+
+    const fontSize = Math.max(18, Math.round(width * 0.055));
+    ctx.font = `800 ${fontSize}px 'Plus Jakarta Sans', Arial, sans-serif`;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'bottom';
+    const x = width - Math.round(width * 0.03);
+    const y = height - Math.round(height * 0.035);
+    ctx.globalAlpha = 0.8;
+    ctx.lineWidth = Math.max(2, Math.round(fontSize * 0.12));
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.55)';
+    ctx.strokeText(WATERMARK_TEXT, x, y);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.fillText(WATERMARK_TEXT, x, y);
+    ctx.globalAlpha = 1;
+
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, 'image/jpeg', 0.92),
+    );
+    if (!blob) return file;
+    const base = file.name.replace(/\.[a-z0-9]+$/i, '') || 'foto';
+    return new File([blob], `${base}.jpg`, { type: 'image/jpeg' });
+  } catch {
+    return file;
+  }
+}
+
 export async function uploadVehiclePhoto(file: File): Promise<string> {
-  const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+  const watermarked = await withClickMotoresWatermark(file);
+  const ext = watermarked.name.split('.').pop()?.toLowerCase() || 'jpg';
   const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
   const { error: uploadError } = await supabase.storage
     .from('vehicle-photos')
-    .upload(fileName, file, { cacheControl: '3600', upsert: false });
+    .upload(fileName, watermarked, { cacheControl: '3600', upsert: false });
   if (uploadError) throw uploadError;
 
   const { data, error: urlError } = await supabase.storage
