@@ -4,8 +4,6 @@ import type { Session } from '@supabase/supabase-js';
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { Header } from '@/jg/components/Header';
 import { Footer } from '@/jg/components/Footer';
-import { WhatsAppFloat } from '@/jg/components/WhatsAppFloat';
-import { SalesChatbot } from '@/jg/components/SalesChatbot';
 import { VehicleDetailModal } from '@/jg/components/VehicleDetailModal';
 import {
   Vehicle,
@@ -220,8 +218,6 @@ export function JgApp({ children }: { children: ReactNode }) {
     });
   };
 
-  const isAdmin = currentPage === 'admin' || location.pathname === '/cms' || location.pathname === '/admin';
-
   return (
         <JgContext.Provider
       value={{
@@ -239,8 +235,6 @@ export function JgApp({ children }: { children: ReactNode }) {
           </div>
         </main>
         <Footer onNavigate={navigate} />
-        {!isAdmin && <SalesChatbot onNavigate={navigate} />}
-        {!isAdmin && <WhatsAppFloat />}
         <VehicleDetailModal vehicle={selectedVehicle} onClose={() => setSelectedVehicle(null)} />
       </div>
     </JgContext.Provider>
