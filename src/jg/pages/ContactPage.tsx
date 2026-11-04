@@ -7,7 +7,7 @@ import {
   MessageCircle,
   Send,
 } from 'lucide-react';
-import { WHATSAPP_DISPLAY, FACEBOOK_URL, whatsappLink } from '@/jg/lib/supabase';
+import { FACEBOOK_URL, whatsappLink } from '@/jg/lib/supabase';
 import { useSeo } from '@/lib/seo';
 import { useState } from 'react';
 
@@ -63,7 +63,7 @@ ${form.message}`;
               </div>
               <div className="flex-1">
                 <p className="text-xs text-gray-500">WhatsApp / Teléfono</p>
-                <p className="font-display text-lg font-bold text-jg-text-dark">{WHATSAPP_DISPLAY}</p>
+                <p className="font-display text-lg font-bold text-jg-text-dark">Escríbenos por WhatsApp</p>
               </div>
               <Send className="h-4 w-4 text-gray-400 transition-colors group-hover:text-green-400" />
             </a>
@@ -112,7 +112,7 @@ ${form.message}`;
             <div className="border-b border-jg-silver/50 px-6 py-5">
               <h2 className="font-display text-xl font-bold text-jg-text-dark">Envíanos un mensaje</h2>
               <p className="mt-1 text-sm text-gray-400">
-                Se enviará por WhatsApp a {WHATSAPP_DISPLAY}.
+                Se enviará por WhatsApp.
               </p>
             </div>
 

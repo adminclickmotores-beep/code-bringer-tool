@@ -1,6 +1,6 @@
 import { MapPin, Phone, Facebook, Clock, ShieldCheck, Zap, Award, Instagram, FileText, ShieldAlert } from 'lucide-react';
 import { Logo } from './Logo';
-import { WHATSAPP_DISPLAY, FACEBOOK_URL, INSTAGRAM_URL, INSTAGRAM_HANDLE, whatsappLink } from '@/jg/lib/supabase';
+import { FACEBOOK_URL, INSTAGRAM_URL, INSTAGRAM_HANDLE, whatsappLink } from '@/jg/lib/supabase';
 
 interface FooterProps {
   onNavigate: (page: string) => void;
@@ -80,7 +80,7 @@ export function Footer({ onNavigate }: FooterProps) {
               <li className="flex items-start gap-3 text-sm text-gray-400">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-jg-red" />
                 <a href={whatsappLink('Hola ClickMotores, me gustaría más información.')} target="_blank" rel="noopener noreferrer" className="hover:text-white">
-                  {WHATSAPP_DISPLAY}
+                  WhatsApp
                 </a>
               </li>
               <li className="flex items-start gap-3 text-sm text-gray-400">

@@ -1,6 +1,6 @@
 import { FileText, ShieldAlert, ArrowLeft } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { whatsappLink, WHATSAPP_DISPLAY } from '@/jg/lib/supabase';
+import { whatsappLink } from '@/jg/lib/supabase';
 
 interface LegalPageProps {
   onNavigate: (page: string) => void;
@@ -205,7 +205,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
 
         <Section id="t-contacto" title="16. Contacto y soporte">
           <P>
-            Para inquietudes o soporte, escríbenos por WhatsApp corporativo al <a href={whatsappLink('Hola ClickMotores, tengo una consulta sobre soporte.')} target="_blank" rel="noopener noreferrer" className="text-jg-red hover:underline">{WHATSAPP_DISPLAY}</a> o visítanos en nuestra sede en {SEDE}.
+            Para inquietudes o soporte, escríbenos por <a href={whatsappLink('Hola ClickMotores, tengo una consulta sobre soporte.')} target="_blank" rel="noopener noreferrer" className="text-jg-red hover:underline">WhatsApp corporativo</a> o visítanos en nuestra sede en {SEDE}.
           </P>
         </Section>
       </div>
@@ -221,7 +221,7 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           <ul className="list-disc space-y-2 pl-5 leading-relaxed">
             <li><strong>Responsable:</strong> {RESPONSABLE}.</li>
             <li><strong>Domicilio:</strong> {SEDE}.</li>
-            <li><strong>Canal de atención de datos personales:</strong> WhatsApp <a href={whatsappLink(WHATSAPP_HABEAS)} target="_blank" rel="noopener noreferrer" className="text-jg-red hover:underline">{WHATSAPP_DISPLAY}</a>.</li>
+            <li><strong>Canal de atención de datos personales:</strong> <a href={whatsappLink(WHATSAPP_HABEAS)} target="_blank" rel="noopener noreferrer" className="text-jg-red hover:underline">WhatsApp</a>.</li>
             <li><strong>Marco legal:</strong> Ley 1581 de 2012, Decreto 1377 de 2013 (compilado en el Decreto 1074 de 2015) y demás normas concordantes, bajo vigilancia de la Superintendencia de Industria y Comercio.</li>
           </ul>
         </Section>
@@ -282,7 +282,7 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           <ul className="list-disc space-y-2 pl-5 leading-relaxed">
             <li><strong>Consultas</strong> (conocer tus datos): las respondemos en máximo <strong>10 días hábiles</strong>.</li>
             <li><strong>Reclamos</strong> (corregir, actualizar o suprimir): los resolvemos en máximo <strong>15 días hábiles</strong>. Si tu solicitud está incompleta te lo indicaremos para que la subsanes.</li>
-            <li><strong>Canal:</strong> escríbenos por WhatsApp al <a href={whatsappLink(WHATSAPP_HABEAS)} target="_blank" rel="noopener noreferrer" className="text-jg-red hover:underline">{WHATSAPP_DISPLAY}</a> indicando tu nombre, el dato a corregir y un medio de respuesta. También puedes hacerlo en nuestra sede en {SEDE}.</li>
+            <li><strong>Canal:</strong> escríbenos por <a href={whatsappLink(WHATSAPP_HABEAS)} target="_blank" rel="noopener noreferrer" className="text-jg-red hover:underline">WhatsApp</a> indicando tu nombre, el dato a corregir y un medio de respuesta. También puedes hacerlo en nuestra sede en {SEDE}.</li>
             <li>La supresión procede cuando el tratamiento no respete la ley o cuando finalice la finalidad, salvo que debamos conservar los datos por obligación legal (p. ej. documentos contables o contractuales).</li>
           </ul>
           <P>

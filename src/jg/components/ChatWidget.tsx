@@ -72,7 +72,7 @@ function respuestaLocal(texto: string): string {
   if (t.includes('soat') || t.includes('seguro')) return 'Te cotizamos SOAT y seguro en menos de 10 minutos. Déjame tu placa y tu WhatsApp y lo gestionamos ya mismo.';
   if (t.includes('vend') || t.includes('consign')) return 'Puedes vender por compra directa o consignación ($100.000 la pauta + 3% carros / 5% motos). ¿Qué marca, modelo y año es tu vehículo?';
   if (t.includes('hola') || t.includes('buenas')) return '¡Hola! ¿Buscas comprar o vender? Si me dices marca y presupuesto te muestro opciones del inventario verificado.';
-  return 'Anotado. Un asesor de ClickMotores (Yumbo / Cali, +57 333 276 5584) te responderá enseguida. ¿Me confirmas tu nombre y tu WhatsApp?';
+  return 'Anotado. Un asesor de ClickMotores (Yumbo / Cali) te responderá enseguida. ¿Me confirmas tu nombre y tu WhatsApp?';
 }
 
 export function ChatWidget() {
@@ -125,7 +125,7 @@ export function ChatWidget() {
       await new Promise((r) => setTimeout(r, 600));
       setMensajes([...conUsuario, { rol: 'bot', texto: respuestaLocal(limpio) }]);
     } catch {
-      setMensajes([...conUsuario, { rol: 'bot', texto: 'Tuve un problema de conexión. Escríbenos por WhatsApp al +57 333 276 5584 y te ayudamos ya mismo.' }]);
+      setMensajes([...conUsuario, { rol: 'bot', texto: 'Tuve un problema de conexión. Escríbenos por WhatsApp y te ayudamos ya mismo.' }]);
     } finally {
       setEnviando(false);
     }

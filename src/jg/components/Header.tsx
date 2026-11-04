@@ -1,7 +1,7 @@
 import { Menu, X, Facebook, Lock, Instagram, Phone } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Logo } from './Logo';
-import { WHATSAPP_DISPLAY, FACEBOOK_URL, INSTAGRAM_URL, whatsappLink } from '@/jg/lib/supabase';
+import { FACEBOOK_URL, INSTAGRAM_URL, whatsappLink } from '@/jg/lib/supabase';
 
 interface HeaderProps {
   currentPage: string;
@@ -109,7 +109,7 @@ export function Header({ currentPage, onNavigate, sessionEmail }: HeaderProps) {
               className="btn-primary !px-4 !py-2"
             >
               <Phone className="h-3.5 w-3.5" />
-              {WHATSAPP_DISPLAY}
+              WhatsApp
             </a>
           </div>
 
