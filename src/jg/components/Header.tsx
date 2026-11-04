@@ -41,7 +41,7 @@ export function Header({ currentPage, onNavigate, sessionEmail }: HeaderProps) {
         style={
           solid
             ? { backgroundColor: 'rgba(10, 10, 10, 0.85)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }
-            : { backgroundColor: 'rgba(7, 7, 7, 0.4)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }
+            : { backgroundColor: 'rgba(7, 7, 7, 0.5)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }
         }
         className={`sticky top-0 z-50 border-b transition-[background-color,border-color,box-shadow] duration-300 ease-in-out ${solid ? 'border-white/[0.08] shadow-lg shadow-black/40' : 'border-transparent'}`}
       >

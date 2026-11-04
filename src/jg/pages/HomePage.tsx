@@ -107,7 +107,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
               </span>
             </div>
 
-            <h1 className="mt-5 animate-fade-up animate-delay-100 font-display text-4xl font-black uppercase leading-[0.95] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 className="mt-5 animate-fade-up animate-delay-100 font-hero text-4xl font-black uppercase leading-none tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
               <span className="block text-[#FF1E27]">Clickmotores</span>
               <span className="mt-2 block text-white">
                 Carros y motos <span className="text-[#FF1E27]">100% verificados</span>
