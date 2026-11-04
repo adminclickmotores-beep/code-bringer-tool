@@ -80,7 +80,7 @@ export function BuyerInterestsPanel() {
                 <p className="text-xs text-gray-500">{new Date(r.created_at).toLocaleString('es-CO')} · Contactó a {r.contact_target === 'owner' ? 'propietario' : 'ClickMotores'}</p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                <select value={r.status} onChange={(e) => setStatus(r.id, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-900 px-2 py-1.5 text-sm">
+                <select value={r.status} onChange={(e) => setStatus(r.id, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-900 px-2 py-2.5 text-base">
                   <option value="nuevo">Nuevo</option>
                   <option value="contactado">Contactado</option>
                   <option value="negociando">Negociando</option>

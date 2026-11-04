@@ -132,7 +132,7 @@ export function ChatWidget() {
   };
 
   return (
-    <div className="fixed bottom-24 right-4 z-40 flex flex-col items-end gap-3">
+    <div className="fixed bottom-[max(6rem,calc(env(safe-area-inset-bottom)+4.5rem))] right-[max(1rem,env(safe-area-inset-right))] z-40 flex flex-col items-end gap-3">
       {abierto && (
         <div className="flex h-[min(480px,60vh)] w-[min(360px,calc(100vw-2rem))] animate-scale-in flex-col overflow-hidden rounded-2xl border border-[#FF1E27]/25 bg-black/90 shadow-2xl shadow-black/60 backdrop-blur-xl">
           <div className="flex items-center justify-between border-b border-white/10 bg-black/60 px-4 py-3">

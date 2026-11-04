@@ -7,7 +7,7 @@ export function WhatsAppFloat() {
       href={whatsappLink('Hola ClickMotores, me gustaría obtener información sobre sus vehículos.')}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 shadow-lg shadow-green-500/30 transition-all duration-300 hover:scale-110 hover:bg-green-600"
+      className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-40 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 shadow-lg shadow-green-500/30 transition-all duration-300 hover:scale-110 hover:bg-green-600"
       aria-label="Hablar por WhatsApp"
     >
       <MessageCircle className="h-7 w-7 text-white" />

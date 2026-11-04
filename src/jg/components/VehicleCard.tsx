@@ -111,14 +111,14 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
           <>
             <button
               onClick={prevImage}
-              className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/60 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100"
+              className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/60 p-2 text-white transition-opacity lg:opacity-0 lg:group-hover:opacity-100"
               aria-label="Foto anterior"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
               onClick={nextImage}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/60 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/60 p-2 text-white transition-opacity lg:opacity-0 lg:group-hover:opacity-100"
               aria-label="Foto siguiente"
             >
               <ChevronRight className="h-4 w-4" />

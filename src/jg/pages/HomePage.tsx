@@ -98,7 +98,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
         <div className="relative z-10 mx-auto w-full max-w-7xl min-w-0 px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
           <div className="animate-fade-up flex items-center gap-2">
-              <span className="inline-flex items-center gap-2.5 rounded-full border border-[#FF1E27]/60 bg-black/60 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-gray-200 backdrop-blur-md">
+              <span className="inline-flex max-w-full items-center gap-2.5 rounded-full border border-[#FF1E27]/60 bg-black/60 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-gray-200 backdrop-blur-md">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#FF1E27] opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-[#FF1E27]" />
@@ -107,7 +107,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
               </span>
             </div>
 
-            <h1 className="mt-5 animate-fade-up animate-delay-100 font-hero text-4xl font-black uppercase leading-none tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 className="mt-5 animate-fade-up animate-delay-100 break-words font-hero text-4xl font-black uppercase leading-none tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
               <span className="block text-[#FF1E27]">Clickmotores</span>
               <span className="mt-2 block text-white">
                 Carros y motos <span className="text-[#FF1E27]">100% verificados</span>
@@ -177,12 +177,12 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
             </div>
 
             {/* Botones de acción principales */}
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button onClick={() => onNavigate('catalog')} className="btn-primary !px-8 !py-3.5 !text-base">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <button onClick={() => onNavigate('catalog')} className="btn-primary w-full !px-8 !py-3.5 !text-base sm:w-auto">
                 Explorar Inventario
                 <ArrowRight className="h-4 w-4" />
               </button>
-              <button onClick={() => onNavigate('sell')} className="btn-secondary !bg-white !text-jg-black hover:!bg-gray-100">
+              <button onClick={() => onNavigate('sell')} className="btn-secondary w-full !bg-white !text-jg-black hover:!bg-gray-100 sm:w-auto">
                 Vender / Consignar Vehículo
               </button>
             </div>
