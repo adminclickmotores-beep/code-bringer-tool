@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from '@tanstack/react-router';
 import { Header } from '@/jg/components/Header';
 import { Footer } from '@/jg/components/Footer';
 import { WhatsAppFloat } from '@/jg/components/WhatsAppFloat';
-import { ChatWidget } from '@/jg/components/ChatWidget';
 import { SalesChatbot } from '@/jg/components/SalesChatbot';
 import { VehicleDetailModal } from '@/jg/components/VehicleDetailModal';
 import {
@@ -241,7 +240,6 @@ export function JgApp({ children }: { children: ReactNode }) {
         </main>
         <Footer onNavigate={navigate} />
         {!isAdmin && <SalesChatbot onNavigate={navigate} />}
-        {!isAdmin && <ChatWidget />}
         {!isAdmin && <WhatsAppFloat />}
         <VehicleDetailModal vehicle={selectedVehicle} onClose={() => setSelectedVehicle(null)} />
       </div>
