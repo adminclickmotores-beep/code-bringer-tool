@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CatalogoRouteImport } from './routes/catalogo'
+import { Route as CmsRouteImport } from './routes/cms'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as FinanciacionRouteImport } from './routes/financiacion'
 import { Route as HabeasDataRouteImport } from './routes/habeas-data'
@@ -32,6 +33,11 @@ const AdminRoute = AdminRouteImport.update({
 const CatalogoRoute = CatalogoRouteImport.update({
   id: '/catalogo',
   path: '/catalogo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CmsRoute = CmsRouteImport.update({
+  id: '/cms',
+  path: '/cms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactoRoute = ContactoRouteImport.update({
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/catalogo': typeof CatalogoRoute
+  '/cms': typeof CmsRoute
   '/contacto': typeof ContactoRoute
   '/financiacion': typeof FinanciacionRoute
   '/habeas-data': typeof HabeasDataRoute
@@ -80,6 +87,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/catalogo': typeof CatalogoRoute
+  '/cms': typeof CmsRoute
   '/contacto': typeof ContactoRoute
   '/financiacion': typeof FinanciacionRoute
   '/habeas-data': typeof HabeasDataRoute
@@ -92,6 +100,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/catalogo': typeof CatalogoRoute
+  '/cms': typeof CmsRoute
   '/contacto': typeof ContactoRoute
   '/financiacion': typeof FinanciacionRoute
   '/habeas-data': typeof HabeasDataRoute
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/catalogo'
+    | '/cms'
     | '/contacto'
     | '/financiacion'
     | '/habeas-data'
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/catalogo'
+    | '/cms'
     | '/contacto'
     | '/financiacion'
     | '/habeas-data'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/catalogo'
+    | '/cms'
     | '/contacto'
     | '/financiacion'
     | '/habeas-data'
@@ -139,6 +151,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   CatalogoRoute: typeof CatalogoRoute
+  CmsRoute: typeof CmsRoute
   ContactoRoute: typeof ContactoRoute
   FinanciacionRoute: typeof FinanciacionRoute
   HabeasDataRoute: typeof HabeasDataRoute
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/catalogo'
       fullPath: '/catalogo'
       preLoaderRoute: typeof CatalogoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cms': {
+      id: '/cms'
+      path: '/cms'
+      fullPath: '/cms'
+      preLoaderRoute: typeof CmsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contacto': {
@@ -219,6 +239,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   CatalogoRoute: CatalogoRoute,
+  CmsRoute: CmsRoute,
   ContactoRoute: ContactoRoute,
   FinanciacionRoute: FinanciacionRoute,
   HabeasDataRoute: HabeasDataRoute,

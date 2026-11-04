@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from '@tanstack/react-router';
 import { Header } from '@/jg/components/Header';
 import { Footer } from '@/jg/components/Footer';
 import { WhatsAppFloat } from '@/jg/components/WhatsAppFloat';
+import { ChatWidget } from '@/jg/components/ChatWidget';
 import { SalesChatbot } from '@/jg/components/SalesChatbot';
 import { VehicleDetailModal } from '@/jg/components/VehicleDetailModal';
 import {
@@ -24,6 +25,7 @@ export const PAGE_PATHS: Record<string, string> = {
   terminos: '/terminos',
   'habeas-data': '/habeas-data',
   admin: '/admin',
+  cms: '/cms',
 };
 
 function pageFromPath(path: string): string {
@@ -219,7 +221,7 @@ export function JgApp({ children }: { children: ReactNode }) {
     });
   };
 
-  const isAdmin = currentPage === 'admin';
+  const isAdmin = currentPage === 'admin' || location.pathname === '/cms' || location.pathname === '/admin';
 
   return (
         <JgContext.Provider
@@ -239,6 +241,7 @@ export function JgApp({ children }: { children: ReactNode }) {
         </main>
         <Footer onNavigate={navigate} />
         {!isAdmin && <SalesChatbot onNavigate={navigate} />}
+        {!isAdmin && <ChatWidget />}
         {!isAdmin && <WhatsAppFloat />}
         <VehicleDetailModal vehicle={selectedVehicle} onClose={() => setSelectedVehicle(null)} />
       </div>

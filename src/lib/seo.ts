@@ -50,6 +50,10 @@ export const PAGE_SEO: Record<string, SeoData> = {
     title: 'Panel Administrativo | ClickMotores',
     description: 'Panel interno de ClickMotores para inventario, leads y ventas.',
   },
+  '/cms': {
+    title: 'CMS Privado | ClickMotores',
+    description: 'Panel privado de ClickMotores para inventario, leads y chatbot.',
+  },
   '/reset-password': {
     title: 'Restablecer contraseña | ClickMotores',
     description: 'Restablece tu contraseña del panel de ClickMotores.',
