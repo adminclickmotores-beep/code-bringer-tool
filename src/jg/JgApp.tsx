@@ -4,6 +4,7 @@ import type { Session } from '@supabase/supabase-js';
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { Header } from '@/jg/components/Header';
 import { Footer } from '@/jg/components/Footer';
+import { BotonWhatsappFlotante } from '@/jg/components/BotonWhatsappFlotante';
 import { VehicleDetailModal } from '@/jg/components/VehicleDetailModal';
 import {
   Vehicle,
@@ -235,6 +236,7 @@ export function JgApp({ children }: { children: ReactNode }) {
           </div>
         </main>
         <Footer onNavigate={navigate} />
+        <BotonWhatsappFlotante />
         <VehicleDetailModal vehicle={selectedVehicle} onClose={() => setSelectedVehicle(null)} />
       </div>
     </JgContext.Provider>
