@@ -29,7 +29,16 @@ export function HeroClip() {
         src={FONDO}
         alt=""
         loading="eager"
-        className="hero-zoom absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      <video
+        src="/subida-3e504e4d.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="absolute inset-0 h-full w-full object-cover"
       />
 
       {/* Rachas de luz rojas cruzando la pantalla */}
