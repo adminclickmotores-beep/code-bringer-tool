@@ -11,6 +11,7 @@ import { PlansSection } from '@/jg/components/PlansSection';
 import { useSeo } from '@/lib/seo';
 import { DirectPurchaseForm } from '@/jg/components/DirectPurchaseForm';
 import { ConsignmentPanel } from '@/jg/components/ConsignmentPanel';
+import { ConsultaVehiculo } from '@/jg/components/ConsultaVehiculo';
 import { formatCOP, fuelOptions, uploadPropertyCard, uploadVehiclePhoto } from '@/jg/lib/supabase';
 import { submitVehicleRequest } from '@/jg/lib/vehicle-submission.functions';
 import {
@@ -407,6 +408,8 @@ export function SellPage() {
         </div>
 
         {isPublicar && <PlansSection />}
+
+        <ConsultaVehiculo />
 
         <section className="py-14">
           <h2 className="text-center text-2xl font-bold text-jg-text-dark">¿Por qué elegir ClickMotores?</h2>
