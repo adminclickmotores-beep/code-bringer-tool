@@ -367,7 +367,7 @@
   .page-fade { animation-duration: 0.01ms; }
 }
 
-/* GoIDE: sin zoom en celular al escribir (v2) */
+/* sin zoom en celular al escribir */
 @media (hover: none) and (pointer: coarse) {
   input, select, textarea { font-size: max(16px, 1em) !important; }
 }
@@ -375,8 +375,6 @@
 html, body { max-width: 100%; }
 @supports (overflow-x: clip) { html, body { overflow-x: clip; } }
 @supports not (overflow-x: clip) { body { overflow-x: hidden; } }
-/* /GoIDE zoom */
 
-/* GoIDE: oculta la insignia "Edit with Lovable" (v2) */
+/* oculta la insignia "Edit with Lovable" */
 #lovable-badge, [id^="lovable-badge"], [id*="lovable-badge"], [class*="lovable-badge"], aside[id*="lovable" i], a[href*="utm_source=lovable-badge"], a[href*="lovable.dev"][href*="utm_campaign=lovable-badge"] { display:none !important; visibility:hidden !important; opacity:0 !important; pointer-events:none !important }
-/* /GoIDE */
