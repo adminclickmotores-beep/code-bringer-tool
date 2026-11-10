@@ -155,6 +155,72 @@ export type Database = {
         }
         Relationships: []
       }
+      movimientos_financieros: {
+        Row: {
+          concepto: string
+          created_at: string
+          fecha: string
+          id: string
+          monto: number
+          tipo: string
+        }
+        Insert: {
+          concepto: string
+          created_at?: string
+          fecha?: string
+          id?: string
+          monto?: number
+          tipo: string
+        }
+        Update: {
+          concepto?: string
+          created_at?: string
+          fecha?: string
+          id?: string
+          monto?: number
+          tipo?: string
+        }
+        Relationships: []
+      }
+      control_consignaciones: {
+        Row: {
+          cliente: string
+          comision_estado: string
+          created_at: string
+          id: string
+          pauta_pagada: boolean
+          pauta_valor: number
+          precio_venta: number
+          telefono: string | null
+          tipo_vehiculo: string
+          vehiculo: string
+        }
+        Insert: {
+          cliente: string
+          comision_estado?: string
+          created_at?: string
+          id?: string
+          pauta_pagada?: boolean
+          pauta_valor?: number
+          precio_venta?: number
+          telefono?: string | null
+          tipo_vehiculo?: string
+          vehiculo: string
+        }
+        Update: {
+          cliente?: string
+          comision_estado?: string
+          created_at?: string
+          id?: string
+          pauta_pagada?: boolean
+          pauta_valor?: number
+          precio_venta?: number
+          telefono?: string | null
+          tipo_vehiculo?: string
+          vehiculo?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string | null

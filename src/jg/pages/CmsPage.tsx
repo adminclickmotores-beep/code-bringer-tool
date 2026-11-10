@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Bike, Car, CheckCircle2, Loader2, Pencil, Plus, ShieldCheck, Users, X } from 'lucide-react';
+import { BarChart3, Bike, Car, CheckCircle2, Handshake, Loader2, Pencil, Plus, ShieldCheck, Users, Wallet, X } from 'lucide-react';
+import { CmsNegocio } from '@/jg/components/CmsNegocio';
 import { supabase } from '@/integrations/supabase/client';
 import { formatCOP, normalizeVehicle, type Vehicle } from '@/jg/lib/supabase';
 import { CmsVehicleForm, type CmsVehicleFormValue } from '@/jg/components/CmsVehicleForm';
 
-type Tab = 'inventario' | 'leads';
+type Tab = 'panel' | 'inventario' | 'finanzas' | 'consignaciones' | 'leads';
 
 type Consulta = {
   id: string;
@@ -51,7 +52,7 @@ export function CmsPage({
   userEmail: string;
   onLogout: () => Promise<void>;
 }) {
-  const [tab, setTab] = useState<Tab>('inventario');
+  const [tab, setTab] = useState<Tab>('panel');
   const [vehiculos, setVehiculos] = useState<Vehicle[]>([]);
   const [cargando, setCargando] = useState(true);
   const [busqueda, setBusqueda] = useState('');
@@ -150,7 +151,7 @@ export function CmsPage({
   return (
     <div className="min-h-screen bg-[#070707] px-4 py-8 text-white sm:px-6">
       <div className="mx-auto max-w-6xl">
-        <header className="mb-6 flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/60 p-5 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between">
+        <header className="mb-6 flex flex-col gap-4 rounded-2xl border border-white/10 bg-gradient-to-r from-[#FF1E27]/10 via-black/60 to-black/60 p-5 shadow-2xl shadow-black/50 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FF1E27]/15 text-[#FF1E27]">
               <ShieldCheck className="h-5 w-5" />
@@ -176,10 +177,13 @@ export function CmsPage({
           </div>
         </div>
 
-        <nav className="mb-5 flex gap-2 border-b border-white/10">
+        <nav className="mb-5 flex gap-1 overflow-x-auto border-b border-white/10 sm:gap-2">
           {(
             [
+              { id: 'panel' as Tab, etiqueta: 'Panel', Icono: BarChart3 },
               { id: 'inventario' as Tab, etiqueta: 'Inventario', Icono: Car },
+              { id: 'finanzas' as Tab, etiqueta: 'Finanzas', Icono: Wallet },
+              { id: 'consignaciones' as Tab, etiqueta: 'Consignaciones', Icono: Handshake },
               { id: 'leads' as Tab, etiqueta: 'Leads de Clientes', Icono: Users },
             ]
           ).map(({ id, etiqueta, Icono }) => (
@@ -187,7 +191,7 @@ export function CmsPage({
               key={id}
               type="button"
               onClick={() => setTab(id)}
-              className={`flex items-center gap-2 border-b-2 px-4 py-3 text-base font-semibold transition-colors ${
+              className={`flex shrink-0 items-center gap-2 whitespace-nowrap border-b-2 px-3 py-3 text-base font-semibold transition-colors sm:px-4 ${
                 tab === id ? 'border-[#FF1E27] text-white' : 'border-transparent text-gray-400 hover:text-white'
               }`}
             >
@@ -196,6 +200,10 @@ export function CmsPage({
             </button>
           ))}
         </nav>
+
+        {(tab === 'panel' || tab === 'finanzas' || tab === 'consignaciones') && (
+          <CmsNegocio key={tab} seccion={tab} vehiculos={vehiculos} />
+        )}
 
         {tab === 'inventario' && (
           <section className="rounded-2xl border border-white/10 bg-black/60 p-4 backdrop-blur-xl sm:p-5">
