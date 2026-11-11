@@ -9,6 +9,7 @@ import {
   formatCOP, fuelOptions, supabase, uploadVehiclePhoto, whatsappLink, type Vehicle,
 } from '@/jg/lib/supabase';
 import { SelectorMarca } from '@/jg/components/SelectorMarca';
+import { CrmCompraventa } from '@/jg/components/CrmCompraventa';
 import { validarCorreo } from '@/jg/lib/validar-correo';
 import { meetsPhotoResolution, minimumPhotos, MIN_PHOTO_WIDTH, MIN_PHOTO_HEIGHT } from '@/jg/lib/vehicle-submission';
 import { listingStatus, planWhatsappMessage, PUBLICATION_PLANS } from '@/jg/lib/plans';
@@ -611,7 +612,7 @@ export function CompraventasPage() {
   const beneficios = [
     { icono: Megaphone, titulo: 'Publica gratis', texto: 'Sube tus carros y motos sin costo y sin vencimiento.' },
     { icono: Store, titulo: 'Tu propio catálogo', texto: 'Con el nombre de tu negocio y tu celular de contacto.' },
-    { icono: Users, titulo: 'Compártelo', texto: 'Envía un solo enlace a tus clientes por WhatsApp.' },
+    { icono: Users, titulo: 'CRM de clientes', texto: 'Registra a tus clientes, anota seguimientos y recibe recordatorios de cuándo volver a contactarlos.' },
   ];
 
   return (
@@ -681,6 +682,7 @@ export function CompraventasPage() {
               </div>
             </div>
             <CompartirCatalogo dealer={dealer} vehiculos={vehiculos} />
+            <CrmCompraventa dealer={dealer} />
             {dealer.aprobada && <PublicarForm dealer={dealer} onPublicado={() => void recargar()} />}
             <MisVehiculos vehiculos={vehiculos} cargando={cargandoVeh} onCambio={() => void recargar()} />
           </>

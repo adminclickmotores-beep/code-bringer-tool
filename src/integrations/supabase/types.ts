@@ -14,6 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
+      crm_clientes: {
+        Row: {
+          correo: string | null
+          created_at: string
+          dealer_id: string
+          etapa: string
+          id: string
+          interes: string | null
+          nombre: string
+          notas: string | null
+          origen: string
+          presupuesto: number | null
+          proximo_contacto: string | null
+          telefono: string
+          updated_at: string
+        }
+        Insert: {
+          correo?: string | null
+          created_at?: string
+          dealer_id: string
+          etapa?: string
+          id?: string
+          interes?: string | null
+          nombre: string
+          notas?: string | null
+          origen?: string
+          presupuesto?: number | null
+          proximo_contacto?: string | null
+          telefono: string
+          updated_at?: string
+        }
+        Update: {
+          correo?: string | null
+          created_at?: string
+          dealer_id?: string
+          etapa?: string
+          id?: string
+          interes?: string | null
+          nombre?: string
+          notas?: string | null
+          origen?: string
+          presupuesto?: number | null
+          proximo_contacto?: string | null
+          telefono?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      crm_seguimientos: {
+        Row: {
+          cliente_id: string
+          created_at: string
+          dealer_id: string
+          id: string
+          nota: string
+        }
+        Insert: {
+          cliente_id: string
+          created_at?: string
+          dealer_id: string
+          id?: string
+          nota: string
+        }
+        Update: {
+          cliente_id?: string
+          created_at?: string
+          dealer_id?: string
+          id?: string
+          nota?: string
+        }
+        Relationships: []
+      }
       dealer_profiles: {
         Row: {
           aprobada: boolean
