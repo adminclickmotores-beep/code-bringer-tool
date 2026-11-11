@@ -10,7 +10,7 @@ import {
 } from '@/jg/lib/supabase';
 import {
   createDealer, dealerCatalogUrl, deleteDealerVehicle, fetchDealerVehicles, fetchMyDealer,
-  publishDealerVehicle, setDealerVehicleStatus, updateDealer,
+  publishDealerVehicle, setDealerVehicleStatus, updateDealer, uploadDealerLogo,
   type DealerProfile,
 } from '@/jg/lib/dealers';
 
@@ -167,9 +167,25 @@ function PerfilForm({
   const [celular, setCelular] = useState(dealer?.phone ?? '');
   const [ciudad, setCiudad] = useState(dealer?.city ?? '');
   const [descripcion, setDescripcion] = useState(dealer?.description ?? '');
+  const [logoUrl, setLogoUrl] = useState<string | null>(dealer?.logo_url ?? null);
+  const [subiendoLogo, setSubiendoLogo] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState(false);
+
+  const elegirLogo = async (lista: FileList | null) => {
+    const archivo = lista?.[0];
+    if (!archivo) return;
+    setError(null);
+    setSubiendoLogo(true);
+    try {
+      setLogoUrl(await uploadDealerLogo(archivo));
+    } catch (err) {
+      setError(mensajeError(err, 'No pudimos subir el logo. Intenta de nuevo.'));
+    } finally {
+      setSubiendoLogo(false);
+    }
+  };
 
   const guardar = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -180,7 +196,7 @@ function PerfilForm({
     if (tel.length !== 10) return setError('Escribe un celular de 10 dígitos (ej. 3001234567).');
     setCargando(true);
     try {
-      const datos = { business_name: nombre, phone: tel, city: ciudad, description: descripcion };
+      const datos = { logo_url: logoUrl, business_name: nombre, phone: tel, city: ciudad, description: descripcion };
       const d = dealer ? await updateDealer(dealer.id, datos) : await createDealer(userId, datos);
       setOk(true);
       onGuardado(d);
@@ -198,6 +214,19 @@ function PerfilForm({
       </h2>
       {error && <Aviso tipo="error">{error}</Aviso>}
       {ok && <Aviso tipo="ok">Datos guardados.</Aviso>}
+      <div className="flex items-center gap-4">
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-jg-silver bg-white/5">
+          {logoUrl ? <img src={logoUrl} alt="Logo de tu negocio" className="h-full w-full object-contain" /> : <Store className="h-8 w-8 text-gray-500" />}
+        </div>
+        <div className="min-w-0 flex-1">
+          <label className="label-field">Logo de tu compraventa (opcional)</label>
+          <input type="file" accept="image/*" disabled={subiendoLogo} onChange={(e) => { void elegirLogo(e.target.files); e.target.value = ''; }} className="input-field" />
+          {subiendoLogo && <p className="mt-1 text-xs text-gray-500">Subiendo logo...</p>}
+          {logoUrl && !subiendoLogo && (
+            <button type="button" onClick={() => setLogoUrl(null)} className="mt-1 text-xs text-jg-red">Quitar logo</button>
+          )}
+        </div>
+      </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label className="label-field">Nombre del negocio</label>
@@ -444,6 +473,7 @@ function CompartirCatalogo({ dealer }: { dealer: DealerProfile }) {
         <Share2 className="h-5 w-5 text-jg-red" /> Tu catálogo para compartir
       </h2>
       <p className="text-sm text-gray-400">Envía este enlace a tus clientes: solo verán los vehículos de {dealer.business_name}.</p>
+      <p className="text-xs text-gray-500">Varias personas de tu equipo pueden entrar con el mismo correo y contraseña, desde distintos celulares, y publicar al mismo tiempo.</p>
       <div className="break-all rounded-lg border border-jg-silver bg-black/30 px-3 py-2 text-sm text-jg-text-dark">{url}</div>
       <div className="flex flex-wrap gap-2">
         <button onClick={() => void copiar()} className="btn-secondary !py-2.5">
@@ -546,9 +576,12 @@ export function CompraventasPage() {
         ) : (
           <>
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="min-w-0">
+              <div className="flex min-w-0 items-center gap-3">
+                {dealer.logo_url && <img src={dealer.logo_url} alt="" className="h-12 w-12 shrink-0 rounded-lg object-contain" />}
+                <div className="min-w-0">
                 <p className="truncate font-display text-xl font-bold text-jg-text-dark">{dealer.business_name}</p>
                 <p className="text-sm text-gray-400">WhatsApp: {dealer.phone}{dealer.city ? ` · ${dealer.city}` : ''}</p>
+                </div>
               </div>
               <div className="flex gap-2">
                 <button onClick={() => setEditando(true)} className="btn-secondary !px-3 !py-2 text-xs">Editar datos</button>

@@ -10,10 +10,12 @@ export type DealerProfile = {
   phone: string;
   city: string | null;
   description: string | null;
+  logo_url: string | null;
   created_at: string;
 };
 
 export type DealerProfileInput = {
+  logo_url: string | null;
   business_name: string;
   phone: string;
   city: string;
@@ -44,6 +46,21 @@ export function slugify(text: string): string {
     .slice(0, 50);
 }
 
+/** Sube el logo del negocio (sin marca de agua) y devuelve su dirección. */
+export async function uploadDealerLogo(file: File): Promise<string> {
+  if (!file.type.startsWith('image/')) throw new Error('El logo debe ser una imagen (JPG, PNG o WebP).');
+  if (file.size > 5 * 1024 * 1024) throw new Error('El logo pesa más de 5 MB. Sube una imagen más liviana.');
+  const ext = file.name.split('.').pop()?.toLowerCase().replace(/[^a-z0-9]/g, '') || 'png';
+  const ruta = `logos/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  const { error } = await supabase.storage.from('vehicle-photos').upload(ruta, file, { cacheControl: '3600', upsert: false });
+  if (error) throw error;
+  const { data, error: urlError } = await supabase.storage
+    .from('vehicle-photos')
+    .createSignedUrl(ruta, 60 * 60 * 24 * 365 * 10);
+  if (urlError || !data?.signedUrl) throw urlError ?? new Error('No pudimos obtener la dirección del logo.');
+  return data.signedUrl as string;
+}
+
 export function dealerCatalogUrl(slug: string): string {
   return `${SITE_URL}/tienda/${slug}`;
 }
@@ -68,6 +85,7 @@ export async function createDealer(userId: string, input: DealerProfileInput): P
       .from('dealer_profiles')
       .insert({
         user_id: userId,
+        logo_url: input.logo_url,
         business_name: input.business_name.trim(),
         slug,
         phone: input.phone,
@@ -89,6 +107,7 @@ export async function updateDealer(id: string, input: DealerProfileInput): Promi
   const { data, error } = await supabase
     .from('dealer_profiles')
     .update({
+      logo_url: input.logo_url,
       business_name: input.business_name.trim(),
       phone: input.phone,
       city: input.city.trim() || null,

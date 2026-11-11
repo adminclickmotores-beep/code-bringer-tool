@@ -17,6 +17,7 @@ export type Database = {
       dealer_profiles: {
         Row: {
           business_name: string
+          logo_url: string | null
           city: string | null
           created_at: string
           description: string | null
@@ -27,6 +28,7 @@ export type Database = {
         }
         Insert: {
           business_name: string
+          logo_url?: string | null
           city?: string | null
           created_at?: string
           description?: string | null
@@ -37,6 +39,7 @@ export type Database = {
         }
         Update: {
           business_name?: string
+          logo_url?: string | null
           city?: string | null
           created_at?: string
           description?: string | null

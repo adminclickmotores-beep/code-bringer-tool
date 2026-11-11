@@ -73,6 +73,9 @@ export function TiendaPage({ slug }: { slug: string }) {
       <div className="border-b border-jg-silver/50 bg-jg-carbon/50 py-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 sm:px-6 lg:px-8 md:flex-row md:items-end md:justify-between">
           <div className="min-w-0">
+            {dealer.logo_url && (
+              <img src={dealer.logo_url} alt={`Logo de ${dealer.business_name}`} className="mb-3 h-16 max-w-[12rem] rounded-lg object-contain" />
+            )}
             <p className="text-xs font-semibold uppercase tracking-wide text-jg-red">Compraventa aliada</p>
             <h1 className="break-words font-display text-3xl font-bold text-jg-text-dark sm:text-4xl">{dealer.business_name}</h1>
             {dealer.city && (
