@@ -8,10 +8,10 @@ export function AccesoCompraventa({ onIr }: { onIr: () => void }) {
       </div>
       <h1 className="font-display text-xl font-bold text-jg-text-dark">Esta área es solo para administración</h1>
       <p className="mt-2 text-sm text-gray-400">
-        Tu cuenta es de compraventa. Administra tus vehículos y comparte tu catálogo desde tu panel.
+        Tu cuenta es de Compra-Venta. Administra tus vehículos y comparte tu catálogo desde tu panel.
       </p>
       <button onClick={onIr} className="btn-primary mt-5">
-        Ir a mi panel de compraventa
+        Ir a mi panel de Compra-Venta
       </button>
     </div>
   );

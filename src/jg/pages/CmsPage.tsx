@@ -186,7 +186,7 @@ export function CmsPage({
               { id: 'finanzas' as Tab, etiqueta: 'Finanzas', Icono: Wallet },
               { id: 'consignaciones' as Tab, etiqueta: 'Consignaciones', Icono: Handshake },
               { id: 'leads' as Tab, etiqueta: 'Leads de Clientes', Icono: Users },
-              { id: 'compraventas' as Tab, etiqueta: 'Compraventas', Icono: Store },
+              { id: 'compraventas' as Tab, etiqueta: 'Compra-Venta', Icono: Store },
             ]
           ).map(({ id, etiqueta, Icono }) => (
             <button

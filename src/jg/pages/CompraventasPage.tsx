@@ -241,7 +241,7 @@ function PerfilForm({
   return (
     <form onSubmit={guardar} className="card space-y-4 p-5 sm:p-6">
       <h2 className="font-display text-lg font-bold text-jg-text-dark">
-        {dealer ? 'Datos de tu negocio' : 'Cuéntanos de tu compraventa'}
+        {dealer ? 'Datos de tu negocio' : 'Cuéntanos de tu Compra-Venta'}
       </h2>
       {error && <Aviso tipo="error">{error}</Aviso>}
       {ok && <Aviso tipo="ok">Datos guardados.</Aviso>}
@@ -250,7 +250,7 @@ function PerfilForm({
           {logoUrl ? <img src={logoUrl} alt="Logo de tu negocio" className="h-full w-full object-contain" /> : <Store className="h-8 w-8 text-gray-500" />}
         </div>
         <div className="min-w-0 flex-1">
-          <label className="label-field">Logo de tu compraventa (opcional)</label>
+          <label className="label-field">Logo de tu Compra-Venta (opcional)</label>
           <input type="file" accept="image/*" disabled={subiendoLogo} onChange={(e) => { void elegirLogo(e.target.files); e.target.value = ''; }} className="input-field" />
           {subiendoLogo && <p className="mt-1 text-xs text-gray-500">Subiendo logo...</p>}
           {logoUrl && !subiendoLogo && (
@@ -619,7 +619,7 @@ export function CompraventasPage() {
     <div className="animate-fade-in">
       <div className="border-b border-jg-silver/50 bg-jg-carbon/50 py-8">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-display text-3xl font-bold text-jg-text-dark sm:text-4xl">Para compraventas</h1>
+          <h1 className="font-display text-3xl font-bold text-jg-text-dark sm:text-4xl">Compra-Venta</h1>
           <p className="mt-2 text-sm text-gray-400">
             Publica tus vehículos gratis en ClickMotores y comparte tu propio catálogo con tus clientes.
           </p>
@@ -644,7 +644,7 @@ export function CompraventasPage() {
           <>
             {!dealer && (
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-jg-silver/40 bg-black/20 p-4 text-sm text-gray-300">
-                <span className="min-w-0 break-words">Sesión iniciada como {j.session.user.email}. Si esta no es la cuenta de tu compraventa, cierra sesión y crea una nueva.</span>
+                <span className="min-w-0 break-words">Sesión iniciada como {j.session.user.email}. Si esta no es la cuenta de tu Compra-Venta, cierra sesión y crea una nueva.</span>
                 <button onClick={() => void j.logout()} className="btn-secondary !px-3 !py-2 text-xs">Cerrar sesión</button>
               </div>
             )}

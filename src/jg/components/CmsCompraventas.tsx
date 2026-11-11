@@ -48,9 +48,9 @@ export function CmsCompraventas() {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="font-display text-xl font-bold text-white">Compraventas</h2>
+        <h2 className="font-display text-xl font-bold text-white">Compra-Venta</h2>
         <p className="mt-1 text-sm text-gray-400">
-          Las compraventas nuevas entran pendientes. Apruébalas para que puedan publicar gratis.
+          Las Compra-Venta nuevas entran pendientes. Apruébalas para que puedan publicar gratis.
         </p>
         {!cargando && (
           <p
@@ -59,8 +59,8 @@ export function CmsCompraventas() {
             }`}
           >
             {pendientes > 0
-              ? `${pendientes} ${pendientes === 1 ? 'compraventa pendiente' : 'compraventas pendientes'} de aprobar`
-              : 'No hay compraventas pendientes'}
+              ? `${pendientes} ${pendientes === 1 ? 'Compra-Venta pendiente' : 'Compra-Venta pendientes'} de aprobar`
+              : 'No hay Compra-Venta pendientes'}
           </p>
         )}
       </div>
@@ -72,7 +72,7 @@ export function CmsCompraventas() {
           <Loader2 className="h-4 w-4 animate-spin" /> Cargando...
         </p>
       ) : filas.length === 0 ? (
-        <p className="text-sm text-gray-400">Todavía no hay compraventas registradas.</p>
+        <p className="text-sm text-gray-400">Todavía no hay Compra-Venta registradas.</p>
       ) : (
         <ul className="space-y-3">
           {filas.map((fila) => (
