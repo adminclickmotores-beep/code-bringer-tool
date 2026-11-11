@@ -78,6 +78,19 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
   const [priceMin, setPriceMin] = useState('');
   const [priceMax, setPriceMax] = useState('');
   const [showFilters, setShowFilters] = useState(true);
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem('jg-busqueda');
+      if (!raw) return;
+      sessionStorage.removeItem('jg-busqueda');
+      const dato = JSON.parse(raw) as { q?: string; tipo?: string };
+      if (dato.q) setSearch(dato.q);
+      if (dato.tipo === 'moto' || dato.tipo === 'carro') setTypeFilter(dato.tipo);
+    } catch {
+      /* sin búsqueda previa */
+    }
+  }, []);
   const [yearFilter, setYearFilter] = useState('all');
   const [fuelFilter, setFuelFilter] = useState('all');
   const [transFilter, setTransFilter] = useState('all');

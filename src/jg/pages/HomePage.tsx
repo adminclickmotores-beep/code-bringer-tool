@@ -79,6 +79,15 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
   const [activeTab, setActiveTab] = useState<'carro' | 'moto'>('carro');
   const [searchTerm, setSearchTerm] = useState('');
 
+  const buscarEnCatalogo = () => {
+    try {
+      sessionStorage.setItem('jg-busqueda', JSON.stringify({ q: searchTerm.trim(), tipo: activeTab }));
+    } catch {
+      /* sin almacenamiento */
+    }
+    onNavigate('catalog');
+  };
+
 
   const soldLast = [...vehicles].sort(
     (a, b) => (a.status === 'vendido' ? 1 : 0) - (b.status === 'vendido' ? 1 : 0),
@@ -159,7 +168,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter') onNavigate('catalog');
+                      if (e.key === 'Enter') buscarEnCatalogo();
                     }}
                     placeholder={`Buscar ${activeTab === 'carro' ? 'carro' : 'moto'} por marca, modelo o ciudad...`}
                     className="w-full min-w-0 pl-10 pr-4 py-3 bg-white text-jg-black rounded-xl text-base border border-white/40 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#FF1E27] focus:border-transparent"
@@ -167,7 +176,7 @@ export function HomePage({ vehicles, loading, onNavigate, onVehicleClick }: Home
                 </div>
                 <button
                   type="button"
-                  onClick={() => onNavigate('catalog')}
+                  onClick={buscarEnCatalogo}
                   className="flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#FF1E27] px-7 py-3 text-base font-bold text-white shadow-lg shadow-[#FF1E27]/30 transition-all hover:bg-[#D9111A] hover:shadow-xl hover:shadow-[#FF1E27]/40 hover:-translate-y-px active:bg-[#B30D15] active:translate-y-0 active:scale-[0.98]"
                 >
                   Buscar
