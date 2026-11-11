@@ -371,6 +371,12 @@
 @media (hover: none) and (pointer: coarse) {
   input, select, textarea { font-size: max(16px, 1em) !important; }
 }
+/* botones y enlaces fáciles de tocar con el dedo */
+@media (hover: none) and (pointer: coarse) {
+  .btn-primary, .btn-secondary, .btn-yellow { min-height: 44px; }
+}
+/* textos largos no rompen el ancho en celular */
+p, li, h1, h2, h3, h4 { overflow-wrap: anywhere; }
 /* sin deslizar de lado: nada mas ancho que la pantalla (clip no rompe position: sticky) */
 html, body { max-width: 100%; }
 @supports (overflow-x: clip) { html, body { overflow-x: clip; } }
