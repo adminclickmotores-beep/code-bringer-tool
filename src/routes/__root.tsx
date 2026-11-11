@@ -83,7 +83,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Compra, vende o consigna tu carro o moto en Colombia. Vehículos verificados, financiación, SOAT y traspaso. Publica gratis 20 días." },
       { name: "geo.region", content: "CO-VAC" },
       { name: "geo.placename", content: "Yumbo, Valle del Cauca" },
-      { name: "theme-color", content: "#121212" },
+      { name: "theme-color", content: "#070707" },
       { property: "og:site_name", content: "ClickMotores" },
       { property: "og:locale", content: "es_CO" },
       { property: "og:type", content: "website" },
@@ -115,7 +115,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

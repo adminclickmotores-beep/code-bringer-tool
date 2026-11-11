@@ -32,10 +32,18 @@ export function ConsignmentPanel() {
     finally { setSending(false); }
   };
 
-  const field = (id: 'name' | 'phone' | 'brand' | 'model' | 'city', label: string, ph = '') => (
-    <div><label className="label-field" htmlFor={`cs-${id}`}>{label}</label>
-      <input id={`cs-${id}`} className="input-field" maxLength={100} placeholder={ph} value={f[id]} onChange={(e) => setF({ ...f, [id]: e.target.value })} /></div>
-  );
+  const field = (id: 'name' | 'phone' | 'brand' | 'model' | 'city', label: string, ph = '') => {
+    const attrs =
+      id === 'phone'
+        ? { type: 'tel', inputMode: 'tel' as const, autoComplete: 'tel' }
+        : id === 'name'
+          ? { type: 'text', inputMode: 'text' as const, autoComplete: 'name' }
+          : { type: 'text', inputMode: 'text' as const, autoComplete: 'off' };
+    return (
+      <div><label className="label-field" htmlFor={`cs-${id}`}>{label}</label>
+        <input id={`cs-${id}`} className="input-field text-base" maxLength={100} placeholder={ph} value={f[id]} onChange={(e) => setF({ ...f, [id]: e.target.value })} {...attrs} /></div>
+    );
+  };
 
   return (
     <div className="space-y-6 p-5 sm:p-8">
@@ -61,12 +69,12 @@ export function ConsignmentPanel() {
             {field('name', 'Nombre completo *')}
             {field('phone', 'Celular / WhatsApp *', '3001234567')}
             <div><label className="label-field" htmlFor="cs-type">Tipo *</label>
-              <select id="cs-type" className="input-field" value={f.vehicleType} onChange={(e) => setF({ ...f, vehicleType: e.target.value as 'moto' | 'carro' })}>
+              <select id="cs-type" className="input-field text-base" value={f.vehicleType} onChange={(e) => setF({ ...f, vehicleType: e.target.value as 'moto' | 'carro' })}>
                 <option value="carro">Carro</option><option value="moto">Moto</option></select></div>
             {field('brand', 'Marca *', 'Ej. Mazda')}
             {field('model', 'Modelo / referencia *', 'Ej. CX-30')}
             <div><label className="label-field" htmlFor="cs-year">Año *</label>
-              <input id="cs-year" type="number" min={1950} max={2050} className="input-field" value={f.year} onChange={(e) => setF({ ...f, year: Number(e.target.value) })} /></div>
+              <input id="cs-year" type="number" min={1950} max={new Date().getFullYear() + 1} className="input-field text-base" value={f.year} onChange={(e) => setF({ ...f, year: Number(e.target.value) })} /></div>
             {field('city', 'Ciudad *', 'Ej. Cali')}
           </div>
           <label className="flex cursor-pointer items-start gap-3"><input type="checkbox" checked={f.acceptedPrivacy} onChange={(e) => setF({ ...f, acceptedPrivacy: e.target.checked })} className="mt-1 h-4 w-4 accent-jg-red" /><span className="text-sm text-jg-text-muted">Autorizo a JG Motors, operador de ClickMotores, a tratar mis datos para contactarme (Habeas Data).</span></label>

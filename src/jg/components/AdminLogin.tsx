@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Lock, Mail, Loader2, AlertCircle, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/jg/lib/supabase';
 import { Logo } from '@/jg/components/Logo';
@@ -14,13 +14,16 @@ export function AdminLogin({ onBack, onSuccess }: AdminLoginProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [remember, setRemember] = useState(() => {
+  // Valor fijo en el primer render (el servidor no tiene localStorage);
+  // se lee el valor real en useEffect para no romper la hidratación.
+  const [remember, setRemember] = useState(true);
+  useEffect(() => {
     try {
-      return localStorage.getItem('jg-remember-me') !== '0';
+      setRemember(localStorage.getItem('jg-remember-me') !== '0');
     } catch {
-      return true;
+      /* almacenamiento no disponible */
     }
-  });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,7 +132,9 @@ export function AdminLogin({ onBack, onSuccess }: AdminLoginProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@jgmotors.com"
-                  className="input-field pl-11"
+                  autoComplete="email"
+                  inputMode="email"
+                  className="input-field pl-11 text-base"
                 />
               </div>
             </div>
@@ -145,7 +150,7 @@ export function AdminLogin({ onBack, onSuccess }: AdminLoginProps) {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   autoComplete="current-password"
-                  className="input-field pl-11 pr-11"
+                  className="input-field pl-11 pr-11 text-base"
                 />
                 <button
                   type="button"

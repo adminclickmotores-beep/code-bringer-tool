@@ -18,6 +18,7 @@ export function ListingBadge({
 }) {
   const renew = useServerFn(renewListing);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const status = listingStatus(vehicle);
   if (status === 'permanente') return null;
   const label = LABELS[status];
@@ -25,11 +26,12 @@ export function ListingBadge({
   const handle = async (planId: PlanId) => {
     if (!window.confirm('¿Confirmas que validaste el pago de este plan?')) return;
     setBusy(true);
+    setError(null);
     try {
       await renew({ data: { vehicleId: vehicle.id, planId } });
       await onRenewed();
     } catch (e) {
-      window.alert(e instanceof Error ? e.message : 'No se pudo renovar.');
+      setError(e instanceof Error ? e.message : 'No se pudo renovar.');
     } finally {
       setBusy(false);
     }
@@ -41,6 +43,7 @@ export function ListingBadge({
         Tercero · {label.text} · vence{' '}
         {vehicle.expires_at ? new Date(vehicle.expires_at).toLocaleDateString('es-CO') : '—'}
       </span>
+      {error && <p role="alert" className="mt-1 text-red-400">{error}</p>}
       <div className="mt-1 flex flex-wrap gap-1.5">
         <button
           type="button"

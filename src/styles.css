@@ -367,7 +367,8 @@
   .page-fade { animation-duration: 0.01ms; }
 }
 
-/* sin zoom en celular al escribir */
+/* sin zoom en celular al escribir: todos los campos a mínimo 16px */
+input, select, textarea { font-size: max(16px, 1em); }
 @media (hover: none) and (pointer: coarse) {
   input, select, textarea { font-size: max(16px, 1em) !important; }
 }

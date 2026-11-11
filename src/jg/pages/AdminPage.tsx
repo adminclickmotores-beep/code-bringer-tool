@@ -21,6 +21,7 @@ import {
   Download,
   Eye,
   RefreshCw,
+  Lock,
 } from 'lucide-react';
 import {
   ALLOWED_IMAGE_TYPES,
@@ -591,7 +592,7 @@ export function AdminPage({
 
   const handleExportCSV = () => {
     if (vehicles.length === 0) {
-      window.alert('No hay vehículos para exportar.');
+      setActionError('No hay vehículos para exportar.');
       return;
     }
 
@@ -657,7 +658,7 @@ export function AdminPage({
     const printWindow = window.open('', '_blank');
 
     if (!printWindow) {
-      window.alert(
+      setActionError(
         'El navegador bloqueó la ventana. Permite las ventanas emergentes para imprimir.',
       );
       return;
@@ -822,14 +823,14 @@ export function AdminPage({
     const carros = onlyType('carro');
 
     if (motos.length === 0 && carros.length === 0) {
-      window.alert('No hay vehículos registrados para generar el catálogo.');
+      setActionError('No hay vehículos registrados para generar el catálogo.');
       return;
     }
 
     const printWindow = window.open('', '_blank');
 
     if (!printWindow) {
-      window.alert(
+      setActionError(
         'Permite las ventanas emergentes para generar el catálogo.',
       );
       return;
@@ -1696,8 +1697,8 @@ export function AdminPage({
                                 {STATUS_LABELS[vehicle.status]}
                               </span>
                             )}
-                            <span className="mt-1 block text-[11px] font-semibold uppercase text-blue-400">
-                              🔒 {INTERNAL_LABELS[(vehicle.internal_status as InternalStatus) || 'propio']}
+                            <span className="mt-1 flex items-center gap-1 text-[11px] font-semibold uppercase text-blue-400">
+                              <Lock className="h-3 w-3" />{INTERNAL_LABELS[(vehicle.internal_status as InternalStatus) || 'propio']}
                             </span>
                             <ListingBadge vehicle={vehicle} onRenewed={onRefresh} />
                           </td>

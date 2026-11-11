@@ -153,7 +153,7 @@ function AccesoForm({ onListo }: { onListo: () => void }) {
         <label className="label-field">Correo electrónico</label>
         <div className="relative">
           <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
-          <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" className="input-field pl-11" placeholder="tucompraventa@correo.com" />
+          <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" inputMode="email" className="input-field pl-11 text-base" placeholder="tucompraventa@correo.com" />
         </div>
       </div>
       <div>
@@ -526,7 +526,8 @@ function CompartirCatalogo({ dealer, vehiculos }: { dealer: DealerProfile; vehic
       setCopiado(true);
       window.setTimeout(() => setCopiado(false), 2000);
     } catch {
-      window.prompt('Copia tu enlace:', url);
+      // Sin prompt del navegador: el enlace ya está visible arriba para copiarlo a mano.
+      setCopiado(false);
     }
   };
   const texto = `Mira el catálogo de ${dealer.business_name}: ${url}`;

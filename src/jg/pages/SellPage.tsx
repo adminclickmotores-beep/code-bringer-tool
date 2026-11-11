@@ -152,7 +152,9 @@ export function SellPage() {
     setUploadingCards(true);
     setStepError(null);
     try {
-      propertyUploadGroupRef.current ??= crypto.randomUUID();
+      propertyUploadGroupRef.current ??= (typeof crypto !== 'undefined' && 'randomUUID' in crypto)
+        ? crypto.randomUUID()
+        : `grupo-${Date.now()}-${Math.random().toString(36).slice(2)}`;
       const path = await uploadPropertyCard(file, propertyUploadGroupRef.current, side);
       if (!path) throw new Error('No se pudo cargar el documento.');
       const index = side === 'front' ? 0 : 1;
@@ -184,8 +186,7 @@ export function SellPage() {
         return;
       }
       const year = new Date().getFullYear();
-      if (form.year < 1950 || form.year > 2050 || form.mileage < 0 || (isPublicar && !form.mileage)) {
-        void year;
+      if (form.year < 1950 || form.year > year + 1 || form.mileage < 0 || (isPublicar && !form.mileage)) {
         setStepError('Revisa el año y el kilometraje.');
         return;
       }
@@ -241,21 +242,21 @@ export function SellPage() {
       id: 'directa' as SaleMode,
       icon: DollarSign,
       title: 'Te Compramos Tu Vehículo',
-      badge: '⚡ Pago de Contado · Oferta en 24h',
+      badge: 'Pago de contado · Oferta en 24h',
       desc: 'Vende de inmediato, sin esperas. Te hacemos una oferta formal y recibes el dinero tras el peritaje.',
     },
     {
       id: 'consignacion' as SaleMode,
       icon: Handshake,
       title: 'Consignación Comercial',
-      badge: '🤝 Gestión Total · Vendemos por ti',
+      badge: 'Gestión total · Vendemos por ti',
       desc: 'Nuestro equipo se encarga de fotos, pauta, compradores y trámites para lograr el mejor precio.',
     },
     {
       id: 'publicar_gratis' as SaleMode,
       icon: Globe,
       title: 'Publica Gratis',
-      badge: '📢 20 Días GRATIS · Trato Directo',
+      badge: '20 días gratis · Trato directo',
       desc: 'Publica por tu cuenta y atiende a los compradores directamente por WhatsApp.',
     },
   ];
@@ -388,8 +389,8 @@ export function SellPage() {
                     {isPublicar && <div className="rounded-lg border border-jg-yellow-dark/30 bg-jg-yellow/10 p-4"><div className="flex gap-3"><DollarSign className="h-5 w-5 text-jg-yellow-dark" /><div><p className="text-sm font-semibold text-jg-text-dark">Precio sugerido aproximado</p><p className="mt-1 text-2xl font-bold text-jg-text-dark">{suggestedPrice ? formatCOP(suggestedPrice) : 'Aún sin comparables'}</p><p className="mt-1 text-xs text-jg-text-muted">Referencia basada en vehículos similares del inventario y su antigüedad; no es un avalúo oficial.</p>{suggestedPrice && <Button type="button" variant="outline" size="sm" className="mt-3" onClick={() => setForm({ ...form, askingPrice: suggestedPrice })}>Usar este precio</Button>}</div></div></div>}
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div><label className="label-field" htmlFor="askingPrice">Precio esperado (COP)</label><input id="askingPrice" type="number" min="0" max="10000000000" value={form.askingPrice || ''} onChange={(e) => setForm({ ...form, askingPrice: Number(e.target.value) })} className="input-field" placeholder="Ej. 45000000" /></div>
-                      <div><label className="label-field" htmlFor="name">Nombre completo *</label><input id="name" maxLength={100} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="input-field" placeholder="Tu nombre" /></div>
-                      <div><label className="label-field" htmlFor="phone">WhatsApp *</label><input id="phone" type="tel" maxLength={20} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="input-field" placeholder="300 123 4567" /></div>
+                      <div><label className="label-field" htmlFor="name">Nombre completo *</label><input id="name" maxLength={100} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="input-field" placeholder="Tu nombre" autoComplete="name" /></div>
+                      <div><label className="label-field" htmlFor="phone">WhatsApp *</label><input id="phone" type="tel" maxLength={20} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="input-field" placeholder="300 123 4567" autoComplete="tel" inputMode="tel" /></div>
                       <div className="sm:col-span-2"><label className="label-field" htmlFor="description">Comentarios</label><textarea id="description" maxLength={1200} rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="input-field resize-none" placeholder="Detalles importantes del vehículo" /></div>
                     </div>
                     <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-jg-silver p-4"><input type="checkbox" checked={form.acceptedPrivacy} onChange={(e) => setForm({ ...form, acceptedPrivacy: e.target.checked })} className="mt-1 h-4 w-4 accent-jg-red" /><span className="text-sm text-jg-text-muted">Autorizo a JG Motors, operador de ClickMotores, a tratar mis datos para gestionar esta solicitud. Entiendo que la tarjeta de propiedad es confidencial y no será publicada.</span></label>

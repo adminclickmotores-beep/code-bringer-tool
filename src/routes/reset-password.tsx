@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Loader2, Mail, Lock, ArrowLeft, CheckCircle2, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/jg/lib/supabase";
 import { routeHead } from "@/lib/seo";
@@ -19,8 +19,15 @@ function Page() {
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isRecovery =
-    typeof window !== "undefined" && window.location.hash.includes("type=recovery");
+  // Se lee en useEffect para no romper la hidratación (el servidor no tiene window).
+  const [isRecovery, setIsRecovery] = useState(false);
+  useEffect(() => {
+    try {
+      setIsRecovery(window.location.hash.includes("type=recovery"));
+    } catch {
+      setIsRecovery(false);
+    }
+  }, []);
 
   const request = async (e: FormEvent) => {
     e.preventDefault();

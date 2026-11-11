@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, ChevronLeft, ChevronRight, Bike, Car, Calendar, Gauge, Fuel, Settings2, ImageIcon, ShieldCheck, Instagram, MapPin, CalendarClock, Share2, Check } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Bike, Car, Calendar, Gauge, Fuel, Settings2, ImageIcon, ShieldCheck, Instagram, MapPin, CalendarClock, Share2, Check, Handshake } from 'lucide-react';
 import { Vehicle, formatCOP, STATUS_CONFIG, TAG_CONFIG, whatsappLink, whatsappLinkTo, logConsulta, maskPlaca } from '@/jg/lib/supabase';
 import { compartirVehiculo } from '@/jg/lib/compartir';
 import { contactTarget } from '@/jg/lib/plans';
@@ -219,8 +219,8 @@ export function VehicleDetailModal({ vehicle, onClose }: VehicleDetailModalProps
             )}
 
             {vehicle.status === 'aliado' && vehicle.ally_name && (
-              <p className="mt-3 rounded-lg border border-blue-500/30 bg-blue-500/10 px-4 py-2.5 text-sm text-blue-700">
-                🤝 En exhibición con vitrina aliada: <strong>{vehicle.ally_name}</strong>
+              <p className="mt-3 flex items-center gap-2 rounded-lg border border-blue-500/30 bg-blue-500/10 px-4 py-2.5 text-sm text-blue-700">
+                <Handshake className="h-4 w-4 shrink-0" />En exhibición con vitrina aliada: <strong>{vehicle.ally_name}</strong>
               </p>
             )}
             {vehicle.instagram_url && (
