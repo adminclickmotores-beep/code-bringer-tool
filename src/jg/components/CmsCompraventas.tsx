@@ -16,6 +16,7 @@ export function CmsCompraventas() {
   const [cargando, setCargando] = useState(true);
   const [ocupado, setOcupado] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const pendientes = filas.filter((f) => !f.aprobada).length;
 
   const cargar = async () => {
     setCargando(true);
@@ -51,6 +52,17 @@ export function CmsCompraventas() {
         <p className="mt-1 text-sm text-gray-400">
           Las compraventas nuevas entran pendientes. Apruébalas para que puedan publicar gratis.
         </p>
+        {!cargando && (
+          <p
+            className={`mt-3 inline-flex rounded-full px-3 py-1 text-sm font-semibold ${
+              pendientes > 0 ? 'bg-yellow-500/15 text-yellow-300' : 'bg-white/10 text-gray-300'
+            }`}
+          >
+            {pendientes > 0
+              ? `${pendientes} ${pendientes === 1 ? 'compraventa pendiente' : 'compraventas pendientes'} de aprobar`
+              : 'No hay compraventas pendientes'}
+          </p>
+        )}
       </div>
 
       {error && <p className="text-sm text-red-400">{error}</p>}
