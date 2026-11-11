@@ -13,7 +13,6 @@ const navItems = [
   { id: 'home', label: 'Inicio' },
   { id: 'catalog', label: 'Inventario' },
   { id: 'sell', label: 'Vende tu Vehículo' },
-  { id: 'compraventas', label: 'Compraventas' },
   { id: 'financing', label: 'Financiación' },
   { id: 'contact', label: 'Contacto' },
 ];

@@ -215,7 +215,7 @@ function PerfilForm({
     if (nombre.trim().length < 2) return setError('Escribe el nombre de tu negocio.');
     if (tel.length !== 10) return setError('Escribe un celular de 10 dígitos (ej. 3001234567).');
     if (ciudad.trim().length < 2) return setError('Escribe la ciudad de tu negocio.');
-    if (descripcion.trim().length < 10) return setError('Escribe una descripción de tu negocio (mínimo 10 caracteres) para activar tu cuenta de inmediato.');
+    if (descripcion.trim().length < 10) return setError('Escribe una descripción de tu negocio (mínimo 10 caracteres).');
     setCargando(true);
     try {
       const datos = { logo_url: logoUrl, business_name: nombre, phone: tel, city: ciudad, description: descripcion };
@@ -643,7 +643,7 @@ export function CompraventasPage() {
               <div className="rounded-xl border border-yellow-500/40 bg-yellow-500/10 p-4">
                 <p className="font-semibold text-yellow-300">Tu cuenta está pendiente de aprobación</p>
                 <p className="mt-1 text-sm text-gray-300">
-                  Ya puedes ver tu catálogo, pero para publicar tus vehículos el administrador debe aprobar tu compraventa.
+                  Recibimos tus datos. La primera vez, el administrador debe revisar y autorizar tu acceso; cuando lo haga, podrás publicar tus vehículos.
                 </p>
               </div>
             )}
