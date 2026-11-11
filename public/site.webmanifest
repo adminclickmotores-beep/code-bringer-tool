@@ -1,11 +1,14 @@
 {
   "name": "ClickMotores",
   "short_name": "ClickMotores",
-  "description": "ClickMotores — vitrina digital de vehículos.",
+  "description": "Compra, vende y financia carros y motos usados en Colombia.",
+  "lang": "es-CO",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#242424",
-  "theme_color": "#121212",
+  "background_color": "#070707",
+  "theme_color": "#070707",
+  "categories": ["shopping", "business"],
   "icons": [
     {
       "src": "/favicon.svg",

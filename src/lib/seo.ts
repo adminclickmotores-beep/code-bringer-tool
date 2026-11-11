@@ -11,9 +11,9 @@ export interface SeoData {
 }
 
 const DEFAULT_SEO: SeoData = {
-  title: 'ClickMotores | Consignación y Venta Profesional de Motos y Carros en Colombia',
+  title: 'ClickMotores | Compra y Vende Carros y Motos Usados en Colombia',
   description:
-    'Compra y vende carros y motos multimarca 100% verificados en Colombia. Consignación profesional, financiación, SOAT y traspaso legal garantizado.',
+    'Compra, vende o consigna tu carro o moto en Colombia. Vehículos verificados, financiación, SOAT y traspaso. Publica gratis 20 días. Cali y Yumbo.',
 };
 
 export const PAGE_SEO: Record<string, SeoData> = {
@@ -98,6 +98,99 @@ function upsertCanonical(href: string): void {
   el.setAttribute('href', href);
 }
 
+const KEYWORDS =
+  'comprar carro usado Colombia, vender carro, vender moto, motos usadas Cali, carros usados Cali, consignación de vehículos, compraventa de carros, financiación de vehículos, SOAT, traspaso de vehículos, ClickMotores, JG Motors, Yumbo';
+
+export const FAQ_HOME: { q: string; a: string }[] = [
+  {
+    q: '¿Qué es ClickMotores?',
+    a: 'ClickMotores es una vitrina virtual de carros y motos usados en Colombia, operada por JG Motors desde Yumbo, Valle del Cauca. Aquí compras, vendes o financias tu vehículo con acompañamiento.',
+  },
+  {
+    q: '¿Cuánto cuesta publicar mi vehículo?',
+    a: 'Publicar tu vehículo es gratis durante 20 días. Después puedes elegir un plan desde $20.000, $35.000 o $50.000 para mantenerlo visible.',
+  },
+  {
+    q: '¿Cómo funciona la consignación?',
+    a: 'Dejas tu carro o moto con nosotros y nos encargamos de promocionarlo y venderlo. Se paga una pauta de $100.000 más una comisión del 3% en carros o del 5% en motos, solo cuando se vende.',
+  },
+  {
+    q: '¿Puedo financiar un vehículo?',
+    a: 'Sí. Te ayudamos a simular tu crédito con entidades aliadas para que compres tu carro o moto con cuotas que se ajusten a tu presupuesto.',
+  },
+  {
+    q: '¿Cómo los contacto?',
+    a: 'Escríbenos por WhatsApp al +57 333 276 5584 o visítanos en Yumbo, Valle del Cauca.',
+  },
+];
+
+function businessJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'AutoDealer',
+    '@id': `${SITE_URL}/#negocio`,
+    name: SITE_NAME,
+    alternateName: 'JG Motors',
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo.svg`,
+    image: OG_IMAGE,
+    description: DEFAULT_SEO.description,
+    telephone: '+573332765584',
+    priceRange: '$$',
+    areaServed: { '@type': 'Country', name: 'Colombia' },
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Yumbo',
+      addressRegion: 'Valle del Cauca',
+      addressCountry: 'CO',
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+573332765584',
+      contactType: 'customer service',
+      availableLanguage: 'Spanish',
+    },
+  };
+}
+
+function websiteJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE_NAME,
+    url: SITE_URL,
+    inLanguage: 'es-CO',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${SITE_URL}/catalogo`,
+      'query-input': 'required name=search_term_string',
+    },
+  };
+}
+
+function faqJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ_HOME.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  };
+}
+
+function breadcrumbJsonLd(path: string, title: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: title.split('|')[0]?.trim() ?? title, item: `${SITE_URL}${path}` },
+    ],
+  };
+}
+
 /** Metadatos de una ruta para el `head()` de TanStack Router (SSR + navegación). */
 export function routeHead(path: string, opts?: { noindex?: boolean }) {
   const { title, description } = pageSeo(path);
@@ -105,16 +198,34 @@ export function routeHead(path: string, opts?: { noindex?: boolean }) {
   const meta: Record<string, string>[] = [
     { title },
     { name: 'description', content: description },
+    { name: 'keywords', content: KEYWORDS },
+    { name: 'robots', content: opts?.noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1' },
     { property: 'og:title', content: title },
     { property: 'og:description', content: description },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: url },
-    { name: 'twitter:card', content: 'summary_large_image' },
+    { property: 'og:locale', content: 'es_CO' },
+    { property: 'og:site_name', content: SITE_NAME },
     { property: 'og:image', content: OG_IMAGE },
+    { property: 'og:image:alt', content: 'ClickMotores: carros y motos verificados en Colombia' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: title },
+    { name: 'twitter:description', content: description },
     { name: 'twitter:image', content: OG_IMAGE },
   ];
-  if (opts?.noindex) meta.push({ name: 'robots', content: 'noindex' });
-  return { meta, links: [{ rel: 'canonical', href: url }] };
+  const scripts: { type: string; children: string }[] = [];
+  if (!opts?.noindex) {
+    if (path === '/') {
+      scripts.push(
+        { type: 'application/ld+json', children: JSON.stringify(businessJsonLd()) },
+        { type: 'application/ld+json', children: JSON.stringify(websiteJsonLd()) },
+        { type: 'application/ld+json', children: JSON.stringify(faqJsonLd()) },
+      );
+    } else {
+      scripts.push({ type: 'application/ld+json', children: JSON.stringify(breadcrumbJsonLd(path, title)) });
+    }
+  }
+  return { meta, links: [{ rel: 'canonical', href: url }], scripts };
 }
 
 /** Refuerzo en cliente: actualiza título, descripción, OG y canonical al montar la página. */
