@@ -13,12 +13,14 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CatalogoRouteImport } from './routes/catalogo'
 import { Route as CmsRouteImport } from './routes/cms'
+import { Route as CompraventasRouteImport } from './routes/compraventas'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as FinanciacionRouteImport } from './routes/financiacion'
 import { Route as HabeasDataRouteImport } from './routes/habeas-data'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as TerminosRouteImport } from './routes/terminos'
 import { Route as VenderRouteImport } from './routes/vender'
+import { Route as TiendaSlugRouteImport } from './routes/tienda.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -38,6 +40,11 @@ const CatalogoRoute = CatalogoRouteImport.update({
 const CmsRoute = CmsRouteImport.update({
   id: '/cms',
   path: '/cms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompraventasRoute = CompraventasRouteImport.update({
+  id: '/compraventas',
+  path: '/compraventas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactoRoute = ContactoRouteImport.update({
@@ -70,30 +77,39 @@ const VenderRoute = VenderRouteImport.update({
   path: '/vender',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TiendaSlugRoute = TiendaSlugRouteImport.update({
+  id: '/tienda/$slug',
+  path: '/tienda/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/catalogo': typeof CatalogoRoute
   '/cms': typeof CmsRoute
+  '/compraventas': typeof CompraventasRoute
   '/contacto': typeof ContactoRoute
   '/financiacion': typeof FinanciacionRoute
   '/habeas-data': typeof HabeasDataRoute
   '/reset-password': typeof ResetPasswordRoute
   '/terminos': typeof TerminosRoute
   '/vender': typeof VenderRoute
+  '/tienda/$slug': typeof TiendaSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/catalogo': typeof CatalogoRoute
   '/cms': typeof CmsRoute
+  '/compraventas': typeof CompraventasRoute
   '/contacto': typeof ContactoRoute
   '/financiacion': typeof FinanciacionRoute
   '/habeas-data': typeof HabeasDataRoute
   '/reset-password': typeof ResetPasswordRoute
   '/terminos': typeof TerminosRoute
   '/vender': typeof VenderRoute
+  '/tienda/$slug': typeof TiendaSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -101,12 +117,14 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/catalogo': typeof CatalogoRoute
   '/cms': typeof CmsRoute
+  '/compraventas': typeof CompraventasRoute
   '/contacto': typeof ContactoRoute
   '/financiacion': typeof FinanciacionRoute
   '/habeas-data': typeof HabeasDataRoute
   '/reset-password': typeof ResetPasswordRoute
   '/terminos': typeof TerminosRoute
   '/vender': typeof VenderRoute
+  '/tienda/$slug': typeof TiendaSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -115,36 +133,42 @@ export interface FileRouteTypes {
     | '/admin'
     | '/catalogo'
     | '/cms'
+    | '/compraventas'
     | '/contacto'
     | '/financiacion'
     | '/habeas-data'
     | '/reset-password'
     | '/terminos'
     | '/vender'
+    | '/tienda/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/catalogo'
     | '/cms'
+    | '/compraventas'
     | '/contacto'
     | '/financiacion'
     | '/habeas-data'
     | '/reset-password'
     | '/terminos'
     | '/vender'
+    | '/tienda/$slug'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/catalogo'
     | '/cms'
+    | '/compraventas'
     | '/contacto'
     | '/financiacion'
     | '/habeas-data'
     | '/reset-password'
     | '/terminos'
     | '/vender'
+    | '/tienda/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -152,12 +176,14 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   CatalogoRoute: typeof CatalogoRoute
   CmsRoute: typeof CmsRoute
+  CompraventasRoute: typeof CompraventasRoute
   ContactoRoute: typeof ContactoRoute
   FinanciacionRoute: typeof FinanciacionRoute
   HabeasDataRoute: typeof HabeasDataRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   TerminosRoute: typeof TerminosRoute
   VenderRoute: typeof VenderRoute
+  TiendaSlugRoute: typeof TiendaSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -188,6 +214,13 @@ declare module '@tanstack/react-router' {
       path: '/cms'
       fullPath: '/cms'
       preLoaderRoute: typeof CmsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compraventas': {
+      id: '/compraventas'
+      path: '/compraventas'
+      fullPath: '/compraventas'
+      preLoaderRoute: typeof CompraventasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contacto': {
@@ -232,6 +265,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VenderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tienda/$slug': {
+      id: '/tienda/$slug'
+      path: '/tienda/$slug'
+      fullPath: '/tienda/$slug'
+      preLoaderRoute: typeof TiendaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -240,12 +280,14 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   CatalogoRoute: CatalogoRoute,
   CmsRoute: CmsRoute,
+  CompraventasRoute: CompraventasRoute,
   ContactoRoute: ContactoRoute,
   FinanciacionRoute: FinanciacionRoute,
   HabeasDataRoute: HabeasDataRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   TerminosRoute: TerminosRoute,
   VenderRoute: VenderRoute,
+  TiendaSlugRoute: TiendaSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

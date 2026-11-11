@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      dealer_profiles: {
+        Row: {
+          business_name: string
+          city: string | null
+          created_at: string
+          description: string | null
+          id: string
+          phone: string
+          slug: string
+          user_id: string
+        }
+        Insert: {
+          business_name: string
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          phone: string
+          slug: string
+          user_id: string
+        }
+        Update: {
+          business_name?: string
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          phone?: string
+          slug?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       buyer_interests: {
         Row: {
           buyer_name: string
@@ -390,6 +423,7 @@ export type Database = {
           ciudad: string | null
           consignado: boolean
           created_at: string | null
+          dealer_id: string | null
           description: string | null
           displacement: string | null
           expires_at: string | null
@@ -423,6 +457,7 @@ export type Database = {
           ciudad?: string | null
           consignado?: boolean
           created_at?: string | null
+          dealer_id?: string | null
           description?: string | null
           displacement?: string | null
           expires_at?: string | null
@@ -456,6 +491,7 @@ export type Database = {
           ciudad?: string | null
           consignado?: boolean
           created_at?: string | null
+          dealer_id?: string | null
           description?: string | null
           displacement?: string | null
           expires_at?: string | null

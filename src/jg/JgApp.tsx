@@ -18,6 +18,7 @@ export const PAGE_PATHS: Record<string, string> = {
   home: '/',
   catalog: '/catalogo',
   sell: '/vender',
+  compraventas: '/compraventas',
   financing: '/financiacion',
   contact: '/contacto',
   terminos: '/terminos',

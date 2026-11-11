@@ -57,6 +57,7 @@ export function Footer({ onNavigate }: FooterProps) {
                 { id: 'home', label: 'Inicio' },
                 { id: 'catalog', label: 'Inventario' },
                 { id: 'sell', label: 'Vende tu Vehículo' },
+                { id: 'compraventas', label: 'Para compraventas' },
                 { id: 'financing', label: 'Financiación' },
                 { id: 'contact', label: 'Contacto' },
               ].map((item) => (

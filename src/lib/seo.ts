@@ -26,6 +26,11 @@ export const PAGE_SEO: Record<string, SeoData> = {
     description:
       'Vende tu vehículo en Colombia: publicación gratis, compra directa de contado o consignación profesional con ClickMotores.',
   },
+  '/compraventas': {
+    title: 'Publica gratis tus carros y comparte tu catálogo | Compraventas | ClickMotores',
+    description:
+      'Compraventas: publica tus vehículos gratis en ClickMotores con el nombre de tu negocio y comparte tu propio catálogo con tus clientes.',
+  },
   '/financiacion': {
     title: 'Financiación de Carros y Motos en Colombia | ClickMotores',
     description:
@@ -61,6 +66,12 @@ export const PAGE_SEO: Record<string, SeoData> = {
 };
 
 export function pageSeo(path: string): SeoData {
+  if (path.startsWith('/tienda/')) {
+    return {
+      title: 'Catálogo de vehículos de compraventa | ClickMotores',
+      description: 'Catálogo de carros y motos de una compraventa aliada, publicado en ClickMotores.',
+    };
+  }
   return PAGE_SEO[path] ?? DEFAULT_SEO;
 }
 

@@ -36,6 +36,7 @@ export type Vehicle = {
   owner_name?: string | null;
   owner_phone?: string | null;
   ally_name?: string | null;
+  dealer_id?: string | null;
 };
 
 export type VehicleInput = Omit<Vehicle, 'id' | 'created_at'>;
