@@ -135,7 +135,7 @@ export function Footer({ onNavigate }: FooterProps) {
                 Política de Tratamiento de Datos (Habeas Data Ley 1581)
               </button>
               <button
-                onClick={() => onNavigate('admin')}
+                onClick={() => onNavigate('cms')}
                 className="flex items-center gap-2 text-xs text-gray-500 transition-colors hover:text-gray-300"
               >
                 <Lock className="h-3.5 w-3.5" />
