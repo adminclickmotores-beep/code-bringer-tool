@@ -18,6 +18,8 @@ const ETAPAS = [
   { id: 'perdido', nombre: 'Perdido', ayuda: 'Ya no va a comprar.', color: 'bg-gray-600/20 text-gray-300 border-gray-500/40' },
 ] as const;
 
+const CLIENTES_POR_PAGINA = 20;
+
 const ORIGENES = ['WhatsApp', 'Llamada', 'Redes sociales', 'ClickMotores', 'Visita al patio', 'Referido', 'Otro'];
 
 const PASOS_GUIA = [
@@ -377,6 +379,7 @@ export function CrmCompraventa({ dealer }: { dealer: DealerProfile }) {
   const [expandido, setExpandido] = useState<string | null>(null);
   const [registrando, setRegistrando] = useState<string | null>(null);
   const [guiaAbierta, setGuiaAbierta] = useState(true);
+  const [limite, setLimite] = useState(CLIENTES_POR_PAGINA);
 
   useEffect(() => {
     try {
@@ -513,13 +516,13 @@ export function CrmCompraventa({ dealer }: { dealer: DealerProfile }) {
         <>
           <div className="relative">
             <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
-            <input value={busqueda} onChange={(e) => setBusqueda(e.target.value)} className="input-field pl-11" placeholder="Buscar por nombre, celular o vehículo" />
+            <input value={busqueda} onChange={(e) => { setBusqueda(e.target.value); setLimite(CLIENTES_POR_PAGINA); }} className="input-field pl-11" placeholder="Buscar por nombre, celular o vehículo" />
           </div>
           <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
             {filtros.map(([id, nombre, n]) => (
               <button
                 key={id}
-                onClick={() => setFiltro(id)}
+                onClick={() => { setFiltro(id); setLimite(CLIENTES_POR_PAGINA); }}
                 className={`flex min-h-[40px] shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm font-medium ${filtro === id ? 'border-jg-red bg-jg-red/10 text-jg-red' : 'border-jg-silver text-gray-400'}`}
               >
                 {nombre} <span className="rounded-full bg-white/10 px-1.5 text-xs">{n}</span>
@@ -542,7 +545,7 @@ export function CrmCompraventa({ dealer }: { dealer: DealerProfile }) {
         <p className="rounded-xl bg-black/20 p-4 text-center text-sm text-gray-400">No hay clientes en esta lista.</p>
       ) : (
         <ul className="space-y-3">
-          {visibles.map((c) => {
+          {visibles.slice(0, limite).map((c) => {
             const et = etapaInfo(c.etapa);
             const prox = textoProximo(c.proximo_contacto, hoy);
             const alerta = toca(c) && prox.alerta;
@@ -618,6 +621,11 @@ export function CrmCompraventa({ dealer }: { dealer: DealerProfile }) {
             );
           })}
         </ul>
+      )}
+      {visibles.length > limite && (
+        <button onClick={() => setLimite((l) => l + CLIENTES_POR_PAGINA)} className="btn-secondary min-h-[48px] w-full">
+          Ver más clientes ({visibles.length - limite} más)
+        </button>
       )}
     </section>
   );
