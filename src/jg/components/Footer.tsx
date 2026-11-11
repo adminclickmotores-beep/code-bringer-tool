@@ -1,4 +1,4 @@
-import { MapPin, Phone, Facebook, Clock, ShieldCheck, Zap, Award, Instagram, FileText, ShieldAlert } from 'lucide-react';
+import { MapPin, Phone, Facebook, Clock, ShieldCheck, Zap, Award, Instagram, FileText, ShieldAlert, Lock } from 'lucide-react';
 import { Logo } from './Logo';
 import { FACEBOOK_URL, INSTAGRAM_URL, INSTAGRAM_HANDLE, whatsappLink } from '@/jg/lib/supabase';
 
@@ -133,6 +133,13 @@ export function Footer({ onNavigate }: FooterProps) {
               >
                 <ShieldAlert className="h-3.5 w-3.5" />
                 Política de Tratamiento de Datos (Habeas Data Ley 1581)
+              </button>
+              <button
+                onClick={() => onNavigate('admin')}
+                className="flex items-center gap-2 text-xs text-gray-500 transition-colors hover:text-gray-300"
+              >
+                <Lock className="h-3.5 w-3.5" />
+                CMS · Panel de Control
               </button>
             </div>
           </div>

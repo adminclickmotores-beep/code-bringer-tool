@@ -1,4 +1,4 @@
-import { Menu, X, Facebook, Lock, Instagram, Phone } from 'lucide-react';
+import { Menu, X, Facebook, Instagram, Phone } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Logo } from './Logo';
 import { FACEBOOK_URL, INSTAGRAM_URL, whatsappLink } from '@/jg/lib/supabase';
@@ -17,7 +17,7 @@ const navItems = [
   { id: 'contact', label: 'Contacto' },
 ];
 
-export function Header({ currentPage, onNavigate, sessionEmail }: HeaderProps) {
+export function Header({ currentPage, onNavigate }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -67,20 +67,6 @@ export function Header({ currentPage, onNavigate, sessionEmail }: HeaderProps) {
                 )}
               </button>
             ))}
-            <button
-              onClick={() => handleNav('admin')}
-              className={`flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                currentPage === 'admin'
-                  ? 'border-jg-red bg-jg-red/10 text-jg-red'
-                  : 'border-jg-silver text-gray-300 hover:border-jg-red/50 hover:text-white'
-              }`}
-            >
-              <Lock className="h-3.5 w-3.5" />
-              CMS
-              {sessionEmail && (
-                <span className="h-1.5 w-1.5 rounded-full bg-green-400" title={`Sesión: ${sessionEmail}`} />
-              )}
-            </button>
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
@@ -138,17 +124,6 @@ export function Header({ currentPage, onNavigate, sessionEmail }: HeaderProps) {
                   {item.label}
                 </button>
               ))}
-              <button
-                onClick={() => handleNav('admin')}
-                className={`flex w-full items-center gap-2 rounded-lg px-4 py-3 text-left text-sm font-medium transition-colors ${
-                  currentPage === 'admin'
-                    ? 'border border-jg-red bg-jg-red/10 text-jg-red'
-                    : 'border border-jg-silver text-gray-300 hover:bg-jg-silver'
-                }`}
-              >
-                <Lock className="h-4 w-4" />
-                CMS · Panel de Control
-              </button>
               <div className="flex items-center gap-4 px-4 pt-3">
                 <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-jg-red" aria-label="Instagram">
                   <Instagram className="h-5 w-5" />
