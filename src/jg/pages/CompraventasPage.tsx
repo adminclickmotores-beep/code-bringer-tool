@@ -608,6 +608,14 @@ export function CompraventasPage() {
           />
         ) : (
           <>
+            {!dealer.aprobada && (
+              <div className="rounded-xl border border-yellow-500/40 bg-yellow-500/10 p-4">
+                <p className="font-semibold text-yellow-300">Tu cuenta está pendiente de aprobación</p>
+                <p className="mt-1 text-sm text-gray-300">
+                  Ya puedes ver tu catálogo, pero para publicar tus vehículos el administrador debe aprobar tu compraventa.
+                </p>
+              </div>
+            )}
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
                 {dealer.logo_url && <img src={dealer.logo_url} alt="" className="h-12 w-12 shrink-0 rounded-lg object-contain" />}
@@ -622,7 +630,7 @@ export function CompraventasPage() {
               </div>
             </div>
             <CompartirCatalogo dealer={dealer} vehiculos={vehiculos} />
-            <PublicarForm dealer={dealer} onPublicado={() => void recargar()} />
+            {dealer.aprobada && <PublicarForm dealer={dealer} onPublicado={() => void recargar()} />}
             <MisVehiculos vehiculos={vehiculos} cargando={cargandoVeh} onCambio={() => void recargar()} />
           </>
         )}

@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       dealer_profiles: {
         Row: {
+          aprobada: boolean
           business_name: string
           logo_url: string | null
           city: string | null
@@ -27,6 +28,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          aprobada?: boolean
           business_name: string
           logo_url?: string | null
           city?: string | null
@@ -38,6 +40,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          aprobada?: boolean
           business_name?: string
           logo_url?: string | null
           city?: string | null

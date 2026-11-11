@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BarChart3, Bike, Car, CheckCircle2, Handshake, Loader2, Pencil, Plus, ShieldCheck, Users, Wallet, X } from 'lucide-react';
+import { BarChart3, Bike, Car, CheckCircle2, Handshake, Loader2, Pencil, Plus, ShieldCheck, Store, Users, Wallet, X } from 'lucide-react';
 import { CmsNegocio } from '@/jg/components/CmsNegocio';
+import { CmsCompraventas } from '@/jg/components/CmsCompraventas';
 import { supabase } from '@/integrations/supabase/client';
 import { formatCOP, normalizeVehicle, type Vehicle } from '@/jg/lib/supabase';
 import { CmsVehicleForm, type CmsVehicleFormValue } from '@/jg/components/CmsVehicleForm';
 
-type Tab = 'panel' | 'inventario' | 'finanzas' | 'consignaciones' | 'leads';
+type Tab = 'panel' | 'inventario' | 'finanzas' | 'consignaciones' | 'leads' | 'compraventas';
 
 type Consulta = {
   id: string;
@@ -185,6 +186,7 @@ export function CmsPage({
               { id: 'finanzas' as Tab, etiqueta: 'Finanzas', Icono: Wallet },
               { id: 'consignaciones' as Tab, etiqueta: 'Consignaciones', Icono: Handshake },
               { id: 'leads' as Tab, etiqueta: 'Leads de Clientes', Icono: Users },
+              { id: 'compraventas' as Tab, etiqueta: 'Compraventas', Icono: Store },
             ]
           ).map(({ id, etiqueta, Icono }) => (
             <button
@@ -279,6 +281,7 @@ export function CmsPage({
           </section>
         )}
 
+        {tab === 'compraventas' && <CmsCompraventas />}
         {tab === 'leads' && (
           <section className="grid gap-4 lg:grid-cols-2">
             <div className="rounded-2xl border border-white/10 bg-black/60 p-4 backdrop-blur-xl sm:p-5">

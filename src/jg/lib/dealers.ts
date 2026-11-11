@@ -11,6 +11,7 @@ export type DealerProfile = {
   city: string | null;
   description: string | null;
   logo_url: string | null;
+  aprobada: boolean;
   created_at: string;
 };
 
