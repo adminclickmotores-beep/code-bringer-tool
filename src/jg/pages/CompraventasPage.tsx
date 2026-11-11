@@ -632,21 +632,33 @@ export function CompraventasPage() {
         ) : !j.session ? (
           <AccesoForm onListo={j.refreshSession} />
         ) : !dealer || editando ? (
-          <PerfilForm
-            dealer={dealer}
-            userId={j.session.user.id}
-            onGuardado={(d) => { setDealer(d); setEditando(false); }}
-          />
-        ) : (
           <>
-            {!dealer.aprobada && (
-              <div className="rounded-xl border border-yellow-500/40 bg-yellow-500/10 p-4">
-                <p className="font-semibold text-yellow-300">Tu cuenta está pendiente de aprobación</p>
-                <p className="mt-1 text-sm text-gray-300">
-                  Recibimos tus datos. La primera vez, el administrador debe revisar y autorizar tu acceso; cuando lo haga, podrás publicar tus vehículos.
-                </p>
+            {!dealer && (
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-jg-silver/40 bg-black/20 p-4 text-sm text-gray-300">
+                <span className="min-w-0 break-words">Sesión iniciada como {j.session.user.email}. Si esta no es la cuenta de tu compraventa, cierra sesión y crea una nueva.</span>
+                <button onClick={() => void j.logout()} className="btn-secondary !px-3 !py-2 text-xs">Cerrar sesión</button>
               </div>
             )}
+            <PerfilForm
+              dealer={dealer}
+              userId={j.session.user.id}
+              onGuardado={(d) => { setDealer(d); setEditando(false); }}
+            />
+          </>
+        ) : !dealer.aprobada ? (
+          <div className="card space-y-4 border-yellow-500/40 p-5 text-center sm:p-6">
+            <Lock className="mx-auto h-8 w-8 text-yellow-400" />
+            <h2 className="font-display text-xl font-bold text-jg-text-dark">Tu cuenta está pendiente de aprobación</h2>
+            <p className="text-sm text-gray-300">
+              Recibimos los datos de {dealer.business_name}. La primera vez, el administrador debe revisar y autorizar tu acceso. Cuando lo haga, vuelve a ingresar con tu correo y contraseña y podrás publicar y compartir tu catálogo.
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              <button onClick={() => setEditando(true)} className="btn-secondary !px-3 !py-2 text-xs">Editar datos</button>
+              <button onClick={() => void j.logout()} className="btn-secondary !px-3 !py-2 text-xs">Cerrar sesión</button>
+            </div>
+          </div>
+        ) : (
+          <>
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
                 {dealer.logo_url && <img src={dealer.logo_url} alt="" className="h-12 w-12 shrink-0 rounded-lg object-contain" />}
