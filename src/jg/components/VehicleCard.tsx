@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Bike, Car, Gauge, Calendar, Fuel, Settings2, ImageIcon, ShieldCheck, Instagram, MapPin, ChevronLeft, ChevronRight, Share2, Check } from 'lucide-react';
 import { Vehicle, formatCOP, STATUS_CONFIG, TAG_CONFIG, whatsappLink, whatsappLinkTo, logConsulta, maskPlaca } from '@/jg/lib/supabase';
+import { Heart } from 'lucide-react';
+import { useFavorito } from '@/jg/lib/favoritos';
 import { compartirVehiculo } from '@/jg/lib/compartir';
 import { contactTarget } from '@/jg/lib/plans';
 
@@ -19,6 +21,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
   const images = vehicle.image_urls?.filter(Boolean) ?? [];
   const [currentImage, setCurrentImage] = useState(0);
   const [copiado, setCopiado] = useState(false);
+  const { esFavorito, alternar: alternarFavorito } = useFavorito(vehicle.id);
   const contact = contactTarget(vehicle);
   const isExpiredThirdParty = vehicle.listing_owner === 'tercero' && contact === 'none' && vehicle.status !== 'vendido' && vehicle.status !== 'no_disponible';
   const waHref = contact === 'owner'
@@ -83,7 +86,16 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
             </span>
           )}
         </div>
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); alternarFavorito(); }}
+            aria-label={esFavorito ? 'Quitar de favoritos' : 'Guardar en favoritos'}
+            aria-pressed={esFavorito}
+            className="rounded-full bg-black/60 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/80"
+          >
+            <Heart className={`h-4 w-4 ${esFavorito ? 'fill-jg-red text-jg-red' : ''}`} />
+          </button>
           <span className="badge border border-white/20 bg-black/60 text-white backdrop-blur-sm">
             {vehicle.type === 'moto' ? (
               <Bike className="h-3.5 w-3.5" />
