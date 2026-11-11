@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BarChart3, Bike, Car, CheckCircle2, Handshake, Loader2, Pencil, Plus, ShieldCheck, Store, Users, Wallet, X } from 'lucide-react';
+import { CalendarCheck, BarChart3, Bike, Car, CheckCircle2, Handshake, Loader2, Pencil, Plus, ShieldCheck, Store, Users, Wallet, X } from 'lucide-react';
 import { CmsNegocio } from '@/jg/components/CmsNegocio';
 import { CmsCompraventas } from '@/jg/components/CmsCompraventas';
+import { CmsCrmComercial } from '@/jg/components/CmsCrmComercial';
 import { supabase } from '@/integrations/supabase/client';
 import { formatCOP, normalizeVehicle, type Vehicle } from '@/jg/lib/supabase';
 import { CmsVehicleForm, type CmsVehicleFormValue } from '@/jg/components/CmsVehicleForm';
 
-type Tab = 'panel' | 'inventario' | 'finanzas' | 'consignaciones' | 'leads' | 'compraventas';
+type Tab = 'panel' | 'crm' | 'inventario' | 'finanzas' | 'consignaciones' | 'leads' | 'compraventas';
 
 type Consulta = {
   id: string;
@@ -182,6 +183,7 @@ export function CmsPage({
           {(
             [
               { id: 'panel' as Tab, etiqueta: 'Panel', Icono: BarChart3 },
+              { id: 'crm' as Tab, etiqueta: 'CRM Ventas', Icono: CalendarCheck },
               { id: 'inventario' as Tab, etiqueta: 'Inventario', Icono: Car },
               { id: 'finanzas' as Tab, etiqueta: 'Finanzas', Icono: Wallet },
               { id: 'consignaciones' as Tab, etiqueta: 'Consignaciones', Icono: Handshake },
@@ -281,6 +283,7 @@ export function CmsPage({
           </section>
         )}
 
+        {tab === 'crm' && <CmsCrmComercial />}
         {tab === 'compraventas' && <CmsCompraventas />}
         {tab === 'leads' && (
           <section className="grid gap-4 lg:grid-cols-2">

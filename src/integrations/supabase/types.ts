@@ -338,6 +338,81 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_oportunidades: {
+        Row: {
+          cliente: string
+          created_at: string
+          etapa: string
+          id: string
+          notas: string | null
+          origen: string
+          proxima_accion: string | null
+          telefono: string | null
+          valor_estimado: number
+          vehiculo_interes: string | null
+        }
+        Insert: {
+          cliente: string
+          created_at?: string
+          etapa?: string
+          id?: string
+          notas?: string | null
+          origen?: string
+          proxima_accion?: string | null
+          telefono?: string | null
+          valor_estimado?: number
+          vehiculo_interes?: string | null
+        }
+        Update: {
+          cliente?: string
+          created_at?: string
+          etapa?: string
+          id?: string
+          notas?: string | null
+          origen?: string
+          proxima_accion?: string | null
+          telefono?: string | null
+          valor_estimado?: number
+          vehiculo_interes?: string | null
+        }
+        Relationships: []
+      }
+      crm_citas: {
+        Row: {
+          cliente: string
+          created_at: string
+          estado: string
+          fecha_hora: string
+          id: string
+          notas: string | null
+          telefono: string | null
+          tipo: string
+          vehiculo: string | null
+        }
+        Insert: {
+          cliente: string
+          created_at?: string
+          estado?: string
+          fecha_hora: string
+          id?: string
+          notas?: string | null
+          telefono?: string | null
+          tipo?: string
+          vehiculo?: string | null
+        }
+        Update: {
+          cliente?: string
+          created_at?: string
+          estado?: string
+          fecha_hora?: string
+          id?: string
+          notas?: string | null
+          telefono?: string | null
+          tipo?: string
+          vehiculo?: string | null
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string | null
