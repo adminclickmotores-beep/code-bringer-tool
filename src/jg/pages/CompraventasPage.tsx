@@ -9,6 +9,7 @@ import {
   formatCOP, fuelOptions, supabase, uploadVehiclePhoto, whatsappLink, type Vehicle,
 } from '@/jg/lib/supabase';
 import { SelectorMarca } from '@/jg/components/SelectorMarca';
+import { validarCorreo } from '@/jg/lib/validar-correo';
 import { meetsPhotoResolution, minimumPhotos, MIN_PHOTO_WIDTH, MIN_PHOTO_HEIGHT } from '@/jg/lib/vehicle-submission';
 import { listingStatus, planWhatsappMessage, PUBLICATION_PLANS } from '@/jg/lib/plans';
 import { abrirCatalogoImprimible } from '@/jg/lib/catalogo-imprimible';
@@ -100,10 +101,17 @@ function AccesoForm({ onListo }: { onListo: () => void }) {
       setError('Escribe tu correo y una contraseña de mínimo 6 caracteres.');
       return;
     }
+    if (modo === 'registro') {
+      const malCorreo = validarCorreo(email);
+      if (malCorreo) {
+        setError(malCorreo);
+        return;
+      }
+    }
     setCargando(true);
     try {
       if (modo === 'registro') {
-        const { data, error: err } = await supabase.auth.signUp({ email: email.trim(), password: clave });
+        const { data, error: err } = await supabase.auth.signUp({ email: email.trim().toLowerCase(), password: clave });
         if (err) throw err;
         if (!data?.session) {
           setInfo('Te enviamos un correo para confirmar tu cuenta. Revisa tu bandeja de entrada (y la carpeta de spam) y luego ingresa.');
