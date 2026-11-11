@@ -94,10 +94,10 @@ function ElegirFecha({ valor, onCambio }: { valor: string; onCambio: (v: string)
 /* ---------- Formulario paso a paso ---------- */
 type FormState = {
   nombre: string; telefono: string; correo: string; interes: string; presupuesto: string;
-  origen: string; notas: string; proximo: string;
+  origen: string; notas: string; proximo: string; asesor_nombre: string; asesor_telefono: string;
 };
 
-const FORM_VACIO: FormState = { nombre: '', telefono: '', correo: '', interes: '', presupuesto: '', origen: 'WhatsApp', notas: '', proximo: '' };
+const FORM_VACIO: FormState = { nombre: '', telefono: '', correo: '', interes: '', presupuesto: '', origen: 'WhatsApp', notas: '', proximo: '', asesor_nombre: '', asesor_telefono: '' };
 
 function FormCliente({
   dealerId, cliente, onCerrar, onGuardado,
@@ -109,6 +109,7 @@ function FormCliente({
         nombre: cliente.nombre, telefono: cliente.telefono, correo: cliente.correo ?? '', interes: cliente.interes ?? '',
         presupuesto: cliente.presupuesto != null ? String(cliente.presupuesto) : '', origen: cliente.origen,
         notas: cliente.notas ?? '', proximo: cliente.proximo_contacto ?? '',
+        asesor_nombre: cliente.asesor_nombre ?? '', asesor_telefono: cliente.asesor_telefono ?? '',
       }
       : { ...FORM_VACIO, proximo: sumarDias(1) },
   );
@@ -142,6 +143,8 @@ function FormCliente({
       origen: f.origen,
       notas: f.notas.trim() || null,
       proximo_contacto: f.proximo || null,
+      asesor_nombre: f.asesor_nombre.trim() || null,
+      asesor_telefono: f.asesor_telefono.replace(/\D/g, '') || null,
     };
     setCargando(true);
     try {
@@ -226,6 +229,11 @@ function FormCliente({
           <div>
             <label className="label-field">Notas (opcional)</label>
             <textarea value={f.notas} onChange={(e) => cambiar('notas', e.target.value)} maxLength={1000} rows={3} className="input-field" placeholder="Lo que necesites recordar de este cliente" />
+          </div>
+          <div className="space-y-3 rounded-xl border border-jg-silver/40 p-3">
+            <p className="label-field !mb-0">¿Quién lo atendió? (opcional)</p>
+            <div><label className="label-field">Nombre del asesor</label><input value={f.asesor_nombre} onChange={(e) => cambiar('asesor_nombre', e.target.value)} maxLength={100} className="input-field" placeholder="Ej. Carlos" /></div>
+            <div><label className="label-field">Celular del asesor</label><input value={f.asesor_telefono} onChange={(e) => cambiar('asesor_telefono', e.target.value)} inputMode="tel" maxLength={20} className="input-field" placeholder="3001234567" /></div>
           </div>
           <div><label className="label-field">Correo (opcional)</label><input type="email" value={f.correo} onChange={(e) => cambiar('correo', e.target.value)} maxLength={120} className="input-field" /></div>
         </div>
@@ -559,6 +567,7 @@ export function CrmCompraventa({ dealer }: { dealer: DealerProfile }) {
                     <p className="text-sm text-gray-400">{c.telefono} · {c.origen}</p>
                     {c.interes && <p className="mt-0.5 break-words text-sm text-gray-300">Busca: {c.interes}</p>}
                     {c.presupuesto != null && <p className="text-xs text-gray-500">Presupuesto: {formatCOP(c.presupuesto)}</p>}
+                    {c.asesor_nombre && <p className="mt-0.5 break-words text-xs text-gray-400">Atendió: {c.asesor_nombre}{c.asesor_telefono ? ` · ${c.asesor_telefono}` : ''}</p>}
                   </div>
                   <span className={`shrink-0 rounded-full border px-2.5 py-1 text-xs font-semibold ${et.color}`}>{et.nombre}</span>
                 </div>

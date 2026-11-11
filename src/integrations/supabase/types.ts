@@ -16,6 +16,8 @@ export type Database = {
     Tables: {
       crm_clientes: {
         Row: {
+          asesor_nombre: string | null
+          asesor_telefono: string | null
           correo: string | null
           created_at: string
           dealer_id: string
@@ -31,6 +33,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          asesor_nombre?: string | null
+          asesor_telefono?: string | null
           correo?: string | null
           created_at?: string
           dealer_id: string
@@ -46,6 +50,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          asesor_nombre?: string | null
+          asesor_telefono?: string | null
           correo?: string | null
           created_at?: string
           dealer_id?: string
