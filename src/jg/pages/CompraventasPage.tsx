@@ -9,6 +9,7 @@ import {
   formatCOP, fuelOptions, supabase, uploadVehiclePhoto, whatsappLink, type Vehicle,
 } from '@/jg/lib/supabase';
 import { SelectorMarca } from '@/jg/components/SelectorMarca';
+import { meetsPhotoResolution, minimumPhotos, MIN_PHOTO_WIDTH, MIN_PHOTO_HEIGHT } from '@/jg/lib/vehicle-submission';
 import { listingStatus, planWhatsappMessage, PUBLICATION_PLANS } from '@/jg/lib/plans';
 import { abrirCatalogoImprimible } from '@/jg/lib/catalogo-imprimible';
 import {
@@ -17,8 +18,24 @@ import {
   type DealerProfile,
 } from '@/jg/lib/dealers';
 
-const MIN_FOTOS = 3;
 const MAX_FOTOS = 8;
+const LIMITE_PUBLICACIONES = 80;
+
+function medirImagen(archivo: File): Promise<{ w: number; h: number } | null> {
+  return new Promise((resolver) => {
+    const url = URL.createObjectURL(archivo);
+    const img = new Image();
+    img.onload = () => {
+      resolver({ w: img.naturalWidth, h: img.naturalHeight });
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = () => {
+      resolver(null);
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  });
+}
 
 function mensajeError(e: unknown, defecto: string): string {
   if (e instanceof Error && e.message) return e.message;
@@ -197,6 +214,8 @@ function PerfilForm({
     const tel = celular.replace(/\D/g, '');
     if (nombre.trim().length < 2) return setError('Escribe el nombre de tu negocio.');
     if (tel.length !== 10) return setError('Escribe un celular de 10 dígitos (ej. 3001234567).');
+    if (ciudad.trim().length < 2) return setError('Escribe la ciudad de tu negocio.');
+    if (descripcion.trim().length < 10) return setError('Escribe una descripción de tu negocio (mínimo 10 caracteres) para activar tu cuenta de inmediato.');
     setCargando(true);
     try {
       const datos = { logo_url: logoUrl, business_name: nombre, phone: tel, city: ciudad, description: descripcion };
@@ -244,7 +263,7 @@ function PerfilForm({
           <input value={ciudad} onChange={(e) => setCiudad(e.target.value)} maxLength={80} className="input-field" placeholder="Cali" />
         </div>
         <div className="sm:col-span-2">
-          <label className="label-field">Descripción corta (opcional)</label>
+          <label className="label-field">Descripción corta de tu negocio</label>
           <textarea value={descripcion} onChange={(e) => setDescripcion(e.target.value)} maxLength={500} rows={3} className="input-field" placeholder="Años de experiencia, tipo de vehículos que vendes..." />
         </div>
       </div>
@@ -292,9 +311,20 @@ function PublicarForm({ dealer, onPublicado }: { dealer: DealerProfile; onPublic
     if (!modelo.trim()) return setError('Escribe el modelo.');
     if (!Number.isInteger(year) || year < 1950 || year > new Date().getFullYear() + 1) return setError('Escribe un año válido.');
     if (!price) return setError('Escribe el precio.');
-    if (fotos.length < MIN_FOTOS) return setError(`Sube mínimo ${MIN_FOTOS} fotos del vehículo.`);
+    const minimo = minimumPhotos(tipo);
+    if (fotos.length < minimo) return setError(`Sube mínimo ${minimo} fotos ${tipo === 'moto' ? 'de la moto' : 'del carro'}.`);
     setCargando(true);
     try {
+      for (const f of fotos) {
+        const dim = await medirImagen(f);
+        if (!dim || !meetsPhotoResolution(dim.w, dim.h)) {
+          throw new Error(`La foto "${f.name}" tiene poca calidad. Usa fotos de al menos ${MIN_PHOTO_WIDTH}x${MIN_PHOTO_HEIGHT} píxeles (tómalas con la cámara del celular, sin reducir su tamaño).`);
+        }
+      }
+      const { count } = await supabase.from('vehicles').select('id', { count: 'exact', head: true }).eq('dealer_id', dealer.id);
+      if ((count ?? 0) >= LIMITE_PUBLICACIONES) {
+        throw new Error(`Llegaste al límite de ${LIMITE_PUBLICACIONES} publicaciones. Marca como vendidos o elimina anuncios antiguos para publicar más.`);
+      }
       const urls: string[] = [];
       for (const f of fotos) urls.push(await uploadVehiclePhoto(f));
       await publishDealerVehicle(dealer, {
@@ -363,7 +393,7 @@ function PublicarForm({ dealer, onPublicado }: { dealer: DealerProfile; onPublic
         </div>
       </div>
       <div>
-        <label className="label-field">Fotos (mínimo {MIN_FOTOS}, máximo {MAX_FOTOS})</label>
+        <label className="label-field">Fotos (mínimo {minimumPhotos(tipo)}, máximo {MAX_FOTOS}; buena calidad, mínimo {MIN_PHOTO_WIDTH}x{MIN_PHOTO_HEIGHT} px)</label>
         <input type="file" accept="image/*" multiple onChange={(e) => { agregarFotos(e.target.files); e.target.value = ''; }} className="input-field" />
         {fotos.length > 0 && (
           <ul className="mt-2 space-y-1">

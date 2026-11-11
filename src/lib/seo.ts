@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 export const SITE_NAME = 'ClickMotores';
 export const SITE_URL = 'https://clickmotores.lovable.app';
 
+export const OG_IMAGE = `${SITE_URL}/og-image.svg`;
+
 export interface SeoData {
   title: string;
   description: string;
@@ -108,6 +110,8 @@ export function routeHead(path: string, opts?: { noindex?: boolean }) {
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: url },
     { name: 'twitter:card', content: 'summary_large_image' },
+    { property: 'og:image', content: OG_IMAGE },
+    { name: 'twitter:image', content: OG_IMAGE },
   ];
   if (opts?.noindex) meta.push({ name: 'robots', content: 'noindex' });
   return { meta, links: [{ rel: 'canonical', href: url }] };
@@ -123,6 +127,8 @@ export function useSeo(path: string): void {
     upsertMeta('property', 'og:title', title);
     upsertMeta('property', 'og:description', description);
     upsertMeta('property', 'og:url', url);
+    upsertMeta('property', 'og:image', OG_IMAGE);
+    upsertMeta('name', 'twitter:image', OG_IMAGE);
     upsertCanonical(url);
   }, [path]);
 }
