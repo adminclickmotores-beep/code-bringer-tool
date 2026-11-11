@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Camera, Loader2, X } from 'lucide-react';
 import { uploadVehiclePhoto } from '@/jg/lib/supabase';
+import { SelectorMarca } from '@/jg/components/SelectorMarca';
 import { ALLOWED_IMAGE_TYPES, MAX_UPLOAD_BYTES, MAX_VEHICLE_PHOTOS } from '@/jg/lib/vehicle-submission';
 
 export type CmsVehicleFormValue = {
@@ -117,7 +118,7 @@ export function CmsVehicleForm({
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <label className="text-sm text-gray-300">
           Marca *
-          <input value={form.marca} onChange={(e) => set('marca', e.target.value)} required maxLength={80} placeholder="Yamaha, Honda, Mazda…" className={`${campo} mt-1.5`} />
+          <SelectorMarca value={form.marca} onChange={(v) => set('marca', v)} tipo={form.tipo} className={`${campo} mt-1.5`} />
         </label>
         <label className="text-sm text-gray-300">
           Modelo *

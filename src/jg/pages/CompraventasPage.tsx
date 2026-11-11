@@ -8,6 +8,7 @@ import { useSeo } from '@/lib/seo';
 import {
   formatCOP, fuelOptions, supabase, uploadVehiclePhoto, whatsappLink, type Vehicle,
 } from '@/jg/lib/supabase';
+import { SelectorMarca } from '@/jg/components/SelectorMarca';
 import { listingStatus, planWhatsappMessage, PUBLICATION_PLANS } from '@/jg/lib/plans';
 import { abrirCatalogoImprimible } from '@/jg/lib/catalogo-imprimible';
 import {
@@ -323,7 +324,7 @@ function PublicarForm({ dealer, onPublicado }: { dealer: DealerProfile; onPublic
           <button
             key={t}
             type="button"
-            onClick={() => { setTipo(t); setCombustible('Gasolina'); }}
+            onClick={() => { setTipo(t); setCombustible('Gasolina'); setMarca(''); }}
             className={`rounded-lg border px-3 py-2 text-sm font-medium ${tipo === t ? 'border-jg-red bg-jg-red/10 text-jg-red' : 'border-jg-silver text-gray-400'}`}
           >
             {t === 'carro' ? 'Carro' : 'Moto'}
@@ -331,7 +332,7 @@ function PublicarForm({ dealer, onPublicado }: { dealer: DealerProfile; onPublic
         ))}
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div><label className="label-field">Marca</label><input value={marca} onChange={(e) => setMarca(e.target.value)} maxLength={60} className="input-field" placeholder="Mazda" /></div>
+        <div><label className="label-field">Marca</label><SelectorMarca value={marca} onChange={setMarca} tipo={tipo} /></div>
         <div><label className="label-field">Modelo</label><input value={modelo} onChange={(e) => setModelo(e.target.value)} maxLength={80} className="input-field" placeholder="CX-30 Touring" /></div>
         <div><label className="label-field">Año</label><input value={anio} onChange={(e) => setAnio(soloDigitos(e.target.value).slice(0, 4))} inputMode="numeric" className="input-field" placeholder="2021" /></div>
         <div>

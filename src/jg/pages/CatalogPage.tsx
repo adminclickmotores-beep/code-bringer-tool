@@ -3,6 +3,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { Search, SlidersHorizontal, X, Bike, Car, ImageIcon, FileText } from 'lucide-react';
 import { Vehicle, STATUS_CONFIG, formatCOP, WHATSAPP_DISPLAY } from '@/jg/lib/supabase';
 import { catalogRank } from '@/jg/lib/plans';
+import { marcasPorTipo } from '@/jg/lib/marcas';
 import { GrillaPorEstado } from '@/jg/components/GrillaPorEstado';
 import { abrirCatalogoImprimible } from '@/jg/lib/catalogo-imprimible';
 import { useSeo } from '@/lib/seo';
@@ -97,16 +98,10 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
     return Array.from(m.values()).sort((a, b) => a.localeCompare(b, 'es'));
   }, [vehicles]);
 
-  const brands = useMemo(() => {
-    const seen = new Map<string, string>();
-    for (const v of vehicles) {
-      if (typeFilter !== 'all' && norm(v.type) !== typeFilter) continue;
-      const key = norm(v.brand);
-      if (!key) continue;
-      if (!seen.has(key)) seen.set(key, (v.brand ?? '').trim());
-    }
-    return Array.from(seen.values()).sort((a, b) => a.localeCompare(b, 'es'));
-  }, [vehicles, typeFilter]);
+  const brands = useMemo(
+    () => marcasPorTipo(typeFilter === 'moto' || typeFilter === 'carro' ? typeFilter : 'all'),
+    [typeFilter],
+  );
 
   const models = useMemo(() => {
     const seen = new Map<string, string>();
@@ -295,22 +290,6 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
               </div>
 
               <div>
-                <label className="label-field">
-                  Modelo{brandFilter !== 'all' ? ` (${brandFilter})` : ''}
-                </label>
-                <select
-                  value={modelFilter}
-                  onChange={(e) => setModelFilter(e.target.value)}
-                  className="select-field"
-                >
-                  <option value="all">Todos los modelos</option>
-                  {models.map((m) => (
-                    <option key={m} value={m}>{m}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
                 <label className="label-field">Estado</label>
                 <select
                   value={statusFilter}
@@ -343,14 +322,6 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
                 <select value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} className="select-field">
                   <option value="all">Todos los años</option>
                   {years.map((y) => (<option key={y} value={String(y)}>{y}</option>))}
-                </select>
-              </div>
-
-              <div>
-                <label className="label-field">Combustible</label>
-                <select value={fuelFilter} onChange={(e) => setFuelFilter(e.target.value)} className="select-field">
-                  <option value="all">Todos</option>
-                  {fuels.map((f) => (<option key={f} value={f}>{f}</option>))}
                 </select>
               </div>
 

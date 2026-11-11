@@ -178,6 +178,8 @@ function getErrorMessage(error: unknown): string {
   return 'Verifica la conexión y los datos.';
 }
 
+import { SelectorMarca } from '@/jg/components/SelectorMarca';
+
 const getVehicleTitle = (vehicle: Vehicle) =>
   vehicle.title ||
   `${vehicle.brand || ''} ${vehicle.model || ''}`.trim() ||
@@ -1302,13 +1304,10 @@ export function AdminPage({
 
                     <label className="text-sm text-gray-300">
                       Marca *
-                      <input
+                      <SelectorMarca
                         value={form.brand}
-                        onChange={(event) =>
-                          updateForm('brand', event.target.value)
-                        }
-                        required
-                        maxLength={80}
+                        onChange={(v) => updateForm('brand', v)}
+                        tipo={form.type === 'moto' ? 'moto' : 'carro'}
                         className="mt-2 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-3 text-white"
                       />
                     </label>
