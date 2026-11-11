@@ -76,7 +76,26 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
   const [displacementFilter, setDisplacementFilter] = useState('all');
   const [priceMin, setPriceMin] = useState('');
   const [priceMax, setPriceMax] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
+  const [yearFilter, setYearFilter] = useState('all');
+  const [fuelFilter, setFuelFilter] = useState('all');
+  const [transFilter, setTransFilter] = useState('all');
+
+  const years = useMemo(() => {
+    const s = new Set<number>();
+    for (const v of vehicles) if (v.year) s.add(Number(v.year));
+    return Array.from(s).sort((a, b) => b - a);
+  }, [vehicles]);
+  const fuels = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const v of vehicles) if (v.fuel && !m.has(norm(v.fuel))) m.set(norm(v.fuel), v.fuel.trim());
+    return Array.from(m.values()).sort((a, b) => a.localeCompare(b, 'es'));
+  }, [vehicles]);
+  const transmissions = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const v of vehicles) if (v.transmission && !m.has(norm(v.transmission))) m.set(norm(v.transmission), v.transmission.trim());
+    return Array.from(m.values()).sort((a, b) => a.localeCompare(b, 'es'));
+  }, [vehicles]);
 
   const brands = useMemo(() => {
     const seen = new Map<string, string>();
@@ -118,6 +137,9 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
       if (brandFilter !== 'all' && norm(v.brand) !== norm(brandFilter)) return false;
       if (modelFilter !== 'all' && norm(v.model) !== norm(modelFilter)) return false;
       if (statusFilter !== 'all' && norm(v.status) !== statusFilter) return false;
+      if (yearFilter !== 'all' && String(v.year) !== yearFilter) return false;
+      if (fuelFilter !== 'all' && norm(v.fuel) !== norm(fuelFilter)) return false;
+      if (transFilter !== 'all' && norm(v.transmission) !== norm(transFilter)) return false;
       if (displacementFilter !== 'all') {
         if (norm(v.type) === 'carro') return false;
         if (getDisplacementCategory(v.displacement, v) !== displacementFilter) return false;
@@ -130,7 +152,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
       if (r !== 0) return r;
       return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
     });
-  }, [vehicles, search, typeFilter, brandFilter, modelFilter, statusFilter, displacementFilter, priceMin, priceMax]);
+  }, [vehicles, search, typeFilter, brandFilter, modelFilter, statusFilter, displacementFilter, priceMin, priceMax, yearFilter, fuelFilter, transFilter]);
 
   const activeFilters =
     (typeFilter !== 'all' ? 1 : 0) +
@@ -139,6 +161,9 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
     (statusFilter !== 'all' ? 1 : 0) +
     (displacementFilter !== 'all' ? 1 : 0) +
     (priceMin ? 1 : 0) +
+    (yearFilter !== 'all' ? 1 : 0) +
+    (fuelFilter !== 'all' ? 1 : 0) +
+    (transFilter !== 'all' ? 1 : 0) +
     (priceMax ? 1 : 0);
 
   const clearAll = () => {
@@ -150,6 +175,9 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
     setDisplacementFilter('all');
     setPriceMin('');
     setPriceMax('');
+    setYearFilter('all');
+    setFuelFilter('all');
+    setTransFilter('all');
   };
 
   return (
@@ -186,7 +214,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
                 subtitulo: 'Motos y carros verificados',
                 contacto: WHATSAPP_DISPLAY,
                 ciudad: 'Yumbo / Cali',
-                vehiculos: filtered,
+                vehiculos: vehicles,
               });
               if (!ok) window.alert('Tu navegador bloqueó la ventana. Permite las ventanas emergentes e intenta de nuevo.');
             }}
@@ -309,6 +337,30 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
                   </select>
                 </div>
               )}
+
+              <div>
+                <label className="label-field">Año</label>
+                <select value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} className="select-field">
+                  <option value="all">Todos los años</option>
+                  {years.map((y) => (<option key={y} value={String(y)}>{y}</option>))}
+                </select>
+              </div>
+
+              <div>
+                <label className="label-field">Combustible</label>
+                <select value={fuelFilter} onChange={(e) => setFuelFilter(e.target.value)} className="select-field">
+                  <option value="all">Todos</option>
+                  {fuels.map((f) => (<option key={f} value={f}>{f}</option>))}
+                </select>
+              </div>
+
+              <div>
+                <label className="label-field">Transmisión</label>
+                <select value={transFilter} onChange={(e) => setTransFilter(e.target.value)} className="select-field">
+                  <option value="all">Todas</option>
+                  {transmissions.map((t) => (<option key={t} value={t}>{t}</option>))}
+                </select>
+              </div>
 
               <div>
                 <label className="label-field">Precio mínimo (COP)</label>
