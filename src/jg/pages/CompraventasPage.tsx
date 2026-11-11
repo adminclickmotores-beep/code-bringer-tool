@@ -127,7 +127,7 @@ function AccesoForm({ onListo }: { onListo: () => void }) {
       onListo();
     } catch (err) {
       const m = mensajeError(err, 'No pudimos continuar. Intenta de nuevo.');
-      setError(m.includes('Invalid login credentials') ? 'Correo o contraseña incorrectos.' : m.includes('already registered') ? 'Ese correo ya tiene cuenta. Ingresa con tu contraseña.' : m);
+      setError(/weak|easy to guess|pwned/i.test(m) ? 'Esa contraseña es muy común o ya apareció en filtraciones de datos. Elige otra diferente (por ejemplo, mezcla palabras y números que solo tú conozcas).' : m.includes('Invalid login credentials') ?'Correo o contraseña incorrectos.' : m.includes('already registered') ? 'Ese correo ya tiene cuenta. Ingresa con tu contraseña.' : m);
     } finally {
       setCargando(false);
     }
