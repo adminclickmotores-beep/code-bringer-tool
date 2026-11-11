@@ -156,7 +156,7 @@ export async function publishDealerVehicle(dealer: DealerProfile, v: DealerVehic
   if (error) throw error;
 }
 
-export async function setDealerVehicleStatus(id: string, status: 'disponible' | 'vendido'): Promise<void> {
+export async function setDealerVehicleStatus(id: string, status: 'disponible' | 'no_disponible' | 'vendido'): Promise<void> {
   const { error } = await supabase.from('vehicles').update({ status }).eq('id', id);
   if (error) throw error;
 }

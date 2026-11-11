@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Check, ImageIcon, MapPin, Search, Share2, Store } from 'lucide-react';
+import { Check, FileText, ImageIcon, MapPin, Search, Share2, Store } from 'lucide-react';
 import { useJg } from '@/jg/JgApp';
-import { VehicleCard } from '@/jg/components/VehicleCard';
+import { GrillaPorEstado } from '@/jg/components/GrillaPorEstado';
+import { abrirCatalogoImprimible } from '@/jg/lib/catalogo-imprimible';
 import { catalogRank } from '@/jg/lib/plans';
 import { whatsappLinkTo } from '@/jg/lib/supabase';
 import { dealerCatalogUrl, fetchDealerBySlug, type DealerProfile } from '@/jg/lib/dealers';
@@ -92,6 +93,21 @@ export function TiendaPage({ slug }: { slug: string }) {
             >
               Escribir por WhatsApp
             </a>
+            <button
+              onClick={() => {
+                const ok = abrirCatalogoImprimible({
+                  titulo: dealer.business_name,
+                  logoUrl: dealer.logo_url,
+                  contacto: dealer.phone,
+                  ciudad: dealer.city,
+                  vehiculos: lista,
+                });
+                if (!ok) window.alert('Tu navegador bloqueó la ventana. Permite las ventanas emergentes e intenta de nuevo.');
+              }}
+              className="btn-secondary !py-2.5"
+            >
+              <FileText className="h-4 w-4" /> Generar catálogo
+            </button>
             <button onClick={() => void compartir()} className="btn-secondary !py-2.5">
               {copiado ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
               {copiado ? 'Enlace copiado' : 'Compartir'}
@@ -122,11 +138,7 @@ export function TiendaPage({ slug }: { slug: string }) {
         {j.loading ? (
           <p className="text-sm text-gray-400">Cargando vehículos...</p>
         ) : lista.length > 0 ? (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {lista.map((v) => (
-              <VehicleCard key={v.id} vehicle={v} onClick={() => j.openVehicle(v)} />
-            ))}
-          </div>
+          <GrillaPorEstado vehiculos={lista} onAbrir={j.openVehicle} />
         ) : (
           <div className="flex flex-col items-center py-16 text-center">
             <ImageIcon className="h-10 w-10 text-gray-500" />

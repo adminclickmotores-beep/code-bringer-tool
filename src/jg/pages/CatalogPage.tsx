@@ -1,9 +1,10 @@
 // @ts-nocheck
 import { useState, useMemo, useEffect } from 'react';
-import { Search, SlidersHorizontal, X, Bike, Car, ImageIcon } from 'lucide-react';
-import { Vehicle, STATUS_CONFIG, formatCOP } from '@/jg/lib/supabase';
+import { Search, SlidersHorizontal, X, Bike, Car, ImageIcon, FileText } from 'lucide-react';
+import { Vehicle, STATUS_CONFIG, formatCOP, WHATSAPP_DISPLAY } from '@/jg/lib/supabase';
 import { catalogRank } from '@/jg/lib/plans';
-import { VehicleCard } from '@/jg/components/VehicleCard';
+import { GrillaPorEstado } from '@/jg/components/GrillaPorEstado';
+import { abrirCatalogoImprimible } from '@/jg/lib/catalogo-imprimible';
 import { useSeo } from '@/lib/seo';
 
 interface CatalogPageProps {
@@ -179,6 +180,22 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
             />
           </div>
           <button
+            onClick={() => {
+              const ok = abrirCatalogoImprimible({
+                titulo: 'Catálogo ClickMotores',
+                subtitulo: 'Motos y carros verificados',
+                contacto: WHATSAPP_DISPLAY,
+                ciudad: 'Yumbo / Cali',
+                vehiculos: filtered,
+              });
+              if (!ok) window.alert('Tu navegador bloqueó la ventana. Permite las ventanas emergentes e intenta de nuevo.');
+            }}
+            className="btn-secondary !py-3"
+          >
+            <FileText className="h-4 w-4" />
+            Generar catálogo
+          </button>
+          <button
             onClick={() => setShowFilters(!showFilters)}
             className="btn-secondary !py-3"
           >
@@ -349,15 +366,7 @@ export function CatalogPage({ vehicles, loading, onVehicleClick }: CatalogPagePr
             <p className="mb-4 text-sm text-gray-400">
               Mostrando <span className="font-semibold text-jg-text-dark">{filtered.length}</span> vehículo{filtered.length !== 1 ? 's' : ''}
             </p>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((vehicle) => (
-                <VehicleCard
-                  key={vehicle.id}
-                  vehicle={vehicle}
-                  onClick={() => onVehicleClick(vehicle)}
-                />
-              ))}
-            </div>
+            <GrillaPorEstado vehiculos={filtered} onAbrir={onVehicleClick} />
           </>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center">

@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
-  AlertCircle, CheckCircle2, Copy, Eye, EyeOff, ExternalLink, ImageIcon, Loader2, Lock, Mail,
+  AlertCircle, CheckCircle2, Copy, Eye, EyeOff, ExternalLink, FileText, ImageIcon, Loader2, Lock, Mail,
   Megaphone, Share2, Store, Trash2, Users,
 } from 'lucide-react';
 import { useJg } from '@/jg/JgApp';
 import { useSeo } from '@/lib/seo';
 import {
-  formatCOP, fuelOptions, supabase, uploadVehiclePhoto, type Vehicle,
+  formatCOP, fuelOptions, supabase, uploadVehiclePhoto, whatsappLink, type Vehicle,
 } from '@/jg/lib/supabase';
+import { listingStatus, planWhatsappMessage, PUBLICATION_PLANS } from '@/jg/lib/plans';
+import { abrirCatalogoImprimible } from '@/jg/lib/catalogo-imprimible';
 import {
   createDealer, dealerCatalogUrl, deleteDealerVehicle, fetchDealerVehicles, fetchMyDealer,
   publishDealerVehicle, setDealerVehicleStatus, updateDealer, uploadDealerLogo,
@@ -386,11 +388,12 @@ function MisVehiculos({ vehiculos, cargando, onCambio }: { vehiculos: Vehicle[];
   const [trabajando, setTrabajando] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const cambiarEstado = async (v: Vehicle) => {
+  const cambiarEstado = async (v: Vehicle, nuevo: 'disponible' | 'no_disponible' | 'vendido') => {
+    if (v.status === nuevo) return;
     setTrabajando(v.id);
     setError(null);
     try {
-      await setDealerVehicleStatus(v.id, v.status === 'vendido' ? 'disponible' : 'vendido');
+      await setDealerVehicleStatus(v.id, nuevo);
       onCambio();
     } catch (err) {
       setError(mensajeError(err, 'No pudimos actualizar el vehículo.'));
@@ -433,13 +436,33 @@ function MisVehiculos({ vehiculos, cargando, onCambio }: { vehiculos: Vehicle[];
                   </div>
                   <div className="min-w-0">
                     <p className="truncate font-medium text-jg-text-dark">{v.title}</p>
-                    <p className="text-sm text-jg-red">{formatCOP(v.price)} · <span className="text-gray-400">{v.status === 'vendido' ? 'Vendido' : 'Disponible'}</span></p>
+                    <p className="text-sm text-jg-red">{formatCOP(v.price)}</p>
+                    {(listingStatus(v) === 'por_vencer' || listingStatus(v) === 'expirado') && (
+                      <a
+                        href={whatsappLink(planWhatsappMessage(PUBLICATION_PLANS[0] ?? { id: 'renovacion_simple', name: 'Renovación Simple', days: 30, price: 20000, featured: false }, v.owner_name ?? '', v.placa_completa ?? ''))}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-0.5 inline-block text-xs font-semibold text-yellow-500 underline"
+                      >
+                        {listingStatus(v) === 'expirado' ? 'Anuncio vencido: renovar (desde $20.000)' : 'Por vencer: renovar (desde $20.000)'}
+                      </a>
+                    )}
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <button onClick={() => void cambiarEstado(v)} disabled={trabajando === v.id} className="btn-secondary !px-3 !py-2 text-xs disabled:opacity-50">
-                    {v.status === 'vendido' ? 'Volver a disponible' : 'Marcar vendido'}
-                  </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <div role="group" aria-label="Estado del vehículo" className="grid grid-cols-3 overflow-hidden rounded-lg border border-jg-silver text-xs font-semibold">
+                    {([['disponible', 'Disponible'], ['no_disponible', 'Separado'], ['vendido', 'Vendido']] as const).map(([valor, etiqueta]) => (
+                      <button
+                        key={valor}
+                        type="button"
+                        disabled={trabajando === v.id}
+                        onClick={() => void cambiarEstado(v, valor)}
+                        className={`px-3 py-2 transition-colors disabled:opacity-50 ${v.status === valor ? (valor === 'disponible' ? 'bg-green-600 text-white' : valor === 'vendido' ? 'bg-gray-600 text-white' : 'bg-yellow-600 text-white') : 'text-gray-400 hover:text-white'}`}
+                      >
+                        {etiqueta}
+                      </button>
+                    ))}
+                  </div>
                   <button onClick={() => void eliminar(v)} disabled={trabajando === v.id} aria-label="Eliminar vehículo" className="rounded-lg border border-jg-silver p-2 text-gray-400 hover:text-jg-red disabled:opacity-50">
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -454,7 +477,7 @@ function MisVehiculos({ vehiculos, cargando, onCambio }: { vehiculos: Vehicle[];
 }
 
 /* ---------- Enlace para compartir ---------- */
-function CompartirCatalogo({ dealer }: { dealer: DealerProfile }) {
+function CompartirCatalogo({ dealer, vehiculos }: { dealer: DealerProfile; vehiculos: Vehicle[] }) {
   const url = dealerCatalogUrl(dealer.slug);
   const [copiado, setCopiado] = useState(false);
   const copiar = async () => {
@@ -483,6 +506,16 @@ function CompartirCatalogo({ dealer }: { dealer: DealerProfile }) {
         <a href={`https://wa.me/?text=${encodeURIComponent(texto)}`} target="_blank" rel="noopener noreferrer" className="btn-primary !py-2.5">
           Enviar por WhatsApp
         </a>
+        <button
+          type="button"
+          onClick={() => {
+            const ok = abrirCatalogoImprimible({ titulo: dealer.business_name, logoUrl: dealer.logo_url, contacto: dealer.phone, ciudad: dealer.city, vehiculos });
+            if (!ok) window.alert('Tu navegador bloqueó la ventana. Permite las ventanas emergentes e intenta de nuevo.');
+          }}
+          className="btn-secondary !py-2.5"
+        >
+          <FileText className="h-4 w-4" /> Generar catálogo PDF
+        </button>
         <a href={`/tienda/${dealer.slug}`} className="btn-secondary !py-2.5">
           <ExternalLink className="h-4 w-4" /> Ver mi catálogo
         </a>
@@ -588,7 +621,7 @@ export function CompraventasPage() {
                 <button onClick={() => void j.logout()} className="btn-secondary !px-3 !py-2 text-xs">Cerrar sesión</button>
               </div>
             </div>
-            <CompartirCatalogo dealer={dealer} />
+            <CompartirCatalogo dealer={dealer} vehiculos={vehiculos} />
             <PublicarForm dealer={dealer} onPublicado={() => void recargar()} />
             <MisVehiculos vehiculos={vehiculos} cargando={cargandoVeh} onCambio={() => void recargar()} />
           </>

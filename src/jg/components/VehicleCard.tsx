@@ -24,6 +24,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
   const { esFavorito, alternar: alternarFavorito } = useFavorito(vehicle.id);
   const contact = contactTarget(vehicle);
   const isExpiredThirdParty = vehicle.listing_owner === 'tercero' && contact === 'none' && vehicle.status !== 'vendido' && vehicle.status !== 'no_disponible';
+  const apagado = vehicle.status === 'vendido' || vehicle.status === 'no_disponible' || isExpiredThirdParty;
   const waHref = contact === 'owner'
     ? whatsappLinkTo(vehicle.owner_phone, `Hola${vehicle.owner_name ? ` ${vehicle.owner_name}` : ''}, vi tu vehículo ${vehicle.title} (${maskPlaca(vehicle.placa_completa)}) publicado en ClickMotores y me interesa. ¿Sigue disponible?`)
     : whatsappLink(`Hola, estoy interesado en el vehículo: ${vehicle.title} (${formatCOP(vehicle.price)}). ¿Me puedes dar más información?`);
@@ -55,7 +56,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
   return (
     <article
       onClick={onClick}
-      className="card card-hover group cursor-pointer overflow-hidden"
+      className={`card card-hover group cursor-pointer overflow-hidden ${apagado ? 'opacity-80' : ''}`}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-white/5">
         {images.length > 0 ? (
@@ -63,7 +64,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
             src={images[currentImage]}
             alt={vehicle.title}
             loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className={`h-full w-full max-w-full object-cover transition-transform duration-500 group-hover:scale-105 ${apagado ? 'grayscale opacity-70' : ''}`}
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
