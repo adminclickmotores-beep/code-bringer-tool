@@ -1,0 +1,18 @@
+{
+  "name": "ClickMotores CRM",
+  "short_name": "CRM Motores",
+  "description": "CRM para concesionarios: inventario, clientes, finanzas y consignaciones de ClickMotores.",
+  "lang": "es-CO",
+  "id": "/cms",
+  "start_url": "/cms",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070707",
+  "theme_color": "#070707",
+  "categories": ["business", "productivity"],
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
